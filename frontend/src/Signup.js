@@ -39,18 +39,18 @@ function Signup() {
                 <img src={PU} alt="PU Logo" style={{ width: '120px', height: '110px', marginBottom: '24px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }} />
             </div>
             <div style={{ display: 'flex', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', borderRadius: '16px', overflow: 'hidden', background: '#fff', width: '900px', maxWidth: '95%' }}>
-                <div style={{ flex: 1.2, padding: '20px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <p style={{ fontSize: '2.1rem', opacity: 0.9, fontFamily: 'unset', fontWeight: 600, marginTop: '20px', marginBottom: '16px' }}>Pondicherry University</p>
+                <div style={{ flex: 1.2, padding: '25px 50px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <p style={{ fontSize: '2.1rem', opacity: 0.9, fontFamily: 'unset', fontWeight: 600, marginTop: '20px', marginBottom: '10px' }}>Pondicherry University</p>
                     <p style={{ fontSize: '1rem', opacity: 0.7 }}>Join the platform to manage your publications and profile</p>
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <label style={{ fontWeight: 500 }}>Name</label>
-                        <input name="name" type="text" placeholder="Name" value={form.name} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem' }} />
+                        <input name="name" type="text" placeholder="Name" value={form.name} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem' }} />
                         <label style={{ fontWeight: 500 }}>Email</label>
-                        <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem' }} />
+                        <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem' }} />
                         <label style={{ fontWeight: 500 }}>Password</label>
-                        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem' }} />
+                        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem' }} />
                         <label style={{ fontWeight: 500 }}>Confirm Password</label>
-                        <input name="confirmPassword" type="password" placeholder="Confirm Password" value={form.confirmPassword} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem' }} />
+                        <input name="confirmPassword" type="password" placeholder="Confirm Password" value={form.confirmPassword} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem' }} />
                         <button type="submit" style={{ background: 'linear-gradient(90deg, #6366f1 60%, #818cf8 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px', fontWeight: 600, fontSize: '1.1rem', marginTop: '10px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(99,102,241,0.10)' }}>Signup</button>
                     </form>
                     <p style={{ color: '#ef4444', marginTop: '8px', fontWeight: 500 }}>{message}</p>
@@ -59,12 +59,11 @@ function Signup() {
                     </div>
                 </div>
                 {/* Left Side - Branding */}
-                <div style={{ flex: 1, background: 'linear-gradient(120deg, #6366f1 60%, #818cf8 100%)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 30px' }}>
+                <div style={{ flex: 1, background: 'linear-gradient(120deg, #787af7ff 60%, #818cf8 100%)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 30px' }}>
                     <img src={FacultyIcon} style={{ width: '200px', height: '200px', marginBottom: '20px', borderRadius: '12px' }}></img>
                     <h2 style={{ fontWeight: 700, fontSize: '2rem', marginBottom: '8px' }}>Faculty Signup</h2>
                 </div>
                 {/* Right Side - Form */}
-
             </div>
         </div>
     );
