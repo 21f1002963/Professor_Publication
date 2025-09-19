@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PU from './assets/PU.png';
 import bgImage from './assets/pondicherry-university-banner.jpg';
 import FacultyIcon from './assets/faculty.png';
 
 function Signup() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
     const [message, setMessage] = useState('');
 

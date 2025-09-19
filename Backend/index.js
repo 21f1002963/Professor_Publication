@@ -58,7 +58,11 @@ app.post('/login', async (req, res) => {
         if (!isPasswordCorrect) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        const token = jwt.sign({ id: professor }, TOKEN, { expiresIn: '3m' });
+        const token = jwt.sign({
+            id: professor._id,
+            name: professor.name,
+            email: professor.email
+        }, TOKEN, { expiresIn: '3m' });
         res.status(200).json({ result: professor, token });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
