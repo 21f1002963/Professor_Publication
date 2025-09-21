@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
+import { saveChanges, CHANGE_TYPES } from './changeTracker';
 
 function Patents() {
   const [patents, setPatents] = useState([
@@ -41,22 +42,20 @@ function Patents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    
     try {
-      const response = await fetch('http://localhost:5000/patents', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ patents })
-      });
-      if (response.ok) {
-        alert('Patents saved successfully!');
-      }
+      // Save changes to local tracking system
+      const changeId = saveChanges(
+        CHANGE_TYPES.PATENTS, 
+        patents, 
+        `Updated ${patents.length} patent(s)`
+      );
+      
+      alert('Patents saved! Go to Dashboard to review and submit all changes for approval.');
+      
     } catch (error) {
       console.error('Error saving patents:', error);
-      alert('Error saving patents');
+      alert('Error saving changes. Please try again.');
     }
   };
 

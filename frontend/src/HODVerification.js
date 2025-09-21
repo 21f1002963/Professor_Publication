@@ -83,7 +83,7 @@ function HODVerification() {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       if (response.ok) {
         setPendingProfiles(prev => prev.filter(p => p.id !== profileId));
         alert('Profile approved successfully!');
@@ -101,13 +101,13 @@ function HODVerification() {
       const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:5000/deny-profile/${profileId}`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ reason })
       });
-      
+
       if (response.ok) {
         setPendingProfiles(prev => prev.filter(p => p.id !== profileId));
         alert('Profile denied successfully!');
@@ -198,10 +198,10 @@ function HODVerification() {
               Pending Reviews
             </div>
           </div>
-          <div style={{ 
-            width: '1px', 
-            height: '60px', 
-            background: '#e2e8f0' 
+          <div style={{
+            width: '1px',
+            height: '60px',
+            background: '#e2e8f0'
           }}></div>
           <div style={{ textAlign: 'center' }}>
             <div style={{
@@ -401,7 +401,7 @@ function HODVerification() {
                     >
                       ❌ Deny
                     </button>
-                    
+
                     <button
                       onClick={() => handleApprove(profile.id)}
                       style={{

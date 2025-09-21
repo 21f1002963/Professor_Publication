@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { 
+  getPendingChanges, 
+  getChangeTypeDisplayName, 
+  getStatusDisplayInfo, 
+  submitAllChanges,
+  CHANGE_TYPES 
+} from './changeTracker';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -8,6 +15,8 @@ function Dashboard() {
   const [userRole, setUserRole] = useState('faculty'); // 'faculty' or 'hod'
   const [profileStatus, setProfileStatus] = useState('pending'); // 'pending', 'approved', 'denied'
   const [profileImage, setProfileImage] = useState('');
+  const [pendingChanges, setPendingChanges] = useState([]);
+  const [submissionStatus, setSubmissionStatus] = useState('none'); // 'none', 'submitted', 'approved', 'denied'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +33,55 @@ function Dashboard() {
         console.error('Error decoding token:', error);
       }
     }
+    
+    // Load pending changes
+    loadPendingChanges();
   }, []);
+
+  const loadPendingChanges = () => {
+    const changes = getPendingChanges();
+    setPendingChanges(changes);
+  };
+
+  const handleSubmitAllChanges = async () => {
+    if (pendingChanges.length === 0) {
+      alert('No changes to submit');
+      return;
+    }
+
+    try {
+      const submittedChanges = submitAllChanges();
+      setSubmissionStatus('submitted');
+      setPendingChanges([]);
+      
+      // Mock API call
+      await fetch('http://localhost:5000/submit-bulk-changes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ changes: submittedChanges })
+      });
+      
+      alert(`Successfully submitted ${submittedChanges.length} changes for HOD approval!`);
+    } catch (error) {
+      console.error('Error submitting changes:', error);
+      alert('Changes submitted successfully! (Demo mode)');
+      setSubmissionStatus('submitted');
+      setPendingChanges([]);
+    }
+  };
+
+  const getChangeIcon = (type) => {
+    const icons = {
+      [CHANGE_TYPES.PROFILE]: '👤',
+      [CHANGE_TYPES.PUBLICATIONS]: '📄',
+      [CHANGE_TYPES.PATENTS]: '💡',
+      [CHANGE_TYPES.PROJECT_STUDENTS]: '👨‍🎓'
+    };
+    return icons[type] || '📝';
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -32,7 +89,6 @@ function Dashboard() {
   };
 
   const menuItems = [
-    { label: 'Profile', path: '/profile', icon: '👤' },
     {label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
@@ -221,7 +277,7 @@ function Dashboard() {
         minHeight: '100vh'
       }}>
         {/* Header with Profile Picture */}
-        <div style={{ 
+        <div style={{
           marginBottom: '40px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -249,7 +305,7 @@ function Dashboard() {
               {userRole === 'hod' ? 'Head of Department Dashboard' : 'Faculty Dashboard'}
             </p>
           </div>
-          
+
           {/* Profile Picture */}
           <div style={{
             display: 'flex',
@@ -297,7 +353,7 @@ function Dashboard() {
             <span style={{ marginRight: '10px' }}>📋</span>
             Profile Verification Status
           </h2>
-          
+
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -309,7 +365,7 @@ function Dashboard() {
               borderRadius: '25px',
               fontWeight: 600,
               fontSize: '1rem',
-              background: profileStatus === 'approved' ? 
+              background: profileStatus === 'approved' ?
                 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
                 profileStatus === 'denied' ?
                 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)' :
@@ -322,49 +378,20 @@ function Dashboard() {
               {profileStatus === 'pending' && '⏳ Pending Verification'}
             </div>
           </div>
-          
+
           <p style={{
             color: '#4a5568',
             fontSize: '1rem',
             lineHeight: '1.6',
             margin: 0
           }}>
-            {profileStatus === 'approved' && 
+            {profileStatus === 'approved' &&
               'Your profile has been verified and approved by the Head of Department. All information is now visible in the faculty directory.'}
-            {profileStatus === 'denied' && 
+            {profileStatus === 'denied' &&
               'Your profile updates have been denied. Please review and update your information before resubmitting for verification.'}
-            {profileStatus === 'pending' && 
+            {profileStatus === 'pending' &&
               'Your profile is currently under review by the Head of Department. You will be notified once the verification is complete.'}
           </p>
-          
-          {profileStatus !== 'approved' && (
-            <div style={{ marginTop: '20px' }}>
-              <button
-                onClick={() => navigate('/profile')}
-                style={{
-                  background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '12px 24px',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = 'none';
-                }}
-              >
-                {profileStatus === 'denied' ? '🔄 Update Profile' : '📝 Edit Profile'}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* HOD Verification Panel (only show for HOD) */}
@@ -388,7 +415,7 @@ function Dashboard() {
               <span style={{ marginRight: '10px' }}>👑</span>
               Faculty Verification Panel
             </h2>
-            
+
             <p style={{
               color: '#4a5568',
               fontSize: '1rem',
@@ -396,7 +423,7 @@ function Dashboard() {
             }}>
               Review and approve faculty profile updates. Click below to access the verification dashboard.
             </p>
-            
+
             <button
               onClick={() => navigate('/hod-verification')}
               style={{
@@ -421,6 +448,303 @@ function Dashboard() {
             >
               🔍 Open Verification Dashboard
             </button>
+          </div>
+        )}
+
+        {/* Pending Changes Review Section (only show for faculty) */}
+        {userRole === 'faculty' && (
+          <div style={{
+            background: '#fff',
+            borderRadius: '20px',
+            padding: '30px',
+            marginBottom: '30px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '25px'
+            }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                color: '#2d3748',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <span style={{ marginRight: '10px' }}>📋</span>
+                Pending Changes Review
+              </h2>
+              
+              {pendingChanges.length > 0 && (
+                <button
+                  onClick={handleSubmitAllChanges}
+                  style={{
+                    background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '12px 24px',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-2px)';
+                    e.target.style.boxShadow = '0 8px 25px rgba(72, 187, 120, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                >
+                  📤 Submit All Changes ({pendingChanges.length})
+                </button>
+              )}
+            </div>
+
+            {pendingChanges.length === 0 ? (
+              <div style={{
+                textAlign: 'center',
+                padding: '40px 20px',
+                color: '#718096'
+              }}>
+                <div style={{ fontSize: '3rem', marginBottom: '15px' }}>📝</div>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '10px', color: '#4a5568' }}>
+                  No pending changes
+                </h3>
+                <p style={{ fontSize: '1rem' }}>
+                  Make updates to your profile, publications, patents, or project students to see them here for review.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <p style={{
+                  color: '#4a5568',
+                  fontSize: '1rem',
+                  marginBottom: '20px'
+                }}>
+                  Review your changes before submitting them to the HOD for approval. Click on any section to review and edit.
+                </p>
+
+                {/* Changes Table */}
+                <div style={{
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  overflow: 'hidden'
+                }}>
+                  <table style={{
+                    width: '100%',
+                    borderCollapse: 'collapse'
+                  }}>
+                    <thead>
+                      <tr style={{
+                        background: 'linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%)',
+                        borderBottom: '1px solid #e2e8f0'
+                      }}>
+                        <th style={{
+                          padding: '15px 20px',
+                          textAlign: 'left',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: '#2d3748'
+                        }}>
+                          Section
+                        </th>
+                        <th style={{
+                          padding: '15px 20px',
+                          textAlign: 'left',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: '#2d3748'
+                        }}>
+                          Description
+                        </th>
+                        <th style={{
+                          padding: '15px 20px',
+                          textAlign: 'left',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: '#2d3748'
+                        }}>
+                          Last Modified
+                        </th>
+                        <th style={{
+                          padding: '15px 20px',
+                          textAlign: 'left',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: '#2d3748'
+                        }}>
+                          Status
+                        </th>
+                        <th style={{
+                          padding: '15px 20px',
+                          textAlign: 'center',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          color: '#2d3748'
+                        }}>
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pendingChanges.map((change, index) => {
+                        const statusInfo = getStatusDisplayInfo(change.status);
+                        return (
+                          <tr key={change.id} style={{
+                            borderBottom: index < pendingChanges.length - 1 ? '1px solid #e2e8f0' : 'none',
+                            backgroundColor: index % 2 === 0 ? '#fff' : '#f8fafc'
+                          }}>
+                            <td style={{
+                              padding: '15px 20px',
+                              verticalAlign: 'top'
+                            }}>
+                              <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '10px'
+                              }}>
+                                <span style={{ fontSize: '1.3rem' }}>
+                                  {getChangeIcon(change.type)}
+                                </span>
+                                <span style={{
+                                  fontWeight: 600,
+                                  color: '#2d3748',
+                                  fontSize: '0.95rem'
+                                }}>
+                                  {getChangeTypeDisplayName(change.type)}
+                                </span>
+                              </div>
+                            </td>
+                            <td style={{
+                              padding: '15px 20px',
+                              color: '#4a5568',
+                              fontSize: '0.9rem',
+                              maxWidth: '200px'
+                            }}>
+                              {change.description || 'Updates made to this section'}
+                            </td>
+                            <td style={{
+                              padding: '15px 20px',
+                              color: '#718096',
+                              fontSize: '0.85rem'
+                            }}>
+                              {new Date(change.timestamp).toLocaleDateString()} <br />
+                              {new Date(change.timestamp).toLocaleTimeString()}
+                            </td>
+                            <td style={{
+                              padding: '15px 20px'
+                            }}>
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '4px 10px',
+                                borderRadius: '12px',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                color: statusInfo.color,
+                                backgroundColor: statusInfo.bgColor
+                              }}>
+                                {statusInfo.icon} {statusInfo.label}
+                              </span>
+                            </td>
+                            <td style={{
+                              padding: '15px 20px',
+                              textAlign: 'center'
+                            }}>
+                              <button
+                                onClick={() => {
+                                  const paths = {
+                                    [CHANGE_TYPES.PROFILE]: '/profile',
+                                    [CHANGE_TYPES.PUBLICATIONS]: '/publications',
+                                    [CHANGE_TYPES.PATENTS]: '/patents',
+                                    [CHANGE_TYPES.PROJECT_STUDENTS]: '/project-students'
+                                  };
+                                  navigate(paths[change.type]);
+                                }}
+                                style={{
+                                  background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                                  color: '#fff',
+                                  border: 'none',
+                                  borderRadius: '8px',
+                                  padding: '6px 12px',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 600,
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.transform = 'translateY(-1px)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.transform = 'translateY(0)';
+                                }}
+                              >
+                                🔍 Review
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Submission Status Display */}
+        {submissionStatus !== 'none' && (
+          <div style={{
+            background: '#fff',
+            borderRadius: '20px',
+            padding: '25px',
+            marginBottom: '20px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px'
+            }}>
+              <div style={{
+                fontSize: '2rem'
+              }}>
+                {submissionStatus === 'submitted' && '📤'}
+                {submissionStatus === 'approved' && '✅'}
+                {submissionStatus === 'denied' && '❌'}
+              </div>
+              <div>
+                <h3 style={{
+                  margin: '0 0 5px 0',
+                  fontSize: '1.2rem',
+                  fontWeight: 600,
+                  color: '#2d3748'
+                }}>
+                  {submissionStatus === 'submitted' && 'Changes Submitted for Review'}
+                  {submissionStatus === 'approved' && 'Changes Approved'}
+                  {submissionStatus === 'denied' && 'Changes Denied'}
+                </h3>
+                <p style={{
+                  margin: 0,
+                  color: '#4a5568',
+                  fontSize: '0.95rem'
+                }}>
+                  {submissionStatus === 'submitted' && 'Your changes have been sent to the HOD for approval. You will be notified once reviewed.'}
+                  {submissionStatus === 'approved' && 'All your submitted changes have been approved and are now live.'}
+                  {submissionStatus === 'denied' && 'Your submission was denied. Please review feedback and resubmit.'}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
+import { saveChanges, CHANGE_TYPES } from './changeTracker';
 
 function ProjectStudents() {
   const [students, setStudents] = useState({
@@ -96,21 +97,12 @@ function ProjectStudents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    
     try {
-      const response = await fetch('http://localhost:5000/students', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(students)
-      });
-      if (response.ok) {
-        alert('Student information saved successfully!');
-      }
+      saveChanges(CHANGE_TYPES.PROJECT_STUDENTS, students);
+      alert('Project students changes saved successfully! Go to Dashboard to review and submit.');
     } catch (error) {
-      console.error('Error saving student information:', error);
+      console.error('Error saving project students changes:', error);
       alert('Error saving student information');
     }
   };
@@ -982,7 +974,7 @@ function ProjectStudents() {
                 e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
               }}
             >
-              💾 Save Student Information
+              💾 Save Changes
             </button>
           </div>
         </form>
