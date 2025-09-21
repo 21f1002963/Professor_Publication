@@ -133,14 +133,29 @@ function Layout({ children }) {
                 e.target.style.transform = 'translateX(0)';
               }}
             >
-              <span style={{
-                fontSize: '1.5rem',
-                marginRight: sidebarOpen ? '16px' : '0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '24px'
-              }}>
+              <span 
+                style={{
+                  fontSize: '1.5rem',
+                  marginRight: sidebarOpen ? '16px' : '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '24px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent double click
+                  navigate(item.path);
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'scale(1.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'scale(1)';
+                }}
+                title={item.label} // Add tooltip for better UX
+              >
                 {item.icon}
               </span>
               {sidebarOpen && (
@@ -196,8 +211,43 @@ function Layout({ children }) {
         marginLeft: sidebarOpen ? '280px' : '90px',
         transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         minHeight: '100vh',
-        background: '#f8fafc'
+        background: '#f8fafc',
+        position: 'relative'
       }}>
+        {/* Dashboard Icon - Top Right Corner */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: 1000,
+            cursor: 'pointer',
+            background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+            color: '#fff',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 15px rgba(96, 147, 236, 0.3)',
+            transition: 'all 0.3s ease',
+            fontSize: '1.5rem'
+          }}
+          onClick={() => navigate('/dashboard')}
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'scale(1.1)';
+            e.target.style.boxShadow = '0 6px 25px rgba(96, 147, 236, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'scale(1)';
+            e.target.style.boxShadow = '0 4px 15px rgba(96, 147, 236, 0.3)';
+          }}
+          title="Go to Dashboard"
+        >
+          🏠
+        </div>
+        
         {children}
       </div>
     </div>

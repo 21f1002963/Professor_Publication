@@ -7,6 +7,9 @@ import Signup from './Signup';
 import Dashboard from './Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import Profile from './Profile';
+import Publications from './Publications';
+import Patents from './Patents';
+import ProjectStudents from './ProjectStudents';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,6 +27,21 @@ root.render(
         <Route path='/profile'  element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        } />
+        <Route path='/publications'  element={
+          <ProtectedRoute>
+            <Publications />
+          </ProtectedRoute>
+        } />
+        <Route path='/patents'  element={
+          <ProtectedRoute>
+            <Patents />
+          </ProtectedRoute>
+        } />
+        <Route path='/project-students'  element={
+          <ProtectedRoute>
+            <ProjectStudents />
           </ProtectedRoute>
         } />
         <Route path='*' element={<Login />} />

@@ -305,17 +305,17 @@ function Profile() {
               <span style={{ marginRight: '10px' }}>👤</span>
               Personal Information
             </h2>
-            
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
               gap: '25px'
             }}>
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
@@ -340,12 +340,12 @@ function Profile() {
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
-              
+
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
@@ -371,12 +371,12 @@ function Profile() {
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
-              
+
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
@@ -400,12 +400,12 @@ function Profile() {
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
-              
+
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
@@ -431,12 +431,12 @@ function Profile() {
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
-              
+
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 600, 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
