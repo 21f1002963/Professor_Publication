@@ -71,7 +71,7 @@ function Faculty() {
                          prof.area_of_expertise.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = !filterDepartment || prof.department === filterDepartment;
     const matchesDesignation = !filterDesignation || prof.designation === filterDesignation;
-    
+
     return matchesSearch && matchesDepartment && matchesDesignation;
   });
 
@@ -164,7 +164,7 @@ function Faculty() {
                 }}
               />
             </div>
-            
+
             <div>
               <label style={{
                 display: 'block',
@@ -193,7 +193,7 @@ function Faculty() {
                 ))}
               </select>
             </div>
-            
+
             <div>
               <label style={{
                 display: 'block',
@@ -222,7 +222,7 @@ function Faculty() {
                 ))}
               </select>
             </div>
-            
+
             <button
               onClick={() => {
                 setSearchTerm('');
@@ -389,7 +389,7 @@ function Faculty() {
                     verticalAlign: 'top'
                   }}>
                     <span style={{
-                      background: professor.designation === 'Professor' ? 
+                      background: professor.designation === 'Professor' ?
                         'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' :
                         professor.designation === 'Associate Professor' ?
                         'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' :

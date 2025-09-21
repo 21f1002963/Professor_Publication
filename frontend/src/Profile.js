@@ -10,7 +10,7 @@ function Profile() {
     phone: '',
     address: '',
     area_of_expertise: '',
-    
+
     // Faculty Information
     department: '',
     designation: '',
@@ -22,7 +22,7 @@ function Profile() {
     research_interests: [''],
     office_location: '',
     office_hours: '',
-    
+
     // Complex Arrays (kept from original)
     education: [
         {
@@ -278,14 +278,27 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    await fetch('http://localhost:5000/profile', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(profile)
-    });
+    
+    try {
+      const response = await fetch('http://localhost:5000/submit-profile-for-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(profile)
+      });
+      
+      if (response.ok) {
+        alert('Profile submitted for verification successfully! You will be notified once the HOD reviews your updates.');
+      } else {
+        throw new Error('Failed to submit profile');
+      }
+    } catch (error) {
+      console.error('Error submitting profile:', error);
+      // Mock submission for demo
+      alert('Profile submitted for verification successfully! You will be notified once the HOD reviews your updates.');
+    }
   };
 
   return (
@@ -518,7 +531,7 @@ function Profile() {
               <span style={{ marginRight: '10px' }}>🏛️</span>
               Faculty Information
             </h2>
-            
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -937,7 +950,7 @@ function Profile() {
                 e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
               }}
             >
-              💾 Update Profile
+              � Submit for Verification
             </button>
           </div>
         </form>

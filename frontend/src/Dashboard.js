@@ -5,6 +5,9 @@ import { jwtDecode } from 'jwt-decode';
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userName, setUserName] = useState('Professor');
+  const [userRole, setUserRole] = useState('faculty'); // 'faculty' or 'hod'
+  const [profileStatus, setProfileStatus] = useState('pending'); // 'pending', 'approved', 'denied'
+  const [profileImage, setProfileImage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,9 +15,11 @@ function Dashboard() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        // You'll need to modify your backend to include user info in the token
-        // For now, we'll use a placeholder
         setUserName(decoded.name || 'Professor');
+        setUserRole(decoded.role || 'faculty');
+        // Mock status - in real app, fetch from backend
+        setProfileStatus(decoded.profileStatus || 'pending');
+        setProfileImage(decoded.profileImage || '');
       } catch (error) {
         console.error('Error decoding token:', error);
       }
@@ -215,92 +220,209 @@ function Dashboard() {
         flexDirection: 'column',
         minHeight: '100vh'
       }}>
-        {/* Header */}
-        <div style={{ marginBottom: '40px' }}>
-          <h1 style={{
-            fontSize: '2.2rem',
-            fontWeight: 800,
-            color: '#2d3748',
-            marginBottom: '8px',
-            marginTop: 0,
-            marginLeft: 20,
-            fontFamily: 'Segoe UI, Arial, sans-serif',
-            textShadow: '0 4px 16px rgba(0,0,0,0.2)'
+        {/* Header with Profile Picture */}
+        <div style={{ 
+          marginBottom: '40px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start'
+        }}>
+          <div>
+            <h1 style={{
+              fontSize: '2.2rem',
+              fontWeight: 800,
+              color: '#2d3748',
+              marginBottom: '8px',
+              marginTop: 0,
+              marginLeft: 20,
+              fontFamily: 'Segoe UI, Arial, sans-serif',
+              textShadow: '0 4px 16px rgba(0,0,0,0.2)'
+            }}>
+              Welcome back, {userName}!
+            </h1>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#718096',
+              marginLeft: 20,
+              margin: '0 0 0 20px'
+            }}>
+              {userRole === 'hod' ? 'Head of Department Dashboard' : 'Faculty Dashboard'}
+            </p>
+          </div>
+          
+          {/* Profile Picture */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px'
           }}>
-            Welcome back, {userName}!
-          </h1>
+            <div style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: profileImage ? `url(${profileImage})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontSize: '2rem',
+              fontWeight: 700,
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              border: '3px solid #fff'
+            }}>
+              {!profileImage && (userName.charAt(0) || '👨‍🏫')}
+            </div>
+          </div>
         </div>
 
-        {/* Dashboard Cards */}
-        {/* <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '24px',
-          flex: 1
+        {/* Profile Status Card */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '20px',
+          padding: '30px',
+          marginBottom: '30px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+          border: '1px solid #e2e8f0'
         }}>
-          {menuItems.map((item, index) => (
-            <div
-              key={item.label}
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 700,
+            color: '#2d3748',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <span style={{ marginRight: '10px' }}>📋</span>
+            Profile Verification Status
+          </h2>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px',
+            marginBottom: '15px'
+          }}>
+            <div style={{
+              padding: '12px 20px',
+              borderRadius: '25px',
+              fontWeight: 600,
+              fontSize: '1rem',
+              background: profileStatus === 'approved' ? 
+                'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
+                profileStatus === 'denied' ?
+                'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)' :
+                'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)',
+              color: '#fff',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+            }}>
+              {profileStatus === 'approved' && '✅ Verified & Approved'}
+              {profileStatus === 'denied' && '❌ Denied - Requires Updates'}
+              {profileStatus === 'pending' && '⏳ Pending Verification'}
+            </div>
+          </div>
+          
+          <p style={{
+            color: '#4a5568',
+            fontSize: '1rem',
+            lineHeight: '1.6',
+            margin: 0
+          }}>
+            {profileStatus === 'approved' && 
+              'Your profile has been verified and approved by the Head of Department. All information is now visible in the faculty directory.'}
+            {profileStatus === 'denied' && 
+              'Your profile updates have been denied. Please review and update your information before resubmitting for verification.'}
+            {profileStatus === 'pending' && 
+              'Your profile is currently under review by the Head of Department. You will be notified once the verification is complete.'}
+          </p>
+          
+          {profileStatus !== 'approved' && (
+            <div style={{ marginTop: '20px' }}>
+              <button
+                onClick={() => navigate('/profile')}
+                style={{
+                  background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '12px 24px',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                {profileStatus === 'denied' ? '🔄 Update Profile' : '📝 Edit Profile'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* HOD Verification Panel (only show for HOD) */}
+        {userRole === 'hod' && (
+          <div style={{
+            background: '#fff',
+            borderRadius: '20px',
+            padding: '30px',
+            marginBottom: '30px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <span style={{ marginRight: '10px' }}>👑</span>
+              Faculty Verification Panel
+            </h2>
+            
+            <p style={{
+              color: '#4a5568',
+              fontSize: '1rem',
+              marginBottom: '20px'
+            }}>
+              Review and approve faculty profile updates. Click below to access the verification dashboard.
+            </p>
+            
+            <button
+              onClick={() => navigate('/hod-verification')}
               style={{
-                background: 'rgba(255,255,255,0.95)',
-                borderRadius: '20px',
-                padding: '32px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '12px 24px',
+                fontSize: '1rem',
+                fontWeight: 600,
                 cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                minHeight: '200px',
-                justifyContent: 'center'
+                transition: 'all 0.2s ease'
               }}
-              onClick={() => navigate(item.path)}
               onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-8px) scale(1.02)';
-                e.target.style.boxShadow = '0 16px 48px rgba(0,0,0,0.15)';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0) scale(1)';
-                e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
               }}
             >
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '16px',
-                background: 'linear-gradient(45deg, #667eea, #764ba2)',
-                borderRadius: '20px',
-                padding: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {item.icon}
-              </div>
-              <h3 style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                color: '#2d3748',
-                margin: '0 0 8px 0'
-              }}>
-                {item.label}
-              </h3>
-              <p style={{
-                fontSize: '1rem',
-                color: '#718096',
-                margin: 0,
-                opacity: 0.8
-              }}>
-                {item.label === 'Profile' && 'Manage your personal information'}
-                {item.label === 'Publications' && 'View and edit your research papers'}
-                {item.label === 'Patents' && 'Track your patent applications'}
-                {item.label === 'Project Students' && 'Supervise student projects'}
-              </p>
-            </div>
-          ))}
-        </div> */}
+              🔍 Open Verification Dashboard
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
