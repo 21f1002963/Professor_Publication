@@ -4,10 +4,26 @@ import Layout from './Layout';
 
 function Profile() {
   const [profile, setProfile] = useState({
+    // Personal Information
     name: '',
     email: '',
     phone: '',
     address: '',
+    area_of_expertise: '',
+    
+    // Faculty Information
+    department: '',
+    designation: '',
+    employee_id: '',
+    date_of_joining: '',
+    qualification: '',
+    experience_years: '',
+    subjects_taught: [''],
+    research_interests: [''],
+    office_location: '',
+    office_hours: '',
+    
+    // Complex Arrays (kept from original)
     education: [
         {
       degree: '',
@@ -15,7 +31,6 @@ function Profile() {
       university: '',
       graduationYear: '',
     }],
-    area_of_expertise: '',
     awards: [
         {
         title: '',
@@ -223,6 +238,28 @@ function Profile() {
 
 
   });
+
+  // Helper functions for array field management
+  const handleArrayInputChange = (field, index, value) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: prev[field].map((item, i) => i === index ? value : item)
+    }));
+  };
+
+  const addArrayField = (field) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: [...prev[field], '']
+    }));
+  };
+
+  const removeArrayField = (field, index) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index)
+    }));
+  };
 
   useEffect(() => {
     // Fetch profile data from backend
@@ -462,6 +499,415 @@ function Profile() {
                   onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Faculty Information Section */}
+          <div style={{
+            padding: '40px',
+            borderBottom: '1px solid #e2e8f0'
+          }}>
+            <h2 style={{
+              fontSize: '1.8rem',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '25px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <span style={{ marginRight: '10px' }}>🏛️</span>
+              Faculty Information
+            </h2>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '25px'
+            }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Department *
+                </label>
+                <input
+                  value={profile.department}
+                  onChange={(e) => setProfile({...profile, department: e.target.value})}
+                  placeholder="Enter department name"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Designation *
+                </label>
+                <select
+                  value={profile.designation}
+                  onChange={(e) => setProfile({...profile, designation: e.target.value})}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                >
+                  <option value="">Select Designation</option>
+                  <option value="Professor">Professor</option>
+                  <option value="Associate Professor">Associate Professor</option>
+                  <option value="Assistant Professor">Assistant Professor</option>
+                  <option value="Lecturer">Lecturer</option>
+                  <option value="Senior Lecturer">Senior Lecturer</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Employee ID
+                </label>
+                <input
+                  value={profile.employee_id}
+                  onChange={(e) => setProfile({...profile, employee_id: e.target.value})}
+                  placeholder="Enter employee ID"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Date of Joining
+                </label>
+                <input
+                  value={profile.date_of_joining}
+                  onChange={(e) => setProfile({...profile, date_of_joining: e.target.value})}
+                  type="date"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Highest Qualification
+                </label>
+                <input
+                  value={profile.qualification}
+                  onChange={(e) => setProfile({...profile, qualification: e.target.value})}
+                  placeholder="e.g., Ph.D. in Computer Science"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Years of Experience
+                </label>
+                <input
+                  value={profile.experience_years}
+                  onChange={(e) => setProfile({...profile, experience_years: e.target.value})}
+                  placeholder="Enter years of experience"
+                  type="number"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Office Location
+                </label>
+                <input
+                  value={profile.office_location}
+                  onChange={(e) => setProfile({...profile, office_location: e.target.value})}
+                  placeholder="Enter office location"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Office Hours
+                </label>
+                <input
+                  value={profile.office_hours}
+                  onChange={(e) => setProfile({...profile, office_hours: e.target.value})}
+                  placeholder="e.g., Mon-Fri 10:00-16:00"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s ease',
+                    background: '#fff',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                />
+              </div>
+            </div>
+
+            {/* Subjects Taught */}
+            <div style={{ marginTop: '30px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '15px'
+              }}>
+                <label style={{
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Subjects Taught
+                </label>
+                <button
+                  type="button"
+                  onClick={() => addArrayField('subjects_taught')}
+                  style={{
+                    background: '#48bb78',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  + Add Subject
+                </button>
+              </div>
+              {profile.subjects_taught.map((subject, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  gap: '10px',
+                  marginBottom: '10px',
+                  alignItems: 'center'
+                }}>
+                  <input
+                    value={subject}
+                    onChange={(e) => handleArrayInputChange('subjects_taught', index, e.target.value)}
+                    placeholder="Enter subject name"
+                    style={{
+                      flex: 1,
+                      padding: '12px 16px',
+                      border: '2px solid #e2e8f0',
+                      borderRadius: '10px',
+                      fontSize: '1rem',
+                      background: '#fff'
+                    }}
+                  />
+                  {profile.subjects_taught.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeArrayField('subjects_taught', index)}
+                      style={{
+                        background: '#e53e3e',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        width: '30px',
+                        height: '30px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Research Interests */}
+            <div style={{ marginTop: '30px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '15px'
+              }}>
+                <label style={{
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Research Interests
+                </label>
+                <button
+                  type="button"
+                  onClick={() => addArrayField('research_interests')}
+                  style={{
+                    background: '#6093ecff',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  + Add Interest
+                </button>
+              </div>
+              {profile.research_interests.map((interest, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  gap: '10px',
+                  marginBottom: '10px',
+                  alignItems: 'center'
+                }}>
+                  <input
+                    value={interest}
+                    onChange={(e) => handleArrayInputChange('research_interests', index, e.target.value)}
+                    placeholder="Enter research interest"
+                    style={{
+                      flex: 1,
+                      padding: '12px 16px',
+                      border: '2px solid #e2e8f0',
+                      borderRadius: '10px',
+                      fontSize: '1rem',
+                      background: '#fff'
+                    }}
+                  />
+                  {profile.research_interests.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeArrayField('research_interests', index)}
+                      style={{
+                        background: '#e53e3e',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        width: '30px',
+                        height: '30px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 

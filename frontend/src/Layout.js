@@ -12,6 +12,7 @@ function Layout({ children }) {
 
   const menuItems = [
     { label: 'Profile', path: '/profile', icon: '👤' },
+    { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
@@ -133,7 +134,7 @@ function Layout({ children }) {
                 e.target.style.transform = 'translateX(0)';
               }}
             >
-              <span 
+              <span
                 style={{
                   fontSize: '1.5rem',
                   marginRight: sidebarOpen ? '16px' : '0',
@@ -195,7 +196,7 @@ function Layout({ children }) {
               e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
             }}
           >
-            <span style={{ fontSize: '1.2rem', marginRight: sidebarOpen ? '12px' : '0' }}>🚪</span>
+            <span style={{ fontSize: '1.2rem', marginRight: sidebarOpen ? '12px' : '0' }}>➜</span>
             {sidebarOpen && (
               <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#ef4444' }}>
                 Logout
@@ -247,7 +248,7 @@ function Layout({ children }) {
         >
           🏠
         </div>
-        
+
         {children}
       </div>
     </div>

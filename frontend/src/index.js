@@ -7,6 +7,7 @@ import Signup from './Signup';
 import Dashboard from './Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import Profile from './Profile';
+import Faculty from './Faculty';
 import Publications from './Publications';
 import Patents from './Patents';
 import ProjectStudents from './ProjectStudents';
@@ -27,6 +28,11 @@ root.render(
         <Route path='/profile'  element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        } />
+        <Route path='/faculty'  element={
+          <ProtectedRoute>
+            <Faculty />
           </ProtectedRoute>
         } />
         <Route path='/publications'  element={
