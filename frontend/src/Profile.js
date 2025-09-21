@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import Layout from './Layout';
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -251,29 +252,21 @@ function Profile() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-      padding: '40px 20px'
-    }}>
+    <Layout>
       <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        background: '#fff',
-        borderRadius: '20px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
-        overflow: 'hidden'
+        padding: '40px',
+        maxWidth: '1000px',
+        margin: '0 auto'
       }}>
-        {/* Header */}
+        {/* Page Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: '#fff',
-          padding: '40px',
+          marginBottom: '30px',
           textAlign: 'center'
         }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: 800,
+            color: '#2d3748',
             margin: '0 0 10px 0',
             fontFamily: 'Segoe UI, Arial, sans-serif'
           }}>
@@ -281,82 +274,112 @@ function Profile() {
           </h1>
           <p style={{
             fontSize: '1.2rem',
-            opacity: 0.9,
+            color: '#718096',
             margin: 0
           }}>
             Manage your academic profile and information
           </p>
         </div>
 
-        {/* Form Container */}
-        <form onSubmit={handleSubmit} style={{ padding: '40px' }}>
+        {/* Profile Form Card */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '20px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+          overflow: 'hidden'
+        }}>
+          <form onSubmit={handleSubmit}>
           {/* Personal Information Section */}
           <div style={{
-            marginBottom: '40px',
-            padding: '30px',
-            background: '#f8fafc',
-            borderRadius: '15px',
-            border: '1px solid #e2e8f0'
+            padding: '40px',
+            borderBottom: '1px solid #e2e8f0'
           }}>
             <h2 style={{
               fontSize: '1.8rem',
               fontWeight: 700,
               color: '#2d3748',
               marginBottom: '25px',
-              borderBottom: '3px solid #667eea',
-              paddingBottom: '10px'
+              display: 'flex',
+              alignItems: 'center'
             }}>
+              <span style={{ marginRight: '10px' }}>👤</span>
               Personal Information
             </h2>
             
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '20px'
+              gap: '25px'
             }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#374151' }}>
-                  Full Name
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Full Name *
                 </label>
                 <input
                   value={profile.name}
                   onChange={(e) => setProfile({...profile, name: e.target.value})}
                   placeholder="Enter your full name"
+                  required
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
+                    padding: '14px 16px',
                     border: '2px solid #e2e8f0',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
-                    background: '#fff'
+                    background: '#fff',
+                    fontFamily: 'inherit'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#374151' }}>
-                  Email Address
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  Email Address *
                 </label>
                 <input
                   value={profile.email}
                   onChange={(e) => setProfile({...profile, email: e.target.value})}
                   placeholder="Enter your email"
                   type="email"
+                  required
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
+                    padding: '14px 16px',
                     border: '2px solid #e2e8f0',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
-                    background: '#fff'
+                    background: '#fff',
+                    fontFamily: 'inherit'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#374151' }}>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
                   Phone Number
                 </label>
                 <input
@@ -365,18 +388,27 @@ function Profile() {
                   placeholder="Enter your phone number"
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
+                    padding: '14px 16px',
                     border: '2px solid #e2e8f0',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
-                    background: '#fff'
+                    background: '#fff',
+                    fontFamily: 'inherit'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#374151' }}>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
                   Address
                 </label>
                 <textarea
@@ -386,47 +418,59 @@ function Profile() {
                   rows="3"
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
+                    padding: '14px 16px',
                     border: '2px solid #e2e8f0',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
                     background: '#fff',
-                    resize: 'vertical'
+                    resize: 'vertical',
+                    fontFamily: 'inherit'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
               
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#374151' }}>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontWeight: 600, 
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
                   Area of Expertise
                 </label>
                 <textarea
                   value={profile.area_of_expertise}
                   onChange={(e) => setProfile({...profile, area_of_expertise: e.target.value})}
                   placeholder="Describe your areas of expertise"
-                  rows="3"
+                  rows="4"
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
+                    padding: '14px 16px',
                     border: '2px solid #e2e8f0',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
                     background: '#fff',
-                    resize: 'vertical'
+                    resize: 'vertical',
+                    fontFamily: 'inherit'
                   }}
+                  onFocus={(e) => e.target.style.borderColor = '#6093ecff'}
+                  onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
                 />
               </div>
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          {/* Submit Button Section */}
+          <div style={{ padding: '30px 40px', textAlign: 'center', background: '#f8fafc' }}>
             <button
               type="submit"
               style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '15px',
@@ -435,24 +479,25 @@ function Profile() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
+                boxShadow: '0 8px 25px rgba(96, 147, 236, 0.3)',
                 minWidth: '200px'
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                e.target.style.boxShadow = '0 12px 35px rgba(96, 147, 236, 0.4)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
               }}
             >
-              Update Profile
+              💾 Update Profile
             </button>
           </div>
         </form>
       </div>
     </div>
+  </Layout>
   );
 }
 
