@@ -11,6 +11,7 @@ function Profile() {
     phone: "",
     address: "",
     area_of_expertise: "",
+    profileImage: "", // Add profile image field
 
     // Faculty Information
     department: "",
@@ -213,6 +214,34 @@ function Profile() {
     ],
   });
 
+  // Image upload state
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  // Handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          setImagePreview(e.target.result);
+        // Update profile state with image
+          setProfile(prev => ({
+            ...prev,
+            profileImage: e.target.result
+          }));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -220,7 +249,9 @@ function Profile() {
         const decoded = jwtDecode(token);
         setProfile((prev) => ({
           ...prev,
+          name: decoded.name,
           email: decoded.email,
+          department: prev.department || "Computer Science", // Default value
         }));
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -362,6 +393,102 @@ function Profile() {
                 padding: "5px 30px 30px",
               }}
             >
+              <h2
+                style={{
+                  fontSize: "1.8rem",
+                  fontWeight: 700,
+                  color: "#2d3748",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  fontFamily: "Segoe UI, Arial, sans-serif",
+                  letterSpacing: "0.5px",
+                  marginBottom: "25px",
+                }}
+              >
+                Profile Picture
+              </h2>
+
+              {/* Profile Picture Upload Section */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '20px',
+                marginBottom: '40px',
+                padding: '10px',
+                borderRadius: '15px',
+                background: '#f8fafc'
+              }}>
+                {/* Image Preview */}
+                <div style={{
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: '3rem',
+                  fontWeight: 700,
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  border: '4px solid #fff',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                }}>
+                  {imagePreview || profile.profileImage ? (
+                    <img
+                      src={imagePreview || profile.profileImage}
+                      alt="Profile"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                        borderRadius: '50%'
+                      }}
+                    />
+                  ) : (
+                    <span>{profile.name?.charAt(0) || '👤'}</span>
+                  )}
+                </div>
+
+                {/* Upload Button */}
+                <label style={{
+                  background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '12px 24px',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+
+                {selectedImage && (
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '0.9rem',
+                    margin: 0,
+                    textAlign: 'center'
+                  }}>
+                    Selected: {selectedImage.name}
+                  </p>
+                )}
+              </div>
+
               <h2
                 style={{
                   fontSize: "1.8rem",
@@ -1274,9 +1401,9 @@ function Profile() {
             </div>
             <div
               style={{
-                padding: "10px 10px",
-                textAlign: "center",
-                background: "#f8fafc",
+                padding: "20px 30px",
+                textAlign: "end",
+                background: 'white',
               }}
             >
               <button
@@ -1293,7 +1420,7 @@ function Profile() {
                   cursor: "pointer",
                   transition: "all 0.3s ease",
                   boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
-                  minWidth: "200px",
+                  minWidth: "100px",
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.transform = "translateY(-2px)";
