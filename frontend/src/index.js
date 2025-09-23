@@ -2,16 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Login from './Login';
-import Signup from './Signup';
-import Dashboard from './Dashboard';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Dashboard from './components/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
-import Profile from './Profile';
-import Faculty from './Faculty';
-import Publications from './Publications';
-import Patents from './Patents';
-import ProjectStudents from './ProjectStudents';
-import HODVerification from './HODVerification';
+import Profile from './components/Profile';
+import Faculty from './components/Faculty';
+import Publications from './components/Publications';
+import Patents from './components/Patents';
+import ProjectStudents from './components/ProjectStudents';
+import HODVerification from './components/HODVerification';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -57,6 +57,7 @@ root.render(
           </ProtectedRoute>
         } />
         <Route path='*' element={<Login />} />
+        <Route path='/' element={<Login />} />
       </Routes>
     </Router>
   </React.StrictMode>

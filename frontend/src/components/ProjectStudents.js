@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
-import { saveChanges, CHANGE_TYPES } from './changeTracker';
+import { saveChanges, CHANGE_TYPES } from '../changeTracker';
 
 function ProjectStudents() {
   const [students, setStudents] = useState({
@@ -97,7 +97,7 @@ function ProjectStudents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       saveChanges(CHANGE_TYPES.PROJECT_STUDENTS, students);
       alert('Project students changes saved successfully! Go to Dashboard to review and submit.');

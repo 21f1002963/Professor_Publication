@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
-import { saveChanges, CHANGE_TYPES } from './changeTracker';
+import { saveChanges, CHANGE_TYPES } from '../changeTracker';
 
 function Patents() {
   const [patents, setPatents] = useState([
@@ -42,17 +42,17 @@ function Patents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Save changes to local tracking system
       const changeId = saveChanges(
-        CHANGE_TYPES.PATENTS, 
-        patents, 
+        CHANGE_TYPES.PATENTS,
+        patents,
         `Updated ${patents.length} patent(s)`
       );
-      
+
       alert('Patents saved! Go to Dashboard to review and submit all changes for approval.');
-      
+
     } catch (error) {
       console.error('Error saving patents:', error);
       alert('Error saving changes. Please try again.');

@@ -2,7 +2,7 @@
 
 export const CHANGE_TYPES = {
   PROFILE: 'profile',
-  PUBLICATIONS: 'publications', 
+  PUBLICATIONS: 'publications',
   PATENTS: 'patents',
   PROJECT_STUDENTS: 'project_students'
 };
@@ -18,7 +18,7 @@ export const CHANGE_STATUS = {
 export const saveChanges = (type, changes, description = '') => {
   const existingChanges = getStoredChanges();
   const changeId = Date.now().toString();
-  
+
   const newChange = {
     id: changeId,
     type: type,
@@ -27,10 +27,10 @@ export const saveChanges = (type, changes, description = '') => {
     timestamp: new Date().toISOString(),
     status: CHANGE_STATUS.DRAFT
   };
-  
+
   existingChanges[changeId] = newChange;
   localStorage.setItem('pendingChanges', JSON.stringify(existingChanges));
-  
+
   return changeId;
 };
 
@@ -67,14 +67,14 @@ export const submitAllChanges = () => {
   const pendingChanges = Object.values(existingChanges).filter(
     change => change.status === CHANGE_STATUS.DRAFT
   );
-  
+
   // Update all pending changes to submitted status
   pendingChanges.forEach(change => {
     existingChanges[change.id].status = CHANGE_STATUS.SUBMITTED;
   });
-  
+
   localStorage.setItem('pendingChanges', JSON.stringify(existingChanges));
-  
+
   return pendingChanges;
 };
 
@@ -97,27 +97,27 @@ export const getChangeTypeDisplayName = (type) => {
 // Get status display info
 export const getStatusDisplayInfo = (status) => {
   const statusInfo = {
-    [CHANGE_STATUS.DRAFT]: { 
-      label: 'Draft', 
-      color: '#ed8936', 
+    [CHANGE_STATUS.DRAFT]: {
+      label: 'Draft',
+      color: '#ed8936',
       bgColor: '#fef5e7',
       icon: '📝'
     },
-    [CHANGE_STATUS.SUBMITTED]: { 
-      label: 'Submitted', 
-      color: '#3182ce', 
+    [CHANGE_STATUS.SUBMITTED]: {
+      label: 'Submitted',
+      color: '#3182ce',
       bgColor: '#ebf8ff',
       icon: '📤'
     },
-    [CHANGE_STATUS.APPROVED]: { 
-      label: 'Approved', 
-      color: '#38a169', 
+    [CHANGE_STATUS.APPROVED]: {
+      label: 'Approved',
+      color: '#38a169',
       bgColor: '#f0fff4',
       icon: '✅'
     },
-    [CHANGE_STATUS.DENIED]: { 
-      label: 'Denied', 
-      color: '#e53e3e', 
+    [CHANGE_STATUS.DENIED]: {
+      label: 'Denied',
+      color: '#e53e3e',
       bgColor: '#fed7d7',
       icon: '❌'
     }

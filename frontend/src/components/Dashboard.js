@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { 
-  getPendingChanges, 
-  getChangeTypeDisplayName, 
-  getStatusDisplayInfo, 
+import {
+  getPendingChanges,
+  getChangeTypeDisplayName,
+  getStatusDisplayInfo,
   submitAllChanges,
-  CHANGE_TYPES 
-} from './changeTracker';
+  CHANGE_TYPES
+} from '../changeTracker';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -33,7 +33,7 @@ function Dashboard() {
         console.error('Error decoding token:', error);
       }
     }
-    
+
     // Load pending changes
     loadPendingChanges();
   }, []);
@@ -53,7 +53,7 @@ function Dashboard() {
       const submittedChanges = submitAllChanges();
       setSubmissionStatus('submitted');
       setPendingChanges([]);
-      
+
       // Mock API call
       await fetch('http://localhost:5000/submit-bulk-changes', {
         method: 'POST',
@@ -63,7 +63,7 @@ function Dashboard() {
         },
         body: JSON.stringify({ changes: submittedChanges })
       });
-      
+
       alert(`Successfully submitted ${submittedChanges.length} changes for HOD approval!`);
     } catch (error) {
       console.error('Error submitting changes:', error);
@@ -478,7 +478,7 @@ function Dashboard() {
                 <span style={{ marginRight: '10px' }}>📋</span>
                 Pending Changes Review
               </h2>
-              
+
               {pendingChanges.length > 0 && (
                 <button
                   onClick={handleSubmitAllChanges}

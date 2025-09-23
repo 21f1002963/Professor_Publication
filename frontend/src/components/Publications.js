@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
-import { saveChanges, CHANGE_TYPES } from './changeTracker';
+import { saveChanges, CHANGE_TYPES } from '../changeTracker';
 
 function Publications() {
   const [publications, setPublications] = useState([
@@ -48,17 +48,17 @@ function Publications() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Save changes to local tracking system
       const changeId = saveChanges(
-        CHANGE_TYPES.PUBLICATIONS, 
-        publications, 
+        CHANGE_TYPES.PUBLICATIONS,
+        publications,
         `Updated ${publications.length} publication(s)`
       );
-      
+
       alert('Publications saved! Go to Dashboard to review and submit all changes for approval.');
-      
+
     } catch (error) {
       console.error('Error saving publications:', error);
       alert('Error saving changes. Please try again.');

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import PU from './assets/PU.png';
-import bgImage from './assets/pondicherry-university-banner.jpg';
-import FacultyIcon from './assets/faculty.png';
+import PU from '../assets/PU.png';
+import bgImage from '../assets/pondicherry-university-banner.jpg';
+import FacultyIcon from '../assets/faculty.png';
 
 function Signup() {
     const navigate = useNavigate();

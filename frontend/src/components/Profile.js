@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
-import { saveChanges, CHANGE_TYPES } from './changeTracker';
+import { saveChanges, CHANGE_TYPES } from '../changeTracker';
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -199,7 +199,7 @@ function Profile() {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setProfile(data);
@@ -211,17 +211,17 @@ function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Save changes to local tracking system instead of submitting directly
       const changeId = saveChanges(
-        CHANGE_TYPES.PROFILE, 
-        profile, 
+        CHANGE_TYPES.PROFILE,
+        profile,
         'Updated personal and faculty information'
       );
-      
+
       alert('Profile changes saved! Go to Dashboard to review and submit all changes for approval.');
-      
+
     } catch (error) {
       console.error('Error saving profile changes:', error);
       alert('Error saving changes. Please try again.');
@@ -235,7 +235,7 @@ function Profile() {
   const handleArrayChange = (arrayName, index, field, value) => {
     setProfile(prev => ({
       ...prev,
-      [arrayName]: prev[arrayName].map((item, i) => 
+      [arrayName]: prev[arrayName].map((item, i) =>
         i === index ? { ...item, [field]: value } : item
       )
     }));
@@ -248,7 +248,7 @@ function Profile() {
       teaching_experience: { designation: '', department: '', institution: '', from: '', to: '' },
       // Add other defaults as needed
     };
-    
+
     setProfile(prev => ({
       ...prev,
       [arrayName]: [...prev[arrayName], defaultItems[arrayName] || {}]
@@ -318,7 +318,7 @@ function Profile() {
               }}>
                 📝 Personal Information
               </h2>
-              
+
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',

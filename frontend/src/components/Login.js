@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import ProtectedRoute from './ProtectedRoute';
-import { jwtDecode } from 'jwt-decode';
-import bgImage from './assets/pondicherry-university-banner.jpg';
-import PU from './assets/PU.png';
-import FacultyIcon from './assets/faculty.png';
+import bgImage from '../assets/pondicherry-university-banner.jpg';
+import PU from '../assets/PU.png';
+import FacultyIcon from '../assets/faculty.png';
 
 
 function Login() {
