@@ -106,21 +106,19 @@ function Faculty() {
           {/* Page Header */}
           <div style={{
             marginBottom: '40px',
-            textAlign: 'center'
           }}>
             <h1 style={{
               fontSize: '2.5rem',
               fontWeight: 800,
-              color: '#2d3748',
               margin: '0 0 10px 0',
               fontFamily: 'Segoe UI, Arial, sans-serif'
             }}>
-              👥 Faculty Directory
+              Faculty Directory
             </h1>
             <p style={{
               fontSize: '1.2rem',
-              color: '#718096',
-              margin: 0
+              margin: 0,
+              opacity: 0.8
             }}>
               Discover our distinguished faculty members and their expertise
             </p>
@@ -155,7 +153,7 @@ function Faculty() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by name or expertise..."
                   style={{
-                    width: '100%',
+                    width: '90%',
                     padding: '14px 16px',
                     border: '2px solid #e2e8f0',
                     borderRadius: '12px',
@@ -174,35 +172,6 @@ function Faculty() {
                   color: '#374151',
                   fontSize: '0.95rem'
                 }}>
-                  🏛️ Department
-                </label>
-                <select
-                  value={filterDepartment}
-                  onChange={(e) => setFilterDepartment(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px',
-                    border: '2px solid #e2e8f0',
-                    borderRadius: '12px',
-                    fontSize: '1rem',
-                    background: '#fff'
-                  }}
-                >
-                  <option value="">All Departments</option>
-                  {departments.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '8px',
-                  fontWeight: 600,
-                  color: '#374151',
-                  fontSize: '0.95rem'
-                }}>
                   👔 Designation
                 </label>
                 <select
@@ -210,7 +179,7 @@ function Faculty() {
                   onChange={(e) => setFilterDesignation(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '14px 16px',
+                    padding: '14px 20px',
                     border: '2px solid #e2e8f0',
                     borderRadius: '12px',
                     fontSize: '1rem',
@@ -286,7 +255,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    👨‍🏫 Name
+                    Name
                   </th>
                   <th style={{
                     padding: '20px',
@@ -295,7 +264,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    �️ Department
+                    Department
                   </th>
                   <th style={{
                     padding: '20px',
@@ -304,7 +273,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    👔 Designation
+                   Designation
                   </th>
                   <th style={{
                     padding: '20px',
@@ -313,7 +282,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    🎓 Qualification
+                    Qualification
                   </th>
                   <th style={{
                     padding: '20px',
@@ -322,16 +291,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    📧 Contact
-                  </th>
-                  <th style={{
-                    padding: '20px',
-                    textAlign: 'left',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    borderBottom: 'none'
-                  }}>
-                    📍 Office
+                    Contact
                   </th>
                   <th style={{
                     padding: '20px',
@@ -434,14 +394,6 @@ function Faculty() {
                       }}>
                         {professor.phone}
                       </div>
-                    </td>
-                    <td style={{
-                      padding: '20px',
-                      verticalAlign: 'top',
-                      color: '#4a5568',
-                      fontSize: '0.9rem'
-                    }}>
-                      {professor.office_location}
                     </td>
                     <td style={{
                       padding: '20px',

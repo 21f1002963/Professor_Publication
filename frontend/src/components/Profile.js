@@ -13,7 +13,7 @@ function Profile() {
     area_of_expertise: '',
 
     // Faculty Information
-    department: '',
+    department: 'Computer Science',
     designation: '',
     employee_id: '',
     date_of_joining: '',
@@ -180,7 +180,9 @@ function Profile() {
         const decoded = jwtDecode(token);
         setProfile(prev => ({
           ...prev,
-          email: decoded.email
+          name: decoded.name,
+          email: decoded.email,
+          department: prev.department
         }));
       } catch (error) {
         console.error('Error decoding token:', error);
