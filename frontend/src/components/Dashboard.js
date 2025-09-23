@@ -89,14 +89,18 @@ function Dashboard() {
   };
 
   const menuItems = [
-    {label: 'Faculty', path: '/faculty', icon: '👥' },
+    { label: 'Profile', path: '/profile', icon: '👤' },
+    { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: 'white', display: 'flex', position: 'relative' }}>
+    <div style={{
+      minHeight: '100vh', backgroundSize: 'cover',
+      display: 'flex', position: 'relative'
+    }}>
       {/* Overlay when sidebar is open */}
       {sidebarOpen && (
         <div
@@ -342,40 +346,40 @@ function Dashboard() {
           boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
           border: '1px solid #e2e8f0'
         }}>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: 700,
-            color: '#2d3748',
-            marginBottom: '20px',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            <span style={{ marginRight: '10px' }}>📋</span>
-            Profile Verification Status
-          </h2>
-
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '15px',
-            marginBottom: '15px'
-          }}>
-            <div style={{
-              padding: '12px 20px',
-              borderRadius: '25px',
-              fontWeight: 600,
-              fontSize: '1rem',
-              background: profileStatus === 'approved' ?
-                'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
-                profileStatus === 'denied' ?
-                'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)' :
-                'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)',
-              color: '#fff',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+          <div style={{display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-between'}}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center'
             }}>
-              {profileStatus === 'approved' && '✅ Verified & Approved'}
-              {profileStatus === 'denied' && '❌ Denied - Requires Updates'}
-              {profileStatus === 'pending' && '⏳ Pending Verification'}
+              Profile Update Status
+            </h2>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px',
+            }}>
+              <div style={{
+                padding: '12px 20px',
+                borderRadius: '25px',
+                fontWeight: 600,
+                fontSize: '1rem',
+                background: profileStatus === 'approved' ?
+                  'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
+                  profileStatus === 'denied' ?
+                    'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)' :
+                    'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)',
+                color: '#fff',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+              }}>
+                {profileStatus === 'approved' && 'Approved'}
+                {profileStatus === 'denied' && ' Denied'}
+                {profileStatus === 'pending' && ' Pending Verification'}
+              </div>
             </div>
           </div>
 
@@ -386,11 +390,11 @@ function Dashboard() {
             margin: 0
           }}>
             {profileStatus === 'approved' &&
-              'Your profile has been verified and approved by the Head of Department. All information is now visible in the faculty directory.'}
+              'Your profile updates has been verified and approved by the Head of Department. '}
             {profileStatus === 'denied' &&
               'Your profile updates have been denied. Please review and update your information before resubmitting for verification.'}
             {profileStatus === 'pending' &&
-              'Your profile is currently under review by the Head of Department. You will be notified once the verification is complete.'}
+              'Your profile updates is currently under review by the Head of Department. You will be notified once the verification is complete.'}
           </p>
         </div>
 
@@ -457,7 +461,6 @@ function Dashboard() {
             background: '#fff',
             borderRadius: '20px',
             padding: '30px',
-            marginBottom: '30px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
             border: '1px solid #e2e8f0'
           }}>
@@ -465,7 +468,6 @@ function Dashboard() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '25px'
             }}>
               <h2 style={{
                 fontSize: '1.5rem',
@@ -475,7 +477,6 @@ function Dashboard() {
                 display: 'flex',
                 alignItems: 'center'
               }}>
-                <span style={{ marginRight: '10px' }}>📋</span>
                 Pending Changes Review
               </h2>
 

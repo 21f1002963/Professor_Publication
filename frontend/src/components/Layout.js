@@ -19,7 +19,7 @@ function Layout({ children }) {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: 'white', display: 'flex', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', position: 'relative' }}>
       {/* Overlay when sidebar is open */}
       {sidebarOpen && (
         <div
@@ -212,7 +212,6 @@ function Layout({ children }) {
         marginLeft: sidebarOpen ? '280px' : '90px',
         transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         minHeight: '100vh',
-        background: '#f8fafc',
         position: 'relative'
       }}>
         {/* Dashboard Icon - Top Right Corner */}
@@ -223,15 +222,15 @@ function Layout({ children }) {
             right: '20px',
             zIndex: 1000,
             cursor: 'pointer',
-            background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
             color: '#fff',
             borderRadius: '50%',
+            border: '2px solid #929294ff',
             width: '50px',
             height: '50px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 15px rgba(96, 147, 236, 0.3)',
+            boxShadow: '0 4px 15px rgba(19, 19, 19, 0.3)',
             transition: 'all 0.3s ease',
             fontSize: '1.5rem'
           }}
