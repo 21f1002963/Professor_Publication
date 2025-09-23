@@ -269,41 +269,36 @@ function Profile() {
         padding: '40px 20px'
       }}>
         <div style={{
-          maxWidth: '1000px',
+          padding: '10px 30px 30px',
+        }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            margin: '0 0 10px 0',
+            fontFamily: 'Segoe UI, Arial, sans-serif'
+          }}>
+            Faculty Profile
+          </h1>
+          <p style={{
+            fontSize: '1.2rem',
+            opacity: 0.8,
+            margin: 0
+          }}>
+            Manage your personal and academic information
+          </p>
+        </div>
+        <div style={{
+          maxWidth: '87vw',
           margin: '0 auto',
           background: '#fff',
           borderRadius: '20px',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
           overflow: 'hidden'
         }}>
-          {/* Header */}
-          <div style={{
-            background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
-            color: '#fff',
-            padding: '30px 40px',
-            textAlign: 'center'
-          }}>
-            <h1 style={{
-              fontSize: '2.5rem',
-              fontWeight: 800,
-              margin: '0 0 10px 0',
-              fontFamily: 'Segoe UI, Arial, sans-serif'
-            }}>
-              👤 Faculty Profile
-            </h1>
-            <p style={{
-              fontSize: '1.2rem',
-              opacity: 0.9,
-              margin: 0
-            }}>
-              Manage your personal and academic information
-            </p>
-          </div>
-
           <form onSubmit={handleSubmit}>
             {/* Personal Information Section */}
             <div style={{
-              padding: '40px',
+              padding: '5px 30px 30px',
               borderBottom: '1px solid #e2e8f0'
             }}>
               <h2 style={{
@@ -315,7 +310,7 @@ function Profile() {
                 alignItems: 'center',
                 gap: '10px'
               }}>
-                📝 Personal Information
+                Personal Information
               </h2>
 
               <div style={{
@@ -430,7 +425,7 @@ function Profile() {
             </div>
 
             {/* Submit Button Section */}
-            <div style={{ padding: '30px 40px', textAlign: 'center', background: '#f8fafc' }}>
+            <div style={{ padding: '10px 10px', textAlign: 'center', background: '#f8fafc' }}>
               <button
                 type="submit"
                 style={{
@@ -455,7 +450,7 @@ function Profile() {
                   e.target.style.boxShadow = '0 8px 25px rgba(96, 147, 236, 0.3)';
                 }}
               >
-                💾 Save Changes
+                Save
               </button>
             </div>
           </form>
