@@ -508,7 +508,7 @@ function Profile() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                   gap: "20px",
                 }}
               >
@@ -605,6 +605,36 @@ function Profile() {
                       color: "#4a5568",
                     }}
                   >
+                    Designation
+                  </label>
+                  <input
+                    type="text"
+                    value={profile.designation}
+                    onChange={(e) =>
+                      handleInputChange("designation", e.target.value)
+                    }
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e2e8f0",
+                      borderRadius: "10px",
+                      fontSize: "1rem",
+                      transition: "border-color 0.3s ease",
+                      boxSizing: "border-box",
+                    }}
+                    placeholder="Enter your designation"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontWeight: 600,
+                      color: "#4a5568",
+                    }}
+                  >
                     Department
                   </label>
                   <input
@@ -675,7 +705,7 @@ function Profile() {
                       </th>
                       <th
                         style={{
-                          width: "220px",
+                          width: "250px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -748,7 +778,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "160px",
+                              maxWidth: "210px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -781,7 +811,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "200px",
+                              maxWidth: "350px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -814,7 +844,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "180px",
+                              maxWidth: "220px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -847,7 +877,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "100px",
+                              maxWidth: "150px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1036,7 +1066,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "200px",
+                              maxWidth: "250px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1069,7 +1099,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "100px",
+                              maxWidth: "150px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1102,7 +1132,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "200px",
+                              maxWidth: "250px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1168,7 +1198,7 @@ function Profile() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "100px",
+                              maxWidth: "130px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1347,27 +1377,7 @@ function Profile() {
                       }}
                       placeholder="Specialization 1"
                     />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setProfile((prev) => ({
-                          ...prev,
-                          area_of_expertise: [profile.area_of_expertise, ""],
-                        }))
-                      }
-                      style={{
-                        background: "#3182ce",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "8px 18px",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        fontSize: "1rem",
-                      }}
-                    >
-                      Add Specialization
-                    </button>
+                    
                   </div>
                 )}
               </div>
