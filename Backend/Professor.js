@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const ProfessorSchema = new mongoose.Schema({
+    // Basic Authentication Fields
     name: {
         type: String,
         required: true,
@@ -13,6 +14,211 @@ const ProfessorSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    role: {
+        type: String,
+        enum: ['faculty', 'hod', 'dean'],
+        default: 'faculty'
+    },
+
+    // Personal Information
+    phone: { type: String, default: '' },
+    profileImage: { type: String, default: '' }, // Base64 or file path
+
+    // Faculty Information
+    department: { type: String, default: '' },
+    designation: { type: String, default: '' },
+    employee_id: { type: String, default: '' },
+    date_of_joining: { type: Date },
+    experience_years: { type: Number, default: 0 },
+    subjects_taught: [{ type: String }],
+    research_interests: [{ type: String }],
+    office_location: { type: String, default: '' },
+    office_hours: { type: String, default: '' },
+    area_of_expertise: [{ type: String, default: '' }],
+
+    // Educational Qualifications
+    education: [{
+        degree: { type: String, default: '' },
+        title: { type: String, default: '' },
+        university: { type: String, default: '' },
+        graduationYear: { type: String, default: '' }
+    }],
+
+    // Awards and Recognition
+    awards: [{
+        title: { type: String, default: '' },
+        type: { type: String, default: '' },
+        agency: { type: String, default: '' },
+        year: { type: String, default: '' },
+        amount: { type: String, default: '' }
+    }],
+
+    // Experience
+    teaching_experience: [{
+        designation: { type: String, default: '' },
+        department: { type: String, default: '' },
+        institution: { type: String, default: '' },
+        from: { type: String, default: '' },
+        to: { type: String, default: '' }
+    }],
+
+    research_experience: [{
+        position: { type: String, default: '' },
+        organization: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        research_area: { type: String, default: '' }
+    }],
+
+    industry_experience: [{
+        position: { type: String, default: '' },
+        company: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        role: { type: String, default: '' }
+    }],
+
+    // Research and Innovation
+    contribution_to_innovation: [{
+        title: { type: String, default: '' },
+        description: { type: String, default: '' },
+        year: { type: String, default: '' },
+        impact: { type: String, default: '' }
+    }],
+
+    patents: [{
+        title: { type: String, default: '' },
+        patent_number: { type: String, default: '' },
+        status: { type: String, default: '' },
+        year: { type: String, default: '' },
+        co_inventors: { type: String, default: '' }
+    }],
+
+    publications: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        journal: { type: String, default: '' },
+        volume: { type: String, default: '' },
+        issue: { type: String, default: '' },
+        pages: { type: String, default: '' },
+        year: { type: String, default: '' },
+        doi: { type: String, default: '' },
+        type: { type: String, default: '' }
+    }],
+
+    books: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        publisher: { type: String, default: '' },
+        isbn: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    chapters_in_books: [{
+        chapter_title: { type: String, default: '' },
+        book_title: { type: String, default: '' },
+        editors: { type: String, default: '' },
+        publisher: { type: String, default: '' },
+        pages: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    edited_books: [{
+        title: { type: String, default: '' },
+        editors: { type: String, default: '' },
+        publisher: { type: String, default: '' },
+        isbn: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    // Projects and Students
+    projects: [{
+        title: { type: String, default: '' },
+        funding_agency: { type: String, default: '' },
+        amount: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        role: { type: String, default: '' },
+        status: { type: String, default: '' }
+    }],
+
+    consultancy_works: [{
+        title: { type: String, default: '' },
+        organization: { type: String, default: '' },
+        amount: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        status: { type: String, default: '' }
+    }],
+
+    pg_student_guided: [{
+        student_name: { type: String, default: '' },
+        thesis_title: { type: String, default: '' },
+        year_of_completion: { type: String, default: '' },
+        current_status: { type: String, default: '' }
+    }],
+
+    phd_student_guided: [{
+        student_name: { type: String, default: '' },
+        thesis_title: { type: String, default: '' },
+        thesis_status: { type: String, default: '' },
+        thesis_submission_date: { type: String, default: '' },
+        viva_date: { type: String, default: '' },
+        year_of_award: { type: String, default: '' }
+    }],
+
+    postdoc_student_guided: [{
+        student_name: { type: String, default: '' },
+        designation: { type: String, default: '' },
+        funding_agency: { type: String, default: '' },
+        fellowship_title: { type: String, default: '' },
+        joining_date: { type: String, default: '' },
+        completion_date: { type: String, default: '' }
+    }],
+
+    // Academic Activities
+    invited_talks: [{
+        title: { type: String, default: '' },
+        conference_seminar_workshop_trainingProgram: { type: String, default: '' },
+        organization: { type: String, default: '' },
+        level: { type: String, default: '' },
+        from: { type: String, default: '' },
+        to: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    conferences_seminar_: [{
+        title: { type: String, default: '' },
+        sponsors: { type: String, default: '' },
+        venue: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        level: { type: String, default: '' },
+        from: { type: String, default: '' },
+        to: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    administrative_responsibilities: [{
+        position: { type: String, default: '' },
+        organization: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        nature_of_duty: { type: String, default: '' }
+    }],
+
+    affliations: [{
+        position: { type: String, default: '' },
+        organization: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        nature: { type: String, default: '' }
+    }],
+
+    // Verification Status
+    profileStatus: {
+        type: String,
+        enum: ['pending', 'approved', 'denied'],
+        default: 'pending'
+    },
+
+    lastProfileUpdate: {
+        type: Date,
+        default: Date.now
     }
 }, { timestamps: true });
 

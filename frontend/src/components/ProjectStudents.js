@@ -110,28 +110,24 @@ function ProjectStudents() {
   return (
     <Layout>
       <div style={{
+        minHeight: '100vh',
         padding: '40px',
-        maxWidth: '1200px',
-        margin: '0 auto'
       }}>
         {/* Page Header */}
         <div style={{
-          marginBottom: '30px',
-          textAlign: 'center'
+
         }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: 800,
-            color: '#2d3748',
-            margin: '0 0 10px 0',
+            margin: '0px',
             fontFamily: 'Segoe UI, Arial, sans-serif'
           }}>
-            👨‍🎓 Project Students
+            Project Students
           </h1>
           <p style={{
             fontSize: '1.2rem',
-            color: '#718096',
-            margin: 0
+            opacity: 0.8
           }}>
             Manage your guided students and their academic progress
           </p>

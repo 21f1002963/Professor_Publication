@@ -62,29 +62,23 @@ function Patents() {
   return (
     <Layout>
       <div style={{
-        padding: '40px',
-        maxWidth: '1200px',
-        margin: '0 auto'
+        minHeight: "100vh",
+        padding: "40px",
       }}>
         {/* Page Header */}
         <div style={{
-          marginBottom: '30px',
-          textAlign: 'center'
         }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: 800,
-            color: '#2d3748',
-            margin: '0 0 10px 0',
-            fontFamily: 'Segoe UI, Arial, sans-serif'
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            margin: '0px'
           }}>
-            💡 Patents
+            Patents
           </h1>
           <p style={{
             fontSize: '1.2rem',
-            color: '#718096',
-            margin: 0
-          }}>
+            opacity: 0.8         }}>
             Manage your patent portfolio and intellectual property
           </p>
         </div>

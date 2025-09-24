@@ -68,28 +68,26 @@ function Publications() {
   return (
     <Layout>
       <div style={{
+        minHeight: '100vh',
         padding: '40px',
-        maxWidth: '1200px',
         margin: '0 auto'
       }}>
         {/* Page Header */}
         <div style={{
           marginBottom: '30px',
-          textAlign: 'center'
         }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: 800,
-            color: '#2d3748',
             margin: '0 0 10px 0',
             fontFamily: 'Segoe UI, Arial, sans-serif'
           }}>
-            📄 Publications
+            Publications
           </h1>
           <p style={{
             fontSize: '1.2rem',
-            color: '#718096',
-            margin: 0
+            margin: 0,
+            opacity: 0.8,
           }}>
             Manage your academic publications and research papers
           </p>
@@ -105,7 +103,7 @@ function Publications() {
           <form onSubmit={handleSubmit}>
             {/* Publications Section */}
             <div style={{
-              padding: '40px'
+              padding: '30px 30px 30px'
             }}>
               <div style={{
                 display: 'flex',
@@ -121,7 +119,6 @@ function Publications() {
                   display: 'flex',
                   alignItems: 'center'
                 }}>
-                  <span style={{ marginRight: '10px' }}>📚</span>
                   Academic Publications
                 </h2>
                 <button
@@ -157,7 +154,7 @@ function Publications() {
                 <div key={index} style={{
                   border: '2px solid #e2e8f0',
                   borderRadius: '15px',
-                  padding: '30px',
+                  padding: '25px',
                   marginBottom: '25px',
                   background: '#f8fafc',
                   position: 'relative'
@@ -193,7 +190,8 @@ function Publications() {
                     fontSize: '1.3rem',
                     fontWeight: 600,
                     color: '#2d3748',
-                    marginBottom: '20px'
+                    margin: '10px',
+                    marginLeft: '0px'
                   }}>
                     Publication #{index + 1}
                   </h3>
