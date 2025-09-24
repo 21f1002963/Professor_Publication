@@ -41,23 +41,31 @@ app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
-// Register Professor
+// Register Professor/HOD
 app.post('/signup', async (req, res) => {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role = 'faculty' } = req.body;
     try {
-        console.log(name, email, password, confirmPassword);
+        console.log(name, email, password, confirmPassword, role);
         const existingProfessor = await Professor.findOne({ email });
         if (existingProfessor) {
-            return res.status(400).json({ message: 'Professor already exists' });
+            return res.status(400).json({ message: 'User already exists' });
         }
         if (password !== confirmPassword) {
             return res.status(400).json({ message: 'Passwords do not match' });
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newProfessor = new Professor({ name, email, password: hashedPassword });
+        const newProfessor = new Professor({
+            name,
+            email,
+            password: hashedPassword,
+            role: role // 'faculty' or 'hod'
+        });
         await newProfessor.save();
-        res.status(201).json({ message: 'Professor registered successfully' });
+        res.status(201).json({
+            message: `${role === 'hod' ? 'HOD' : 'Professor'} registered successfully`
+        });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -78,7 +86,8 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({
             id: professor._id,
             name: professor.name,
-            email: professor.email
+            email: professor.email,
+            role: professor.role
         }, TOKEN, { expiresIn: '3m' });
         res.status(200).json({ result: professor, token });
     } catch (error) {
@@ -225,6 +234,39 @@ app.get('/api/professors', authenticateToken, async (req, res) => {
 
 // =============================================================================
 // END PROFILE MANAGEMENT API ENDPOINTS
+// =============================================================================
+
+// =============================================================================
+// HOD MANAGEMENT API ENDPOINTS
+// =============================================================================
+
+// Get all faculty members (HOD only)
+app.get('/api/hod/faculty-list', authenticateToken, async (req, res) => {
+    try {
+        // Check if user is HOD
+        const token = req.headers['authorization']?.split(' ')[1];
+        const decoded = jwt.verify(token, TOKEN);
+        
+        if (decoded.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD role required.' });
+        }
+
+        const faculty = await Professor.find({
+            role: 'faculty'
+        }).select('-password -__v').sort({ createdAt: -1 });
+
+        res.status(200).json({ 
+            faculty: faculty,
+            count: faculty.length 
+        });
+    } catch (error) {
+        console.error('Error fetching faculty list:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END HOD MANAGEMENT API ENDPOINTS
 // =============================================================================
 
 // Start server

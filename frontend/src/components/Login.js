@@ -27,6 +27,13 @@ function Login() {
             console.log(data);
             if (data.token) {
                 localStorage.setItem('token', data.token);
+                // Store user info including role
+                localStorage.setItem('user', JSON.stringify({
+                    id: data.result._id,
+                    name: data.result.name,
+                    email: data.result.email,
+                    role: data.result.role
+                }));
                 navigate('/dashboard'); // Redirect to dashboard or another page
             } else {
                 setMessage(data.message || 'Login failed');

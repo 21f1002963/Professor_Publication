@@ -21,11 +21,14 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
+    const user = localStorage.getItem('user');
+    
+    if (token && user) {
       try {
+        const userInfo = JSON.parse(user);
         const decoded = jwtDecode(token);
-        setUserName(decoded.name || 'Professor');
-        setUserRole(decoded.role || 'faculty');
+        setUserName(userInfo.name || decoded.name || 'Professor');
+        setUserRole(userInfo.role || decoded.role || 'faculty');
         // Mock status - in real app, fetch from backend
         setProfileStatus(decoded.profileStatus || 'pending');
         setProfileImage(decoded.profileImage || '');
@@ -85,16 +88,26 @@ function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
-  const menuItems = [
+  // Role-based menu items
+  const baseMenuItems = [
     { label: 'Profile', path: '/profile', icon: '👤' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
   ];
+
+  const hodMenuItems = [
+    ...baseMenuItems,
+    { label: 'HOD Verification', path: '/hod-verification', icon: '✅' },
+    { label: 'Faculty Management', path: '/faculty-management', icon: '🏛️' }
+  ];
+
+  const menuItems = userRole === 'hod' ? hodMenuItems : baseMenuItems;
 
   return (
     <div style={{

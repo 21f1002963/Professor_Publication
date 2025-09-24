@@ -12,6 +12,7 @@ import Publications from './components/Publications';
 import Patents from './components/Patents';
 import ProjectStudents from './components/ProjectStudents';
 import HODVerification from './components/HODVerification';
+import FacultyManagement from './components/FacultyManagement';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -54,6 +55,11 @@ root.render(
         <Route path='/hod-verification'  element={
           <ProtectedRoute>
             <HODVerification />
+          </ProtectedRoute>
+        } />
+        <Route path='/faculty-management'  element={
+          <ProtectedRoute>
+            <FacultyManagement />
           </ProtectedRoute>
         } />
         <Route path='*' element={<Login />} />
