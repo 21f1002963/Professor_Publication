@@ -43,9 +43,14 @@ app.get('/', (req, res) => {
 
 // Register Professor/HOD
 app.post('/signup', async (req, res) => {
-    const { name, email, password, confirmPassword, role = 'faculty' } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
     try {
-        console.log(name, email, password, confirmPassword, role);
+        console.log('Signup request received:');
+        console.log('Name:', name);
+        console.log('Email:', email);
+        console.log('Role:', role);
+        console.log('Role type:', typeof role);
+
         const existingProfessor = await Professor.findOne({ email });
         if (existingProfessor) {
             return res.status(400).json({ message: 'User already exists' });
@@ -53,16 +58,29 @@ app.post('/signup', async (req, res) => {
         if (password !== confirmPassword) {
             return res.status(400).json({ message: 'Passwords do not match' });
         }
+
+        // Validate role
+        const validRoles = ['faculty', 'hod', 'dean'];
+        const userRole = role || 'faculty'; // Default to faculty if role is undefined
+        if (!validRoles.includes(userRole)) {
+            return res.status(400).json({ message: 'Invalid role selected' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 12);
         const newProfessor = new Professor({
             name,
             email,
             password: hashedPassword,
-            role: role // 'faculty' or 'hod'
+            role: userRole
         });
-        await newProfessor.save();
+
+        console.log('About to save professor with role:', userRole);
+        const savedProfessor = await newProfessor.save();
+        console.log('Saved professor:', savedProfessor.role);
+
         res.status(201).json({
-            message: `${role === 'hod' ? 'HOD' : 'Professor'} registered successfully`
+            message: `${userRole === 'hod' ? 'HOD' : userRole === 'dean' ? 'Dean' : 'Faculty member'} registered successfully`,
+            role: savedProfessor.role
         });
     } catch (error) {
         console.error('Registration error:', error);
@@ -88,7 +106,7 @@ app.post('/login', async (req, res) => {
             name: professor.name,
             email: professor.email,
             role: professor.role
-        }, TOKEN, { expiresIn: '3m' });
+        }, TOKEN, { expiresIn: '24h' });
         res.status(200).json({ result: professor, token });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -109,6 +127,41 @@ app.get('/api/professor/profile', authenticateToken, async (req, res) => {
         res.status(200).json(professor);
     } catch (error) {
         console.error('Error fetching profile:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update profile directly (no approval needed)
+app.put('/api/professor/profile', authenticateToken, async (req, res) => {
+    try {
+        const profileData = req.body;
+        
+        // Remove sensitive fields that shouldn't be updated via this endpoint
+        delete profileData.password;
+        delete profileData.role;
+        delete profileData._id;
+        delete profileData.__v;
+        
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                ...profileData,
+                lastProfileUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+        
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+        
+        console.log('Profile updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Profile updated successfully',
+            profile: updatedProfessor
+        });
+    } catch (error) {
+        console.error('Error updating profile:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -246,7 +299,7 @@ app.get('/api/hod/faculty-list', authenticateToken, async (req, res) => {
         // Check if user is HOD
         const token = req.headers['authorization']?.split(' ')[1];
         const decoded = jwt.verify(token, TOKEN);
-        
+
         if (decoded.role !== 'hod') {
             return res.status(403).json({ message: 'Access denied. HOD role required.' });
         }
@@ -255,9 +308,9 @@ app.get('/api/hod/faculty-list', authenticateToken, async (req, res) => {
             role: 'faculty'
         }).select('-password -__v').sort({ createdAt: -1 });
 
-        res.status(200).json({ 
+        res.status(200).json({
             faculty: faculty,
-            count: faculty.length 
+            count: faculty.length
         });
     } catch (error) {
         console.error('Error fetching faculty list:', error);

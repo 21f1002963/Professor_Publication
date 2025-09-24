@@ -11,6 +11,7 @@ import {
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userDesignation, setuserDesignation] = useState('Assistant Professor');
   const [userName, setUserName] = useState('Professor');
   const [userRole, setUserRole] = useState('faculty'); // 'faculty' or 'hod'
   const [profileStatus, setProfileStatus] = useState('pending'); // 'pending', 'approved', 'denied'
@@ -22,16 +23,17 @@ function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    
+
     if (token && user) {
       try {
         const userInfo = JSON.parse(user);
         const decoded = jwtDecode(token);
         setUserName(userInfo.name || decoded.name || 'Professor');
         setUserRole(userInfo.role || decoded.role || 'faculty');
-        // Mock status - in real app, fetch from backend
         setProfileStatus(decoded.profileStatus || 'pending');
-        setProfileImage(decoded.profileImage || '');
+
+        // Fetch profile data to get the latest profile image
+        fetchProfileData();
       } catch (error) {
         console.error('Error decoding token:', error);
       }
@@ -40,6 +42,32 @@ function Dashboard() {
     // Load pending changes
     loadPendingChanges();
   }, []);
+
+  const fetchProfileData = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:5000/api/professor/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const profileData = await response.json();
+        // Update profile image from the fetched profile data
+        if (profileData.profileImage) {
+          setProfileImage(profileData.profileImage);
+        }
+        if (profileData.designation) {
+          setuserDesignation(profileData.designation);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    }
+  };
 
   const loadPendingChanges = () => {
     const changes = getPendingChanges();
@@ -327,15 +355,14 @@ function Dashboard() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '15px'
+            gap: '15px',
+            flexDirection: 'column'
           }}>
             <div style={{
-              width: '80px',
-              height: '80px',
+              width: '120px',
+              height: '120px',
               borderRadius: '50%',
-              background: profileImage ? `url(${profileImage})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              background: !profileImage ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'transparent',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -343,10 +370,32 @@ function Dashboard() {
               fontSize: '2rem',
               fontWeight: 700,
               boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              border: '3px solid #fff'
+              border: '3px solid #fff',
+              overflow: 'hidden',
+              position: 'relative'
             }}>
-              {!profileImage && (userName.charAt(0) || '👨‍🏫')}
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '50%'
+                  }}
+                />
+              ) : (
+                userName.charAt(0) || '👨‍🏫'
+              )}
             </div>
+            <p style={{
+              fontSize: '1.1rem',
+              marginLeft: 20,
+              margin: '0px 0 0 20px',
+              fontWeight: 600,
+              fontSize: '1.2rem'
+            }}>{userDesignation}</p>
           </div>
         </div>
 

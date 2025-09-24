@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
-import { saveChanges, CHANGE_TYPES } from "../changeTracker";
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -287,19 +286,33 @@ function Profile() {
     e.preventDefault();
 
     try {
-      // Save changes to local tracking system instead of submitting directly
-      const changeId = saveChanges(
-        CHANGE_TYPES.PROFILE,
-        profile,
-        "Updated personal and faculty information"
-      );
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please login again");
+        return;
+      }
 
-      alert(
-        "Profile changes saved! Go to Dashboard to review and submit all changes for approval."
-      );
+      // Send profile data directly to backend for immediate saving
+      const response = await fetch("http://localhost:5000/api/professor/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(profile)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert("Profile updated successfully!");
+        console.log("Profile saved:", data.profile);
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Error updating profile");
+      }
     } catch (error) {
-      console.error("Error saving profile changes:", error);
-      alert("Error saving changes. Please try again.");
+      console.error("Error saving profile:", error);
+      alert("Error saving profile. Please try again.");
     }
   };
 

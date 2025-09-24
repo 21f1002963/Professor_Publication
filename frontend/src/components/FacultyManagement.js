@@ -18,7 +18,7 @@ function FacultyManagement() {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setFacultyList(data.faculty);
@@ -86,18 +86,18 @@ function FacultyManagement() {
         <Layout>
             <div style={{ padding: '40px', backgroundColor: '#f8fafc', minHeight: 'calc(100vh - 80px)' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                    <h1 style={{ 
-                        fontSize: '2.5rem', 
-                        fontWeight: 700, 
-                        color: '#1f2937', 
+                    <h1 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: 700,
+                        color: '#1f2937',
                         marginBottom: '10px',
                         textAlign: 'center'
                     }}>
                         Faculty Management
                     </h1>
-                    <p style={{ 
-                        fontSize: '1.1rem', 
-                        color: '#6b7280', 
+                    <p style={{
+                        fontSize: '1.1rem',
+                        color: '#6b7280',
                         textAlign: 'center',
                         marginBottom: '40px'
                     }}>
@@ -105,9 +105,9 @@ function FacultyManagement() {
                     </p>
 
                     {/* Faculty Statistics */}
-                    <div style={{ 
-                        display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                         gap: '20px',
                         marginBottom: '40px'
                     }}>
@@ -154,13 +154,13 @@ function FacultyManagement() {
                         boxShadow: '0 4px 25px rgba(0,0,0,0.06)',
                         overflow: 'hidden'
                     }}>
-                        <div style={{ 
+                        <div style={{
                             padding: '30px 30px 0 30px',
                             borderBottom: '1px solid #e5e7eb'
                         }}>
-                            <h2 style={{ 
-                                fontSize: '1.5rem', 
-                                fontWeight: '600', 
+                            <h2 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: '600',
                                 color: '#1f2937',
                                 margin: '0 0 20px 0'
                             }}>
@@ -169,14 +169,14 @@ function FacultyManagement() {
                         </div>
 
                         <div style={{ overflowX: 'auto' }}>
-                            <table style={{ 
-                                width: '100%', 
+                            <table style={{
+                                width: '100%',
                                 borderCollapse: 'collapse'
                             }}>
                                 <thead>
                                     <tr style={{ backgroundColor: '#f9fafb' }}>
-                                        <th style={{ 
-                                            padding: '15px 30px', 
+                                        <th style={{
+                                            padding: '15px 30px',
                                             textAlign: 'left',
                                             fontWeight: '600',
                                             color: '#374151',
@@ -184,8 +184,8 @@ function FacultyManagement() {
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.05em'
                                         }}>Name</th>
-                                        <th style={{ 
-                                            padding: '15px 30px', 
+                                        <th style={{
+                                            padding: '15px 30px',
                                             textAlign: 'left',
                                             fontWeight: '600',
                                             color: '#374151',
@@ -193,8 +193,8 @@ function FacultyManagement() {
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.05em'
                                         }}>Email</th>
-                                        <th style={{ 
-                                            padding: '15px 30px', 
+                                        <th style={{
+                                            padding: '15px 30px',
                                             textAlign: 'left',
                                             fontWeight: '600',
                                             color: '#374151',
@@ -202,8 +202,8 @@ function FacultyManagement() {
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.05em'
                                         }}>Status</th>
-                                        <th style={{ 
-                                            padding: '15px 30px', 
+                                        <th style={{
+                                            padding: '15px 30px',
                                             textAlign: 'left',
                                             fontWeight: '600',
                                             color: '#374151',
@@ -211,8 +211,8 @@ function FacultyManagement() {
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.05em'
                                         }}>Joined</th>
-                                        <th style={{ 
-                                            padding: '15px 30px', 
+                                        <th style={{
+                                            padding: '15px 30px',
                                             textAlign: 'center',
                                             fontWeight: '600',
                                             color: '#374151',
@@ -224,11 +224,11 @@ function FacultyManagement() {
                                 </thead>
                                 <tbody>
                                     {facultyList.map((faculty, index) => (
-                                        <tr key={faculty._id} style={{ 
+                                        <tr key={faculty._id} style={{
                                             borderBottom: '1px solid #f3f4f6',
                                             transition: 'background-color 0.2s'
                                         }}>
-                                            <td style={{ 
+                                            <td style={{
                                                 padding: '20px 30px',
                                                 fontWeight: '500',
                                                 color: '#1f2937'
@@ -251,24 +251,24 @@ function FacultyManagement() {
                                                     {faculty.name}
                                                 </div>
                                             </td>
-                                            <td style={{ 
+                                            <td style={{
                                                 padding: '20px 30px',
                                                 color: '#6b7280'
                                             }}>
                                                 {faculty.email}
                                             </td>
-                                            <td style={{ 
+                                            <td style={{
                                                 padding: '20px 30px'
                                             }}>
                                                 {getStatusBadge(faculty.profileStatus)}
                                             </td>
-                                            <td style={{ 
+                                            <td style={{
                                                 padding: '20px 30px',
                                                 color: '#6b7280'
                                             }}>
                                                 {new Date(faculty.joinedDate).toLocaleDateString()}
                                             </td>
-                                            <td style={{ 
+                                            <td style={{
                                                 padding: '20px 30px',
                                                 textAlign: 'center'
                                             }}>
@@ -322,7 +322,7 @@ function FacultyManagement() {
                             width: '100%',
                             boxShadow: '0 20px 50px rgba(0,0,0,0.2)'
                         }} onClick={(e) => e.stopPropagation()}>
-                            <h3 style={{ 
+                            <h3 style={{
                                 fontSize: '1.5rem',
                                 fontWeight: '600',
                                 color: '#1f2937',
@@ -330,7 +330,7 @@ function FacultyManagement() {
                             }}>
                                 Faculty Details
                             </h3>
-                            
+
                             <div style={{ marginBottom: '15px' }}>
                                 <strong>Name:</strong> {selectedFaculty.name}
                             </div>
