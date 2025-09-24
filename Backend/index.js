@@ -241,6 +241,87 @@ app.put('/api/professor/experience', authenticateToken, async (req, res) => {
     }
 });
 
+// Get professor publications
+app.get('/api/professor/publications', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return publications data or default structure
+        const publicationsData = {
+            ugc_approved_journals: professor.ugc_approved_journals || [{
+                title: "",
+                authors: "",
+                journal_name: "",
+                volume: "",
+                issue: "",
+                page_nos: "",
+                year: "",
+                impact_factor: "",
+            }],
+            non_ugc_journals: professor.non_ugc_journals || [{
+                title: "",
+                authors: "",
+                journal_name: "",
+                volume: "",
+                issue: "",
+                page_nos: "",
+                year: "",
+                impact_factor: "",
+            }],
+            conference_proceedings: professor.conference_proceedings || [{
+                title: "",
+                authors: "",
+                conference_details: "",
+                page_nos: "",
+                year: "",
+            }]
+        };
+
+        res.status(200).json(publicationsData);
+    } catch (error) {
+        console.error('Error fetching publications:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update publications directly (no approval needed)
+app.put('/api/professor/publications', authenticateToken, async (req, res) => {
+    try {
+        const publicationsData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                ugc_approved_journals: publicationsData.ugc_approved_journals || [],
+                non_ugc_journals: publicationsData.non_ugc_journals || [],
+                conference_proceedings: publicationsData.conference_proceedings || [],
+                lastPublicationsUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Publications updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Publications updated successfully',
+            publications: {
+                ugc_approved_journals: updatedProfessor.ugc_approved_journals,
+                non_ugc_journals: updatedProfessor.non_ugc_journals,
+                conference_proceedings: updatedProfessor.conference_proceedings
+            }
+        });
+    } catch (error) {
+        console.error('Error updating publications:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Submit profile changes for HOD approval
 app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
     try {

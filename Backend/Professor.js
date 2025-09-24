@@ -107,6 +107,37 @@ const ProfessorSchema = new mongoose.Schema({
         type: { type: String, default: '' }
     }],
 
+    // New Publications Structure
+    ugc_approved_journals: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        journal_name: { type: String, default: '' },
+        volume: { type: String, default: '' },
+        issue: { type: String, default: '' },
+        page_nos: { type: String, default: '' },
+        year: { type: String, default: '' },
+        impact_factor: { type: String, default: '' }
+    }],
+
+    non_ugc_journals: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        journal_name: { type: String, default: '' },
+        volume: { type: String, default: '' },
+        issue: { type: String, default: '' },
+        page_nos: { type: String, default: '' },
+        year: { type: String, default: '' },
+        impact_factor: { type: String, default: '' }
+    }],
+
+    conference_proceedings: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        conference_details: { type: String, default: '' },
+        page_nos: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
     books: [{
         title: { type: String, default: '' },
         authors: { type: String, default: '' },
