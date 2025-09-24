@@ -135,13 +135,13 @@ app.get('/api/professor/profile', authenticateToken, async (req, res) => {
 app.put('/api/professor/profile', authenticateToken, async (req, res) => {
     try {
         const profileData = req.body;
-        
+
         // Remove sensitive fields that shouldn't be updated via this endpoint
         delete profileData.password;
         delete profileData.role;
         delete profileData._id;
         delete profileData.__v;
-        
+
         const updatedProfessor = await Professor.findByIdAndUpdate(
             req.user.id,
             {
@@ -150,11 +150,11 @@ app.put('/api/professor/profile', authenticateToken, async (req, res) => {
             },
             { new: true, select: '-password' }
         );
-        
+
         if (!updatedProfessor) {
             return res.status(404).json({ message: 'Professor not found' });
         }
-        
+
         console.log('Profile updated successfully for user:', req.user.id);
         res.status(200).json({
             message: 'Profile updated successfully',
@@ -162,6 +162,81 @@ app.put('/api/professor/profile', authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor experience
+app.get('/api/professor/experience', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return experience data or default structure
+        const experienceData = {
+            teaching_experience: professor.teaching_experience || [{
+                designation: "",
+                institution: "",
+                department: "",
+                from: "",
+                to: "",
+            }],
+            research_experience: professor.research_experience || [{
+                position: "",
+                organization: "",
+                project: "",
+                from: "",
+                to: "",
+            }],
+            industry_experience: professor.industry_experience || [{
+                designation: "",
+                company: "",
+                sector: "",
+                from: "",
+                to: "",
+            }]
+        };
+
+        res.status(200).json(experienceData);
+    } catch (error) {
+        console.error('Error fetching experience:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update experience directly (no approval needed)
+app.put('/api/professor/experience', authenticateToken, async (req, res) => {
+    try {
+        const experienceData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                teaching_experience: experienceData.teaching_experience || [],
+                research_experience: experienceData.research_experience || [],
+                industry_experience: experienceData.industry_experience || [],
+                lastExperienceUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Experience updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Experience updated successfully',
+            experience: {
+                teaching_experience: updatedProfessor.teaching_experience,
+                research_experience: updatedProfessor.research_experience,
+                industry_experience: updatedProfessor.industry_experience
+            }
+        });
+    } catch (error) {
+        console.error('Error updating experience:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -275,8 +350,8 @@ app.get('/api/professor/change-status', authenticateToken, async (req, res) => {
 app.get('/api/professors', authenticateToken, async (req, res) => {
     try {
         const professors = await Professor.find({
-            profileStatus: 'approved'
-        }).select('-password -__v');
+            role: 'faculty'  // Only show faculty members, not HODs
+        }).select('-password -__v').sort({ name: 1 });
 
         res.status(200).json(professors);
     } catch (error) {

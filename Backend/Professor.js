@@ -57,8 +57,8 @@ const ProfessorSchema = new mongoose.Schema({
     // Experience
     teaching_experience: [{
         designation: { type: String, default: '' },
-        department: { type: String, default: '' },
         institution: { type: String, default: '' },
+        department: { type: String, default: '' },
         from: { type: String, default: '' },
         to: { type: String, default: '' }
     }],
@@ -66,15 +66,17 @@ const ProfessorSchema = new mongoose.Schema({
     research_experience: [{
         position: { type: String, default: '' },
         organization: { type: String, default: '' },
-        duration: { type: String, default: '' },
-        research_area: { type: String, default: '' }
+        project: { type: String, default: '' },
+        from: { type: String, default: '' },
+        to: { type: String, default: '' }
     }],
 
     industry_experience: [{
-        position: { type: String, default: '' },
+        designation: { type: String, default: '' },
         company: { type: String, default: '' },
-        duration: { type: String, default: '' },
-        role: { type: String, default: '' }
+        sector: { type: String, default: '' },
+        from: { type: String, default: '' },
+        to: { type: String, default: '' }
     }],
 
     // Research and Innovation

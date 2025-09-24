@@ -11,6 +11,7 @@ import Faculty from './components/Faculty';
 import Publications from './components/Publications';
 import Patents from './components/Patents';
 import ProjectStudents from './components/ProjectStudents';
+import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -50,6 +51,11 @@ root.render(
         <Route path='/project-students'  element={
           <ProtectedRoute>
             <ProjectStudents />
+          </ProtectedRoute>
+        } />
+        <Route path='/experience'  element={
+          <ProtectedRoute>
+            <Experience />
           </ProtectedRoute>
         } />
         <Route path='/hod-verification'  element={

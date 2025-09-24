@@ -12,6 +12,7 @@ function Layout({ children }) {
 
   const menuItems = [
     { label: 'Profile', path: '/profile', icon: '👤' },
+    { label: 'Experience', path: '/experience', icon: '💼' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },

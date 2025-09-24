@@ -15,68 +15,50 @@ function Faculty() {
   const fetchProfessors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/professors', {
-        headers: { Authorization: `Bearer ${token}` }
+      if (!token) {
+        console.error('No token found');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/professors', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-      const data = await response.json();
-      setProfessors(data);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Fetched professors:', data);
+        setProfessors(data);
+      } else {
+        console.error('Failed to fetch professors:', response.status);
+        setProfessors([]); // Set empty array instead of mock data
+      }
     } catch (error) {
       console.error('Error fetching professors:', error);
-      // Mock data for demo purposes
-      setProfessors([
-        {
-          id: 1,
-          name: 'Dr. John Smith',
-          email: 'john.smith@university.edu',
-          phone: '+1-234-567-8901',
-          department: 'Computer Science',
-          designation: 'Professor',
-          qualification: 'Ph.D. in Computer Science',
-          experience_years: 15,
-          area_of_expertise: 'Machine Learning, Artificial Intelligence, Data Mining',
-          office_location: 'Room 301, CS Building'
-        },
-        {
-          id: 2,
-          name: 'Dr. Sarah Johnson',
-          email: 'sarah.johnson@university.edu',
-          phone: '+1-234-567-8902',
-          department: 'Mathematics',
-          designation: 'Associate Professor',
-          qualification: 'Ph.D. in Applied Mathematics',
-          experience_years: 12,
-          area_of_expertise: 'Statistical Analysis, Mathematical Modeling, Operations Research',
-          office_location: 'Room 205, Math Building'
-        },
-        {
-          id: 3,
-          name: 'Dr. Michael Brown',
-          email: 'michael.brown@university.edu',
-          phone: '+1-234-567-8903',
-          department: 'Physics',
-          designation: 'Assistant Professor',
-          qualification: 'Ph.D. in Theoretical Physics',
-          experience_years: 8,
-          area_of_expertise: 'Quantum Mechanics, Condensed Matter Physics, Computational Physics',
-          office_location: 'Room 108, Physics Building'
-        }
-      ]);
+      setProfessors([]); // Set empty array instead of mock data
     } finally {
       setLoading(false);
     }
   };
 
   const filteredProfessors = professors.filter(prof => {
-    const matchesSearch = prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      prof.area_of_expertise.toLowerCase().includes(searchTerm.toLowerCase());
+    const expertiseText = Array.isArray(prof.area_of_expertise)
+      ? prof.area_of_expertise.join(', ')
+      : (prof.area_of_expertise || '');
+
+    const matchesSearch = (prof.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      expertiseText.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = !filterDepartment || prof.department === filterDepartment;
     const matchesDesignation = !filterDesignation || prof.designation === filterDesignation;
 
     return matchesSearch && matchesDepartment && matchesDesignation;
   });
 
-  const departments = [...new Set(professors.map(prof => prof.department))];
-  const designations = [...new Set(professors.map(prof => prof.designation))];
+  const departments = [...new Set(professors.map(prof => prof.department).filter(Boolean))];
+  const designations = [...new Set(professors.map(prof => prof.designation).filter(Boolean))];
 
   if (loading) {
     return (
@@ -273,7 +255,7 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                   Designation
+                    Designation
                   </th>
                   <th style={{
                     padding: '20px',
@@ -306,7 +288,7 @@ function Faculty() {
               </thead>
               <tbody>
                 {filteredProfessors.map((professor, index) => (
-                  <tr key={professor.id} style={{
+                  <tr key={professor._id} style={{
                     borderBottom: '1px solid #e2e8f0',
                     transition: 'all 0.2s ease',
                     backgroundColor: index % 2 === 0 ? '#f8fafc' : '#fff'
@@ -322,19 +304,54 @@ function Faculty() {
                       padding: '20px',
                       verticalAlign: 'top'
                     }}>
-                      <div style={{
-                        fontWeight: 600,
-                        color: '#2d3748',
-                        fontSize: '1rem',
-                        marginBottom: '4px'
-                      }}>
-                        {professor.name}
-                      </div>
-                      <div style={{
-                        fontSize: '0.85rem',
-                        color: '#718096'
-                      }}>
-                        {professor.experience_years} years exp.
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <div style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                          background: !professor.profileImage
+                            ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                            : 'transparent',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          fontSize: '1.2rem',
+                          fontWeight: 600,
+                          overflow: 'hidden',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                        }}>
+                          {professor.profileImage ? (
+                            <img
+                              src={professor.profileImage}
+                              alt="Profile"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: '50%'
+                              }}
+                            />
+                          ) : (
+                            (professor.name || 'U').charAt(0).toUpperCase()
+                          )}
+                        </div>
+                        <div>
+                          <div style={{
+                            fontWeight: 600,
+                            color: '#2d3748',
+                            fontSize: '1rem',
+                            marginBottom: '4px'
+                          }}>
+                            {professor.name || 'N/A'}
+                          </div>
+                          <div style={{
+                            fontSize: '0.85rem',
+                            color: '#718096'
+                          }}>
+                            {professor.experience_years ? `${professor.experience_years} years exp.` : 'Experience not specified'}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td style={{
@@ -343,7 +360,7 @@ function Faculty() {
                       color: '#4a5568',
                       fontSize: '0.95rem'
                     }}>
-                      {professor.department}
+                      {professor.department || 'Not specified'}
                     </td>
                     <td style={{
                       padding: '20px',
@@ -362,7 +379,7 @@ function Faculty() {
                         fontWeight: 600,
                         display: 'inline-block'
                       }}>
-                        {professor.designation}
+                        {professor.designation || 'Not specified'}
                       </span>
                     </td>
                     <td style={{
@@ -372,7 +389,7 @@ function Faculty() {
                       fontSize: '0.9rem',
                       lineHeight: '1.4'
                     }}>
-                      {professor.qualification}
+                      {professor.qualification || 'Not specified'}
                     </td>
                     <td style={{
                       padding: '20px',
@@ -385,14 +402,14 @@ function Faculty() {
                           fontSize: '0.9rem',
                           display: 'block'
                         }}>
-                          {professor.email}
+                          {professor.email || 'N/A'}
                         </a>
                       </div>
                       <div style={{
                         color: '#718096',
                         fontSize: '0.85rem'
                       }}>
-                        {professor.phone}
+                        {professor.phone || 'Not provided'}
                       </div>
                     </td>
                     <td style={{
@@ -403,7 +420,10 @@ function Faculty() {
                       lineHeight: '1.4',
                       maxWidth: '250px'
                     }}>
-                      {professor.area_of_expertise}
+                      {Array.isArray(professor.area_of_expertise)
+                        ? professor.area_of_expertise.filter(Boolean).join(', ') || 'Not specified'
+                        : professor.area_of_expertise || 'Not specified'
+                      }
                     </td>
                   </tr>
                 ))}

@@ -5,13 +5,6 @@ import Layout from "./Layout";
 function Profile() {
   const [profile, setProfile] = useState({
     // Personal Information
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    area_of_expertise: "",
-    profileImage: "", // Add profile image field
-
     // Faculty Information
     department: "",
     designation: "",
@@ -1390,7 +1383,7 @@ function Profile() {
                       }}
                       placeholder="Specialization 1"
                     />
-                    
+
                   </div>
                 )}
               </div>
