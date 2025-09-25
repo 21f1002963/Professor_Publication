@@ -463,6 +463,90 @@ app.put('/api/professor/books', authenticateToken, async (req, res) => {
     }
 });
 
+// =============================================================================
+// RESEARCH GUIDANCE API ENDPOINTS
+// =============================================================================
+
+// Get professor research guidance
+app.get('/api/professor/research-guidance/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return research guidance data or default structure
+        const researchGuidanceData = {
+            pg_guidance: professor.pg_guidance || [{
+                year: "",
+                degree: "",
+                students_awarded: "",
+                department_centre: "",
+            }],
+            phd_guidance: professor.phd_guidance || [{
+                student_name: "",
+                registration_date: "",
+                registration_no: "",
+                thesis_title: "",
+                thesis_submitted_status: "",
+                thesis_submitted_date: "",
+                vivavoce_completed_status: "",
+                date_awarded: "",
+            }],
+            postdoc_guidance: professor.postdoc_guidance || [{
+                scholar_name: "",
+                designation: "",
+                funding_agency: "",
+                fellowship_title: "",
+                year_of_joining: "",
+                year_of_completion: "",
+            }]
+        };
+
+        res.status(200).json(researchGuidanceData);
+    } catch (error) {
+        console.error('Error fetching research guidance:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update research guidance directly (no approval needed)
+app.put('/api/professor/research-guidance/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const researchGuidanceData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                pg_guidance: researchGuidanceData.pg_guidance || [],
+                phd_guidance: researchGuidanceData.phd_guidance || [],
+                postdoc_guidance: researchGuidanceData.postdoc_guidance || [],
+                lastResearchGuidanceUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Research guidance updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'Research guidance updated successfully',
+            research_guidance: {
+                pg_guidance: updatedProfessor.pg_guidance,
+                phd_guidance: updatedProfessor.phd_guidance,
+                postdoc_guidance: updatedProfessor.postdoc_guidance
+            }
+        });
+    } catch (error) {
+        console.error('Error updating research guidance:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Submit profile changes for HOD approval
 app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
     try {

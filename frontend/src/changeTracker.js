@@ -89,7 +89,7 @@ export const getChangeTypeDisplayName = (type) => {
     [CHANGE_TYPES.PROFILE]: 'Profile Information',
     [CHANGE_TYPES.PUBLICATIONS]: 'Publications',
     [CHANGE_TYPES.PATENTS]: 'Patents',
-    [CHANGE_TYPES.PROJECT_STUDENTS]: 'Project Students'
+    [CHANGE_TYPES.PROJECT_STUDENTS]: 'Research Guidance'
   };
   return names[type] || type;
 };

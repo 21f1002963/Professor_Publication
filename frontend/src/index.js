@@ -11,7 +11,7 @@ import Faculty from './components/Faculty';
 import Publications from './components/Publications';
 import Patents from './components/Patents';
 import Books from './components/Books';
-import ProjectStudents from './components/ProjectStudents';
+import ResearchGuidanceStudents from './components/ResearchGuidanceStudents';
 import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
@@ -54,9 +54,9 @@ root.render(
             <Books />
           </ProtectedRoute>
         } />
-        <Route path='/project-students'  element={
+        <Route path='/research-guidance'  element={
           <ProtectedRoute>
-            <ProjectStudents />
+            <ResearchGuidanceStudents />
           </ProtectedRoute>
         } />
         <Route path='/experience'  element={

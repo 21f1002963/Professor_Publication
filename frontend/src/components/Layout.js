@@ -17,7 +17,7 @@ function Layout({ children }) {
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Books', path: '/books', icon: '📚' },
-    { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
+    { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' }
   ];
 
   return (

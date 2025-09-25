@@ -128,7 +128,7 @@ function Dashboard() {
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Books', path: '/books', icon: '📚' },
-    { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
+    { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' }
   ];
 
   const hodMenuItems = [
@@ -583,7 +583,7 @@ function Dashboard() {
                   No pending changes
                 </h3>
                 <p style={{ fontSize: '1rem' }}>
-                  Make updates to your profile, publications, patents, or project students to see them here for review.
+                  Make updates to your profile, publications, patents, or research guidance to see them here for review.
                 </p>
               </div>
             ) : (
@@ -730,7 +730,7 @@ function Dashboard() {
                                     [CHANGE_TYPES.PROFILE]: '/profile',
                                     [CHANGE_TYPES.PUBLICATIONS]: '/publications',
                                     [CHANGE_TYPES.PATENTS]: '/patents',
-                                    [CHANGE_TYPES.PROJECT_STUDENTS]: '/project-students'
+                                    [CHANGE_TYPES.PROJECT_STUDENTS]: '/research-guidance'
                                   };
                                   navigate(paths[change.type]);
                                 }}

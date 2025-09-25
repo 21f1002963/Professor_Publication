@@ -197,6 +197,35 @@ const ProfessorSchema = new mongoose.Schema({
         status: { type: String, default: '' }
     }],
 
+    // Research Guidance - New Structure
+    pg_guidance: [{
+        year: { type: String, default: '' },
+        degree: { type: String, default: '' },
+        students_awarded: { type: String, default: '' },
+        department_centre: { type: String, default: '' }
+    }],
+
+    phd_guidance: [{
+        student_name: { type: String, default: '' },
+        registration_date: { type: String, default: '' },
+        registration_no: { type: String, default: '' },
+        thesis_title: { type: String, default: '' },
+        thesis_submitted_status: { type: String, default: '' },
+        thesis_submitted_date: { type: String, default: '' },
+        vivavoce_completed_status: { type: String, default: '' },
+        date_awarded: { type: String, default: '' }
+    }],
+
+    postdoc_guidance: [{
+        scholar_name: { type: String, default: '' },
+        designation: { type: String, default: '' },
+        funding_agency: { type: String, default: '' },
+        fellowship_title: { type: String, default: '' },
+        year_of_joining: { type: String, default: '' },
+        year_of_completion: { type: String, default: '' }
+    }],
+
+    // Legacy fields (keeping for backward compatibility)
     pg_student_guided: [{
         student_name: { type: String, default: '' },
         thesis_title: { type: String, default: '' },

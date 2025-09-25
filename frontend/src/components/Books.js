@@ -631,7 +631,7 @@ function Books() {
                       "0 8px 25px rgba(102, 126, 234, 0.3)";
                   }}
                 >
-                  Update Books & Publications
+                  Update
                 </button>
               </div>
             </div>

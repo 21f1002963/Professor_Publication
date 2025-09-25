@@ -1201,7 +1201,7 @@ function Experience() {
                       "0 8px 25px rgba(102, 126, 234, 0.3)";
                   }}
                 >
-                  Update Experience Details
+                  Update
                 </button>
               </div>
             </div>
