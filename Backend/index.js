@@ -547,6 +547,96 @@ app.put('/api/professor/research-guidance/:id', authenticateToken, async (req, r
     }
 });
 
+// =============================================================================
+// PROJECT & CONSULTANCY API ENDPOINTS
+// =============================================================================
+
+// Get professor project & consultancy
+app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return project consultancy data or default structure
+        const projectConsultancyData = {
+            ongoing_projects: professor.ongoing_projects || [{
+                title_of_project: "",
+                sponsored_by: "",
+                period: "",
+                sanctioned_amount: "",
+                year: "",
+            }],
+            ongoing_consultancy_works: professor.ongoing_consultancy_works || [{
+                title_of_consultancy_work: "",
+                sponsored_by: "",
+                period: "",
+                sanctioned_amount: "",
+                year: "",
+            }],
+            completed_projects: professor.completed_projects || [{
+                title_of_project: "",
+                sponsored_by: "",
+                period: "",
+                sanctioned_amount: "",
+                year: "",
+            }],
+            completed_consultancy_works: professor.completed_consultancy_works || [{
+                title_of_consultancy_work: "",
+                sponsored_by: "",
+                period: "",
+                sanctioned_amount: "",
+                year: "",
+            }]
+        };
+
+        res.status(200).json(projectConsultancyData);
+    } catch (error) {
+        console.error('Error fetching project consultancy:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update project & consultancy directly (no approval needed)
+app.put('/api/professor/project-consultancy/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const projectConsultancyData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                ongoing_projects: projectConsultancyData.ongoing_projects || [],
+                ongoing_consultancy_works: projectConsultancyData.ongoing_consultancy_works || [],
+                completed_projects: projectConsultancyData.completed_projects || [],
+                completed_consultancy_works: projectConsultancyData.completed_consultancy_works || [],
+                lastProjectConsultancyUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Project consultancy updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'Project consultancy updated successfully',
+            project_consultancy: {
+                ongoing_projects: updatedProfessor.ongoing_projects,
+                ongoing_consultancy_works: updatedProfessor.ongoing_consultancy_works,
+                completed_projects: updatedProfessor.completed_projects,
+                completed_consultancy_works: updatedProfessor.completed_consultancy_works
+            }
+        });
+    } catch (error) {
+        console.error('Error updating project consultancy:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Submit profile changes for HOD approval
 app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
     try {

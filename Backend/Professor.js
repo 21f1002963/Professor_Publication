@@ -251,6 +251,39 @@ const ProfessorSchema = new mongoose.Schema({
         completion_date: { type: String, default: '' }
     }],
 
+    // Project & Consultancy
+    ongoing_projects: [{
+        title_of_project: { type: String, default: '' },
+        sponsored_by: { type: String, default: '' },
+        period: { type: String, default: '' },
+        sanctioned_amount: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    ongoing_consultancy_works: [{
+        title_of_consultancy_work: { type: String, default: '' },
+        sponsored_by: { type: String, default: '' },
+        period: { type: String, default: '' },
+        sanctioned_amount: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    completed_projects: [{
+        title_of_project: { type: String, default: '' },
+        sponsored_by: { type: String, default: '' },
+        period: { type: String, default: '' },
+        sanctioned_amount: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    completed_consultancy_works: [{
+        title_of_consultancy_work: { type: String, default: '' },
+        sponsored_by: { type: String, default: '' },
+        period: { type: String, default: '' },
+        sanctioned_amount: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
     // Academic Activities
     invited_talks: [{
         title: { type: String, default: '' },

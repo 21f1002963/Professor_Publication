@@ -12,6 +12,7 @@ import Publications from './components/Publications';
 import Patents from './components/Patents';
 import Books from './components/Books';
 import ResearchGuidanceStudents from './components/ResearchGuidanceStudents';
+import ProjectConsultancy from './components/ProjectConsultancy';
 import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
@@ -57,6 +58,11 @@ root.render(
         <Route path='/research-guidance'  element={
           <ProtectedRoute>
             <ResearchGuidanceStudents />
+          </ProtectedRoute>
+        } />
+        <Route path='/project-consultancy'  element={
+          <ProtectedRoute>
+            <ProjectConsultancy />
           </ProtectedRoute>
         } />
         <Route path='/experience'  element={
