@@ -422,7 +422,7 @@ function Publications() {
                             type="text"
                             value={pub.title}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Paper Title"
                           />
                         </td>
@@ -431,7 +431,7 @@ function Publications() {
                             type="text"
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "authors", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Authors"
                           />
                         </td>
@@ -440,7 +440,7 @@ function Publications() {
                             type="text"
                             value={pub.journal_name}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "journal_name", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Journal Name"
                           />
                         </td>
@@ -449,7 +449,7 @@ function Publications() {
                             type="text"
                             value={pub.volume}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "volume", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Vol"
                           />
                         </td>
@@ -458,7 +458,7 @@ function Publications() {
                             type="text"
                             value={pub.issue}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "issue", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Issue"
                           />
                         </td>
@@ -467,7 +467,7 @@ function Publications() {
                             type="text"
                             value={pub.page_nos}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "page_nos", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Pages"
                           />
                         </td>
@@ -476,7 +476,7 @@ function Publications() {
                             type="text"
                             value={pub.year}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "year", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
                           />
                         </td>
@@ -485,7 +485,7 @@ function Publications() {
                             type="text"
                             value={pub.impact_factor}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "impact_factor", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="IF"
                           />
                         </td>
@@ -572,7 +572,7 @@ function Publications() {
                             type="text"
                             value={pub.title}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Paper Title"
                           />
                         </td>
@@ -581,7 +581,7 @@ function Publications() {
                             type="text"
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "authors", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Authors"
                           />
                         </td>
@@ -590,7 +590,7 @@ function Publications() {
                             type="text"
                             value={pub.conference_details}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "conference_details", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Conference Details"
                           />
                         </td>
@@ -599,7 +599,7 @@ function Publications() {
                             type="text"
                             value={pub.page_nos}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "page_nos", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "85%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Pages"
                           />
                         </td>
@@ -608,7 +608,7 @@ function Publications() {
                             type="text"
                             value={pub.year}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "year", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
                           />
                         </td>
