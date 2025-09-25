@@ -851,7 +851,7 @@ app.get('/api/professor/programme/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
         const professor = await Professor.findById(professorId).select('faculty_development_programme executive_development_programme participation_impress_imprint enrolment_arpit_programme');
-        
+
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
         }

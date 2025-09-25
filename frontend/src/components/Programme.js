@@ -210,13 +210,15 @@ function Programme() {
         <div style={{ padding: "10px 30px 30px" }}>
           <h1 style={{
             fontSize: "2.5rem",
-            fontWeight: 700,
+            fontWeight: 800,
             color: "#1a202c",
             marginBottom: "10px",
-            textAlign: "center",
+            marginTop: "0px"
           }}>
             Programme Details
           </h1>
+
+          <p style={{ marginBottom: "20px", opacity: 0.8, marginTop: '0px' }}>Update the details of the programmes you have attended.</p>
 
           <form onSubmit={handleSubmit}>
             <div style={{
@@ -228,12 +230,12 @@ function Programme() {
             }}>
 
               {/* Faculty Development Programme Section */}
-              <div style={{ marginTop: "40px" }}>
-                <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  🎓 Faculty Development Programme Attended (Orientation, Refresher, Other Short Term Courses)
+              <div style={{ marginTop: "0px" }}>
+                <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem", marginTop: '0px' }}>
+                  Faculty Development Programme Attended (Orientation, Refresher, Other Short Term Courses)
                 </h2>
-                <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1400px" }}>
+                <div style={{  }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse",  }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
@@ -390,7 +392,7 @@ function Programme() {
               {/* Executive Development Programme Section */}
               <div style={{ marginTop: "60px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  💼 Details of Executive Development Prog/Management Development Prog. Conducted
+                  Details of Executive Development Prog/Management Development Prog. Conducted
                 </h2>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1600px" }}>
@@ -565,7 +567,7 @@ function Programme() {
               {/* Participation in IMPRESS, IMPRINT, etc. Section */}
               <div style={{ marginTop: "60px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  🚀 Participation in IMPRESS, IMPRINT, SPARC, STARS, LEAP Programme etc and DSF Funding Programme
+                  Participation in IMPRESS, IMPRINT, SPARC, STARS, LEAP Programme etc and DSF Funding Programme
                 </h2>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1000px" }}>
@@ -698,7 +700,7 @@ function Programme() {
               {/* Enrolment under ARPIT Programme Section */}
               <div style={{ marginTop: "60px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  📚 Enrolment under ARPIT Programme
+                  Enrolment under ARPIT Programme
                 </h2>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
@@ -810,7 +812,7 @@ function Programme() {
                     boxShadow: "0 10px 25px rgba(102, 126, 234, 0.3)",
                   }}
                 >
-                  💾 Update Programme Details
+                  Update
                 </button>
               </div>
             </div>
