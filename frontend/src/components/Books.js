@@ -183,10 +183,9 @@ function Books() {
           <h1
             style={{
               fontSize: "2.5rem",
-              fontWeight: 700,
-              color: "#1a202c",
+              fontWeight: 800,
               marginBottom: "10px",
-              textAlign: "center",
+              marginTop: "0px",
             }}
           >
             Books & Publications
@@ -194,9 +193,9 @@ function Books() {
           <p
             style={{
               fontSize: "1.1rem",
-              color: "#6b7280",
-              textAlign: "center",
-              marginBottom: "40px",
+              marginBottom: "30px",
+              marginTop: "0px",
+              opacity: 0.8
             }}
           >
             Update your book publications, chapters, and edited books
@@ -213,13 +212,14 @@ function Books() {
               }}
             >
               {/* Books Section */}
-              <div style={{ marginTop: "40px" }}>
+              <div style={{ marginTop: "0px" }}>
                 <h2
                   style={{
                     fontSize: "1.8rem",
                     fontWeight: 700,
                     color: "#2d3748",
                     marginBottom: "25px",
+                    marginTop: "0px",
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
@@ -227,7 +227,7 @@ function Books() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  📚 Books
+                  Books
                 </h2>
                 <table
                   style={{
@@ -256,7 +256,7 @@ function Books() {
                             type="text"
                             value={book.title}
                             onChange={(e) => handleArrayChange("books", idx, "title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Book Title"
                           />
                         </td>
@@ -265,7 +265,7 @@ function Books() {
                             type="text"
                             value={book.authors}
                             onChange={(e) => handleArrayChange("books", idx, "authors", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Authors"
                           />
                         </td>
@@ -274,7 +274,7 @@ function Books() {
                             type="text"
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("books", idx, "publisher", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Publisher"
                           />
                         </td>
@@ -283,7 +283,7 @@ function Books() {
                             type="number"
                             value={book.year}
                             onChange={(e) => handleArrayChange("books", idx, "year", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
                             min="1900"
                             max="2030"
@@ -294,7 +294,7 @@ function Books() {
                             type="text"
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("books", idx, "isbn", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="ISBN"
                           />
                         </td>
@@ -352,7 +352,7 @@ function Books() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  📖 Chapters in Books
+                  Chapters in Books
                 </h2>
                 <table
                   style={{
@@ -382,7 +382,7 @@ function Books() {
                             type="text"
                             value={chapter.chapter_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "chapter_title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Chapter Title"
                           />
                         </td>
@@ -391,7 +391,7 @@ function Books() {
                             type="text"
                             value={chapter.authors}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "authors", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Authors"
                           />
                         </td>
@@ -400,7 +400,7 @@ function Books() {
                             type="text"
                             value={chapter.book_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "book_title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Book Title"
                           />
                         </td>
@@ -409,7 +409,7 @@ function Books() {
                             type="text"
                             value={chapter.publisher}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "publisher", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Publisher"
                           />
                         </td>
@@ -418,7 +418,7 @@ function Books() {
                             type="number"
                             value={chapter.year}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "year", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
                             min="1900"
                             max="2030"
@@ -429,7 +429,7 @@ function Books() {
                             type="text"
                             value={chapter.isbn}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "isbn", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="ISBN"
                           />
                         </td>
@@ -487,7 +487,7 @@ function Books() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  ✏️ Edited Books
+                  Edited Books
                 </h2>
                 <table
                   style={{
@@ -516,7 +516,7 @@ function Books() {
                             type="text"
                             value={book.title}
                             onChange={(e) => handleArrayChange("edited_books", idx, "title", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Book Title"
                           />
                         </td>
@@ -525,7 +525,7 @@ function Books() {
                             type="text"
                             value={book.authors}
                             onChange={(e) => handleArrayChange("edited_books", idx, "authors", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Authors"
                           />
                         </td>
@@ -534,7 +534,7 @@ function Books() {
                             type="text"
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("edited_books", idx, "publisher", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Publisher"
                           />
                         </td>
@@ -543,7 +543,7 @@ function Books() {
                             type="number"
                             value={book.year}
                             onChange={(e) => handleArrayChange("edited_books", idx, "year", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
                             min="1900"
                             max="2030"
@@ -554,7 +554,7 @@ function Books() {
                             type="text"
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("edited_books", idx, "isbn", e.target.value)}
-                            style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="ISBN"
                           />
                         </td>
