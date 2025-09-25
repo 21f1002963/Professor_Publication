@@ -284,27 +284,56 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
-    // Academic Activities
+    // E-Education
+    e_lecture_details: [{
+        e_lecture_title: { type: String, default: '' },
+        content_module_title: { type: String, default: '' },
+        institution_platform: { type: String, default: '' },
+        year: { type: String, default: '' },
+        weblink: { type: String, default: '' },
+        member_of_editorial_bodies: { type: String, default: '' },
+        reviewer_referee_of: { type: String, default: '' }
+    }],
+
+    online_education_conducted: [{
+        nature_of_online_course: { type: String, default: '' },
+        no_of_sessions: { type: String, default: '' },
+        target_group: { type: String, default: '' },
+        date: { type: String, default: '' }
+    }],
+
+    // Conference/Seminar/Workshop
     invited_talks: [{
-        title: { type: String, default: '' },
-        conference_seminar_workshop_trainingProgram: { type: String, default: '' },
-        organization: { type: String, default: '' },
+        title_of_paper: { type: String, default: '' },
+        conferences_seminar_workshop_training: { type: String, default: '' },
+        organized_by: { type: String, default: '' },
         level: { type: String, default: '' },
-        from: { type: String, default: '' },
-        to: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
         year: { type: String, default: '' }
     }],
 
-    conferences_seminar_: [{
-        title: { type: String, default: '' },
+    conferences_seminars_organized: [{
+        title_of_programme: { type: String, default: '' },
         sponsors: { type: String, default: '' },
-        venue: { type: String, default: '' },
-        duration: { type: String, default: '' },
+        venue_duration: { type: String, default: '' },
         level: { type: String, default: '' },
-        from: { type: String, default: '' },
-        to: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
         year: { type: String, default: '' }
     }],
+
+    workshops_organized: [{
+        title_of_programme: { type: String, default: '' },
+        sponsors: { type: String, default: '' },
+        venue_duration: { type: String, default: '' },
+        level: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    // Administrative Responsibilities
 
     administrative_responsibilities: [{
         position: { type: String, default: '' },

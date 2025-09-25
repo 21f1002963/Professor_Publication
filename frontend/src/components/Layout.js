@@ -18,7 +18,9 @@ function Layout({ children }) {
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Books', path: '/books', icon: '📚' },
     { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' },
-    { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' }
+    { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' },
+    { label: 'E-Education', path: '/e-education', icon: '💻' },
+    { label: 'Conference/Seminar/Workshop', path: '/conference-seminar-workshop', icon: '🎤' }
   ];
 
   return (
@@ -107,14 +109,14 @@ function Layout({ children }) {
         </div>
 
         {/* Navigation Menu */}
-        <div style={{ flex: 1, padding: '20px 0' }}>
+        <div style={{ flex: 1, padding: '5px 0' }}>
           {menuItems.map((item, index) => (
             <div
               key={item.label}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                padding: sidebarOpen ? '16px 24px' : '16px',
+                padding: sidebarOpen ? '5px 24px' : '5px 15px',
                 margin: '8px 16px',
                 cursor: 'pointer',
                 borderRadius: '12px',

@@ -637,6 +637,145 @@ app.put('/api/professor/project-consultancy/:id', authenticateToken, async (req,
     }
 });
 
+// =============================================================================
+// E-EDUCATION API ENDPOINTS
+// =============================================================================
+
+// Get professor e-education
+app.get('/api/professor/e-education/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return e-education data or default structure
+        const eEducationData = {
+            e_lecture_details: professor.e_lecture_details || [{
+                e_lecture_title: "",
+                content_module_title: "",
+                institution_platform: "",
+                year: "",
+                weblink: "",
+                member_of_editorial_bodies: "",
+                reviewer_referee_of: "",
+            }],
+            online_education_conducted: professor.online_education_conducted || [{
+                nature_of_online_course: "",
+                no_of_sessions: "",
+                target_group: "",
+                date: "",
+            }]
+        };
+
+        res.status(200).json(eEducationData);
+    } catch (error) {
+        console.error('Error fetching e-education:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update e-education directly (no approval needed)
+app.put('/api/professor/e-education/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const eEducationData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                e_lecture_details: eEducationData.e_lecture_details || [],
+                online_education_conducted: eEducationData.online_education_conducted || [],
+                lastEEducationUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('E-education updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'E-education updated successfully',
+            e_education: {
+                e_lecture_details: updatedProfessor.e_lecture_details,
+                online_education_conducted: updatedProfessor.online_education_conducted
+            }
+        });
+    } catch (error) {
+        console.error('Error updating e-education:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// CONFERENCE/SEMINAR/WORKSHOP API ENDPOINTS
+// =============================================================================
+
+// Get professor conference/seminar/workshop data
+app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_organized workshops_organized');
+        
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return conference/seminar/workshop data or default structure
+        res.status(200).json({
+            invited_talks: professor.invited_talks || [],
+            conferences_seminars_organized: professor.conferences_seminars_organized || [],
+            workshops_organized: professor.workshops_organized || []
+        });
+    } catch (error) {
+        console.error('Error fetching conference/seminar/workshop:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update conference/seminar/workshop directly (no approval needed)
+app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const { invited_talks, conferences_seminars_organized, workshops_organized } = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                invited_talks: invited_talks,
+                conferences_seminars_organized: conferences_seminars_organized,
+                workshops_organized: workshops_organized,
+                lastProfileUpdate: new Date()
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Conference/seminar/workshop updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'Conference/seminar/workshop updated successfully',
+            conference_data: {
+                invited_talks: updatedProfessor.invited_talks,
+                conferences_seminars_organized: updatedProfessor.conferences_seminars_organized,
+                workshops_organized: updatedProfessor.workshops_organized
+            }
+        });
+    } catch (error) {
+        console.error('Error updating conference/seminar/workshop:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END CONFERENCE/SEMINAR/WORKSHOP API ENDPOINTS
+// =============================================================================
+
 // Submit profile changes for HOD approval
 app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
     try {

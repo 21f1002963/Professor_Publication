@@ -13,6 +13,8 @@ import Patents from './components/Patents';
 import Books from './components/Books';
 import ResearchGuidanceStudents from './components/ResearchGuidanceStudents';
 import ProjectConsultancy from './components/ProjectConsultancy';
+import EEducation from './components/EEducation';
+import ConferenceSeminarWorkshop from './components/ConferenceSeminarWorkshop';
 import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
@@ -63,6 +65,16 @@ root.render(
         <Route path='/project-consultancy'  element={
           <ProtectedRoute>
             <ProjectConsultancy />
+          </ProtectedRoute>
+        } />
+        <Route path='/e-education'  element={
+          <ProtectedRoute>
+            <EEducation />
+          </ProtectedRoute>
+        } />
+        <Route path='/conference-seminar-workshop'  element={
+          <ProtectedRoute>
+            <ConferenceSeminarWorkshop />
           </ProtectedRoute>
         } />
         <Route path='/experience'  element={
