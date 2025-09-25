@@ -333,6 +333,68 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
+    // Participation & Collaboration
+    participation_extension_academic: [{
+        position_name: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        nature_of_duties: { type: String, default: '' }
+    }],
+
+    participation_extension_cocurricular: [{
+        position_name: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        nature_of_duties: { type: String, default: '' }
+    }],
+
+    collaboration_institution_industry: [{
+        collaborator_name: { type: String, default: '' },
+        designation: { type: String, default: '' },
+        institution_industry: { type: String, default: '' },
+        type: { type: String, default: '' },
+        nature_of_collaboration: { type: String, default: '' },
+        period_from: { type: String, default: '' },
+        period_to: { type: String, default: '' },
+        visits_from: { type: String, default: '' },
+        visits_to: { type: String, default: '' },
+        details_collaborative_research: { type: String, default: '' }
+    }],
+
+    // Programme Details
+    faculty_development_programme: [{
+        title_fdp: { type: String, default: '' },
+        organiser: { type: String, default: '' },
+        venue: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    executive_development_programme: [{
+        name_programme: { type: String, default: '' },
+        no_participants: { type: String, default: '' },
+        venue: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
+        year: { type: String, default: '' },
+        revenue_generated: { type: String, default: '' }
+    }],
+
+    participation_impress_imprint: [{
+        programme_type: { type: String, default: '' },
+        place: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
+        year: { type: String, default: '' }
+    }],
+
+    enrolment_arpit_programme: [{
+        name_programme: { type: String, default: '' },
+        period_from: { type: String, default: '' },
+        period_to: { type: String, default: '' }
+    }],
+
     // Administrative Responsibilities
 
     administrative_responsibilities: [{

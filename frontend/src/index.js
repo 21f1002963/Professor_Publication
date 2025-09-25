@@ -15,6 +15,7 @@ import ResearchGuidanceStudents from './components/ResearchGuidanceStudents';
 import ProjectConsultancy from './components/ProjectConsultancy';
 import EEducation from './components/EEducation';
 import ConferenceSeminarWorkshop from './components/ConferenceSeminarWorkshop';
+import ParticipationCollaboration from './components/ParticipationCollaboration';
 import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
@@ -75,6 +76,11 @@ root.render(
         <Route path='/conference-seminar-workshop'  element={
           <ProtectedRoute>
             <ConferenceSeminarWorkshop />
+          </ProtectedRoute>
+        } />
+        <Route path='/participation-collaboration'  element={
+          <ProtectedRoute>
+            <ParticipationCollaboration />
           </ProtectedRoute>
         } />
         <Route path='/experience'  element={

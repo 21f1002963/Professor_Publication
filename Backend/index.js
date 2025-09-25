@@ -719,7 +719,7 @@ app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
     try {
         const professorId = req.params.id;
         const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_organized workshops_organized');
-        
+
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
         }
@@ -774,6 +774,72 @@ app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
 
 // =============================================================================
 // END CONFERENCE/SEMINAR/WORKSHOP API ENDPOINTS
+// =============================================================================
+
+// =============================================================================
+// PARTICIPATION & COLLABORATION API ENDPOINTS
+// =============================================================================
+
+// Get professor participation & collaboration data
+app.get('/api/professor/participation-collaboration/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('participation_extension_academic participation_extension_cocurricular collaboration_institution_industry');
+        
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return participation & collaboration data or default structure
+        res.status(200).json({
+            participation_extension_academic: professor.participation_extension_academic || [],
+            participation_extension_cocurricular: professor.participation_extension_cocurricular || [],
+            collaboration_institution_industry: professor.collaboration_institution_industry || []
+        });
+    } catch (error) {
+        console.error('Error fetching participation & collaboration:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update participation & collaboration directly (no approval needed)
+app.put('/api/professor/participation-collaboration/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const { participation_extension_academic, participation_extension_cocurricular, collaboration_institution_industry } = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                participation_extension_academic: participation_extension_academic,
+                participation_extension_cocurricular: participation_extension_cocurricular,
+                collaboration_institution_industry: collaboration_institution_industry,
+                lastProfileUpdate: new Date()
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Participation & collaboration updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'Participation & collaboration updated successfully',
+            participation_data: {
+                participation_extension_academic: updatedProfessor.participation_extension_academic,
+                participation_extension_cocurricular: updatedProfessor.participation_extension_cocurricular,
+                collaboration_institution_industry: updatedProfessor.collaboration_institution_industry
+            }
+        });
+    } catch (error) {
+        console.error('Error updating participation & collaboration:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END PARTICIPATION & COLLABORATION API ENDPOINTS
 // =============================================================================
 
 // Submit profile changes for HOD approval
