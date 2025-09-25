@@ -217,7 +217,7 @@ function Programme() {
           }}>
             Programme Details
           </h1>
-          
+
           <form onSubmit={handleSubmit}>
             <div style={{
               background: "#fff",
@@ -226,7 +226,7 @@ function Programme() {
               boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
               marginBottom: "30px",
             }}>
-              
+
               {/* Faculty Development Programme Section */}
               <div style={{ marginTop: "40px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
@@ -257,9 +257,9 @@ function Programme() {
                               value={programme.title_fdp}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "title_fdp", e.target.value)}
                               placeholder="e.g., Orientation Programme, Refresher Course"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -271,9 +271,9 @@ function Programme() {
                               value={programme.organiser}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "organiser", e.target.value)}
                               placeholder="Organizing Institution/Body"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -285,9 +285,9 @@ function Programme() {
                               value={programme.venue}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "venue", e.target.value)}
                               placeholder="Programme Venue"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -299,9 +299,9 @@ function Programme() {
                               value={programme.duration}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "duration", e.target.value)}
                               placeholder="e.g., 5 days, 2 weeks"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -312,9 +312,9 @@ function Programme() {
                               type="date"
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "from_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -325,9 +325,9 @@ function Programme() {
                               type="date"
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "to_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -339,9 +339,9 @@ function Programme() {
                               value={programme.year}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "year", e.target.value)}
                               placeholder="YYYY"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -351,11 +351,11 @@ function Programme() {
                             <button
                               type="button"
                               onClick={() => removeArrayItem("faculty_development_programme", idx)}
-                              style={{ 
-                                background: "#ef4444", 
-                                color: "#fff", 
-                                border: "none", 
-                                padding: "6px 12px", 
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                padding: "6px 12px",
                                 borderRadius: "6px",
                                 cursor: "pointer",
                                 fontSize: "12px"
@@ -372,12 +372,12 @@ function Programme() {
                 <button
                   type="button"
                   onClick={() => addArrayItem("faculty_development_programme")}
-                  style={{ 
-                    background: "#10b981", 
-                    color: "#fff", 
-                    border: "none", 
-                    padding: "12px 24px", 
-                    marginTop: "15px", 
+                  style={{
+                    background: "#10b981",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px"
@@ -418,9 +418,9 @@ function Programme() {
                               value={programme.name_programme}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "name_programme", e.target.value)}
                               placeholder="Executive/Management Development Programme Name"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -432,9 +432,9 @@ function Programme() {
                               value={programme.no_participants}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "no_participants", e.target.value)}
                               placeholder="Number"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -446,9 +446,9 @@ function Programme() {
                               value={programme.venue}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "venue", e.target.value)}
                               placeholder="Programme Venue"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -460,9 +460,9 @@ function Programme() {
                               value={programme.duration}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "duration", e.target.value)}
                               placeholder="e.g., 3 days, 1 week"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -473,9 +473,9 @@ function Programme() {
                               type="date"
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "from_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -486,9 +486,9 @@ function Programme() {
                               type="date"
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "to_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -500,9 +500,9 @@ function Programme() {
                               value={programme.year}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "year", e.target.value)}
                               placeholder="YYYY"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -514,9 +514,9 @@ function Programme() {
                               value={programme.revenue_generated}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "revenue_generated", e.target.value)}
                               placeholder="Amount in ₹"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -526,11 +526,11 @@ function Programme() {
                             <button
                               type="button"
                               onClick={() => removeArrayItem("executive_development_programme", idx)}
-                              style={{ 
-                                background: "#ef4444", 
-                                color: "#fff", 
-                                border: "none", 
-                                padding: "6px 12px", 
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                padding: "6px 12px",
                                 borderRadius: "6px",
                                 cursor: "pointer",
                                 fontSize: "12px"
@@ -547,12 +547,12 @@ function Programme() {
                 <button
                   type="button"
                   onClick={() => addArrayItem("executive_development_programme")}
-                  style={{ 
-                    background: "#3b82f6", 
-                    color: "#fff", 
-                    border: "none", 
-                    padding: "12px 24px", 
-                    marginTop: "15px", 
+                  style={{
+                    background: "#3b82f6",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px"
@@ -588,9 +588,9 @@ function Programme() {
                             <select
                               value={programme.programme_type}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "programme_type", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -607,9 +607,9 @@ function Programme() {
                               value={programme.place}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "place", e.target.value)}
                               placeholder="Place/Location"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -620,9 +620,9 @@ function Programme() {
                               type="date"
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "from_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -633,9 +633,9 @@ function Programme() {
                               type="date"
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "to_date", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -647,9 +647,9 @@ function Programme() {
                               value={programme.year}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "year", e.target.value)}
                               placeholder="YYYY"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -659,11 +659,11 @@ function Programme() {
                             <button
                               type="button"
                               onClick={() => removeArrayItem("participation_impress_imprint", idx)}
-                              style={{ 
-                                background: "#ef4444", 
-                                color: "#fff", 
-                                border: "none", 
-                                padding: "6px 12px", 
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                padding: "6px 12px",
                                 borderRadius: "6px",
                                 cursor: "pointer",
                                 fontSize: "12px"
@@ -680,12 +680,12 @@ function Programme() {
                 <button
                   type="button"
                   onClick={() => addArrayItem("participation_impress_imprint")}
-                  style={{ 
-                    background: "#8b5cf6", 
-                    color: "#fff", 
-                    border: "none", 
-                    padding: "12px 24px", 
-                    marginTop: "15px", 
+                  style={{
+                    background: "#8b5cf6",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px"
@@ -721,9 +721,9 @@ function Programme() {
                               value={programme.name_programme}
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "name_programme", e.target.value)}
                               placeholder="ARPIT Programme Name"
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -734,9 +734,9 @@ function Programme() {
                               type="date"
                               value={programme.period_from}
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "period_from", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -747,9 +747,9 @@ function Programme() {
                               type="date"
                               value={programme.period_to}
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "period_to", e.target.value)}
-                              style={{ 
-                                width: "100%", 
-                                padding: "8px", 
+                              style={{
+                                width: "100%",
+                                padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
                               }}
@@ -759,11 +759,11 @@ function Programme() {
                             <button
                               type="button"
                               onClick={() => removeArrayItem("enrolment_arpit_programme", idx)}
-                              style={{ 
-                                background: "#ef4444", 
-                                color: "#fff", 
-                                border: "none", 
-                                padding: "6px 12px", 
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                padding: "6px 12px",
                                 borderRadius: "6px",
                                 cursor: "pointer",
                                 fontSize: "12px"
@@ -780,12 +780,12 @@ function Programme() {
                 <button
                   type="button"
                   onClick={() => addArrayItem("enrolment_arpit_programme")}
-                  style={{ 
-                    background: "#f59e0b", 
-                    color: "#fff", 
-                    border: "none", 
-                    padding: "12px 24px", 
-                    marginTop: "15px", 
+                  style={{
+                    background: "#f59e0b",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px"

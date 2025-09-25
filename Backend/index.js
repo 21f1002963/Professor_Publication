@@ -785,7 +785,7 @@ app.get('/api/professor/participation-collaboration/:id', authenticateToken, asy
     try {
         const professorId = req.params.id;
         const professor = await Professor.findById(professorId).select('participation_extension_academic participation_extension_cocurricular collaboration_institution_industry');
-        
+
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
         }
@@ -840,6 +840,75 @@ app.put('/api/professor/participation-collaboration/:id', authenticateToken, asy
 
 // =============================================================================
 // END PARTICIPATION & COLLABORATION API ENDPOINTS
+// =============================================================================
+
+// =============================================================================
+// PROGRAMME API ENDPOINTS
+// =============================================================================
+
+// Get professor programme data
+app.get('/api/professor/programme/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('faculty_development_programme executive_development_programme participation_impress_imprint enrolment_arpit_programme');
+        
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return programme data or default structure
+        res.status(200).json({
+            faculty_development_programme: professor.faculty_development_programme || [],
+            executive_development_programme: professor.executive_development_programme || [],
+            participation_impress_imprint: professor.participation_impress_imprint || [],
+            enrolment_arpit_programme: professor.enrolment_arpit_programme || []
+        });
+    } catch (error) {
+        console.error('Error fetching programme data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update programme data directly (no approval needed)
+app.put('/api/professor/programme/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const { faculty_development_programme, executive_development_programme, participation_impress_imprint, enrolment_arpit_programme } = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            professorId,
+            {
+                faculty_development_programme: faculty_development_programme,
+                executive_development_programme: executive_development_programme,
+                participation_impress_imprint: participation_impress_imprint,
+                enrolment_arpit_programme: enrolment_arpit_programme,
+                lastProfileUpdate: new Date()
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Programme data updated successfully for user:', professorId);
+        res.status(200).json({
+            message: 'Programme data updated successfully',
+            programme_data: {
+                faculty_development_programme: updatedProfessor.faculty_development_programme,
+                executive_development_programme: updatedProfessor.executive_development_programme,
+                participation_impress_imprint: updatedProfessor.participation_impress_imprint,
+                enrolment_arpit_programme: updatedProfessor.enrolment_arpit_programme
+            }
+        });
+    } catch (error) {
+        console.error('Error updating programme data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END PROGRAMME API ENDPOINTS
 // =============================================================================
 
 // Submit profile changes for HOD approval
