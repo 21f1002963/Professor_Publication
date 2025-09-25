@@ -111,7 +111,38 @@ function Layout({ children }) {
         </div>
 
         {/* Navigation Menu */}
-        <div style={{ flex: 1, padding: '5px 0' }}>
+        <div 
+          className="sidebar-menu-scroll"
+          style={{ 
+            flex: 1, 
+            padding: '5px 0',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            maxHeight: 'calc(100vh - 160px)', // Account for header and logout button
+          }}
+        >
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              .sidebar-menu-scroll::-webkit-scrollbar {
+                width: 6px;
+              }
+              .sidebar-menu-scroll::-webkit-scrollbar-track {
+                background: rgba(255,255,255,0.1);
+                border-radius: 3px;
+              }
+              .sidebar-menu-scroll::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.3);
+                border-radius: 3px;
+              }
+              .sidebar-menu-scroll::-webkit-scrollbar-thumb:hover {
+                background: rgba(255,255,255,0.5);
+              }
+              .sidebar-menu-scroll {
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255,255,255,0.3) transparent;
+              }
+            `
+          }} />
           {menuItems.map((item, index) => (
             <div
               key={item.label}

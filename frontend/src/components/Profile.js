@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
@@ -209,6 +210,24 @@ function Profile() {
   // Image upload state
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [viewingMode, setViewingMode] = useState('own'); // 'own' or 'viewing'
+  const [viewedProfessorName, setViewedProfessorName] = useState('');
+
+  // Additional data for comprehensive profile view (HOD viewing)
+  const [experienceData, setExperienceData] = useState(null);
+  const [publicationsData, setPublicationsData] = useState(null);
+  const [patentsData, setPatentsData] = useState(null);
+  const [booksData, setBooksData] = useState(null);
+  const [researchData, setResearchData] = useState(null);
+  const [projectData, setProjectData] = useState(null);
+  const [educationData, setEducationData] = useState(null);
+  const [conferenceData, setConferenceData] = useState(null);
+  const [participationData, setParticipationData] = useState(null);
+  const [programmeData, setProgrammeData] = useState(null);
+
+  // React Router hooks
+  const { professorId } = useParams();
+  const navigate = useNavigate();
 
   // Handle image upload
   const handleImageUpload = (event) => {
@@ -236,21 +255,31 @@ function Profile() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setProfile((prev) => ({
-          ...prev,
-          name: decoded.name,
-          email: decoded.email,
-          department: prev.department || "Computer Science", // Default value
-        }));
-      } catch (error) {
-        console.error("Error decoding token:", error);
+
+    // Check if HOD is viewing another professor's profile using URL parameter
+    if (professorId) {
+      setViewingMode('viewing');
+      fetchViewingProfile(professorId);
+      // Also fetch comprehensive data for HOD viewing
+      fetchComprehensiveData(professorId);
+    } else {
+      setViewingMode('own');
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          setProfile((prev) => ({
+            ...prev,
+            name: decoded.name,
+            email: decoded.email,
+            department: prev.department || "Computer Science", // Default value
+          }));
+        } catch (error) {
+          console.error("Error decoding token:", error);
+        }
       }
+      fetchProfile();
     }
-    fetchProfile();
-  }, []);
+  }, [professorId]); // Add professorId as dependency
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("token");
@@ -275,8 +304,93 @@ function Profile() {
     }
   };
 
+  // Function to fetch another professor's profile (HOD viewing mode)
+  const fetchViewingProfile = async (professorId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      console.log('Attempting to fetch profile for professor ID:', professorId);
+      const response = await fetch(
+        `http://localhost:5000/api/professor/profile/${professorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log('Response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Profile data received:', data);
+        setProfile(data);
+        setViewedProfessorName(data.name || 'Professor');
+      } else {
+        const errorData = await response.text();
+        console.error("Failed to fetch professor profile. Status:", response.status, "Error:", errorData);
+        alert(`Failed to load professor profile. Status: ${response.status}. Error: ${errorData}`);
+      }
+    } catch (error) {
+      console.error("Error fetching professor profile:", error);
+      alert(`Error loading professor profile: ${error.message}`);
+    }
+  };
+
+  // Function to fetch all comprehensive data for HOD viewing
+  const fetchComprehensiveData = async (professorId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      // Fetch all data endpoints for comprehensive profile view
+      const endpoints = [
+        { name: 'experience', url: `http://localhost:5000/api/professor/experience/${professorId}`, setter: setExperienceData },
+        { name: 'publications', url: `http://localhost:5000/api/professor/publications/${professorId}`, setter: setPublicationsData },
+        { name: 'patents', url: `http://localhost:5000/api/professor/patents/${professorId}`, setter: setPatentsData },
+        { name: 'books', url: `http://localhost:5000/api/professor/books/${professorId}`, setter: setBooksData },
+        { name: 'research', url: `http://localhost:5000/api/professor/research-guidance/${professorId}`, setter: setResearchData },
+        { name: 'projects', url: `http://localhost:5000/api/professor/project-consultancy/${professorId}`, setter: setProjectData },
+        { name: 'education', url: `http://localhost:5000/api/professor/e-education/${professorId}`, setter: setEducationData },
+        { name: 'conferences', url: `http://localhost:5000/api/professor/conference-seminar-workshop/${professorId}`, setter: setConferenceData },
+        { name: 'participation', url: `http://localhost:5000/api/professor/participation-collaboration/${professorId}`, setter: setParticipationData },
+        { name: 'programmes', url: `http://localhost:5000/api/professor/programme/${professorId}`, setter: setProgrammeData }
+      ];
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint.url, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            endpoint.setter(data);
+          } else {
+            console.log(`No ${endpoint.name} data available for this professor`);
+            endpoint.setter(null);
+          }
+        } catch (error) {
+          console.error(`Error fetching ${endpoint.name}:`, error);
+          endpoint.setter(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching comprehensive data:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Prevent submission if in viewing mode
+    if (viewingMode === 'viewing') {
+      alert('Cannot edit profile in viewing mode.');
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -308,6 +422,22 @@ function Profile() {
       alert("Error saving profile. Please try again.");
     }
   };
+
+  // Get input style with disabled state for viewing mode
+  const getInputStyle = (isDisabled = false) => ({
+    width: "100%",
+    padding: "12px 16px",
+    border: isDisabled ? "2px solid #e2e8f0" : "2px solid #e2e8f0",
+    borderRadius: "10px",
+    fontSize: "1rem",
+    transition: "border-color 0.3s ease",
+    boxSizing: "border-box",
+    backgroundColor: isDisabled ? "#f7fafc" : "#fff",
+    color: isDisabled ? "#718096" : "#2d3748",
+    cursor: isDisabled ? "not-allowed" : "text"
+  });
+
+  const isDisabled = viewingMode === 'viewing';
 
   const handleInputChange = (field, value) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
@@ -370,17 +500,16 @@ function Profile() {
               fontFamily: "Segoe UI, Arial, sans-serif",
             }}
           >
-            Faculty Profile
+            {viewingMode === 'viewing' ? `${viewedProfessorName}'s Profile` : 'Faculty Profile'}
           </h1>
           <p
             style={{
               fontSize: "1.2rem",
               opacity: 0.8,
-              margin: 0,
             }}
           >
-            Manage your personal and academic information
           </p>
+
         </div>
         <div
           style={{
@@ -460,30 +589,32 @@ function Profile() {
                 </div>
 
                 {/* Upload Button */}
-                <label style={{
-                  background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '12px 24px',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    style={{ display: 'none' }}
-                  />
-                </label>
+                {!isDisabled && (
+                  <label style={{
+                    background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '12px 24px',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                )}
 
-                {selectedImage && (
+                {!isDisabled && selectedImage && (
                   <p style={{
                     color: '#4a5568',
                     fontSize: '0.9rem',
@@ -533,15 +664,8 @@ function Profile() {
                     type="text"
                     value={profile.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "1rem",
-                      transition: "border-color 0.3s ease",
-                      boxSizing: "border-box",
-                    }}
+                    disabled={isDisabled}
+                    style={getInputStyle(isDisabled)}
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -561,15 +685,8 @@ function Profile() {
                     type="email"
                     value={profile.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "1rem",
-                      transition: "border-color 0.3s ease",
-                      boxSizing: "border-box",
-                    }}
+                    disabled={isDisabled}
+                    style={getInputStyle(isDisabled)}
                     placeholder="Enter your email"
                   />
                 </div>
@@ -902,43 +1019,47 @@ function Profile() {
                             textAlign: "center",
                           }}
                         >
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("education", idx)}
-                            style={{
-                              background: "#e53e3e",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "6px",
-                              padding: "4px 10px",
-                              cursor: "pointer",
-                              fontSize: "0.95rem",
-                            }}
-                          >
-                            Remove
-                          </button>
+                          {!isDisabled && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("education", idx)}
+                              style={{
+                                background: "#e53e3e",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "6px",
+                                padding: "4px 10px",
+                                cursor: "pointer",
+                                fontSize: "0.95rem",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("education")}
-                  style={{
-                    background: "#3182ce",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "8px 18px",
-                    cursor: "pointer",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    marginTop: "5px",
-                  }}
-                >
-                  Add Qualification
-                </button>
+                {!isDisabled && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("education")}
+                    style={{
+                      background: "#3182ce",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "8px 18px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Add Qualification
+                  </button>
+                )}
               </div>
 
               {/* Awards / Prizes Conferred Section */}
@@ -1223,43 +1344,47 @@ function Profile() {
                             textAlign: "center",
                           }}
                         >
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("awards", idx)}
-                            style={{
-                              background: "#e53e3e",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "6px",
-                              padding: "4px 10px",
-                              cursor: "pointer",
-                              fontSize: "0.95rem",
-                            }}
-                          >
-                            Remove
-                          </button>
+                          {!isDisabled && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("awards", idx)}
+                              style={{
+                                background: "#e53e3e",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "6px",
+                                padding: "4px 10px",
+                                cursor: "pointer",
+                                fontSize: "0.95rem",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("awards")}
-                  style={{
-                    background: "#3182ce",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "8px 18px",
-                    cursor: "pointer",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    marginTop: "5px",
-                  }}
-                >
-                  Add Award / Prize
-                </button>
+                {!isDisabled && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("awards")}
+                    style={{
+                      background: "#3182ce",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "8px 18px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Add Award / Prize
+                  </button>
+                )}
               </div>
             </div>
 
@@ -1330,28 +1455,30 @@ function Profile() {
                         }}
                         placeholder={`Specialization ${idx + 1}`}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfile((prev) => ({
-                            ...prev,
-                            area_of_expertise: prev.area_of_expertise.filter(
-                              (_, i) => i !== idx
-                            ),
-                          }));
-                        }}
-                        style={{
-                          background: "#e53e3e",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "4px 10px",
-                          cursor: "pointer",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        Remove
-                      </button>
+                      {!isDisabled && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfile((prev) => ({
+                              ...prev,
+                              area_of_expertise: prev.area_of_expertise.filter(
+                                (_, i) => i !== idx
+                              ),
+                            }));
+                          }}
+                          style={{
+                            background: "#e53e3e",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "6px",
+                            padding: "4px 10px",
+                            cursor: "pointer",
+                            fontSize: "0.95rem",
+                          }}
+                        >
+                          Remove
+                        </button>
+                      )}
                     </div>
                   ))
                 ) : (
@@ -1387,34 +1514,158 @@ function Profile() {
                   </div>
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() =>
-                  setProfile((prev) => ({
-                    ...prev,
-                    area_of_expertise: [
-                      ...(Array.isArray(prev.area_of_expertise)
-                        ? prev.area_of_expertise
-                        : [prev.area_of_expertise]),
-                      "",
-                    ],
-                  }))
-                }
-                style={{
-                  background: "#3182ce",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  padding: "8px 18px",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  marginTop: "15px",
-                }}
-              >
-                Add Specialization
-              </button>
+              {!isDisabled && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setProfile((prev) => ({
+                      ...prev,
+                      area_of_expertise: [
+                        ...(Array.isArray(prev.area_of_expertise)
+                          ? prev.area_of_expertise
+                          : [prev.area_of_expertise]),
+                        "",
+                      ],
+                    }))
+                  }
+                  style={{
+                    background: "#3182ce",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "8px 18px",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    marginTop: "15px",
+                  }}
+                >
+                  Add Specialization
+                </button>
+              )}
             </div>
+
+            {/* Comprehensive Profile Data for HOD Viewing */}
+            {viewingMode === 'viewing' && (
+              <>
+                {/* Experience Section */}
+                {experienceData && (
+                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Professional Experience
+                    </h2>
+                    <div style={{ display: "grid", gap: "20px" }}>
+                      {experienceData.teaching_experience?.map((exp, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                          <h4 style={{ color: "#2d3748", margin: "0 0 10px 0" }}>{exp.designation} at {exp.institution}</h4>
+                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Department:</strong> {exp.department}</p>
+                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Duration:</strong> {exp.from} - {exp.to}</p>
+                        </div>
+                      ))}
+                      {experienceData.research_experience?.map((exp, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                          <h4 style={{ color: "#2d3748", margin: "0 0 10px 0" }}>{exp.position} at {exp.organization}</h4>
+                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Duration:</strong> {exp.from} - {exp.to}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Publications Section */}
+                {publicationsData && (
+                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Publications
+                    </h2>
+                    <div style={{ display: "grid", gap: "15px" }}>
+                      {publicationsData.journal_publications?.map((pub, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{pub.title}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>{pub.journal}</strong> ({pub.year}) - Volume {pub.volume}, Pages {pub.pages}
+                          </p>
+                        </div>
+                      ))}
+                      {publicationsData.conference_publications?.map((pub, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{pub.title}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>{pub.conference}</strong> ({pub.year}) - Pages {pub.pages}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Patents Section */}
+                {patentsData && (
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Patents
+                    </h2>
+                    <div style={{ display: "grid", gap: "15px" }}>
+                      {patentsData.patents?.map((patent, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{patent.title}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>Patent No:</strong> {patent.patent_number} | <strong>Year:</strong> {patent.year} | <strong>Status:</strong> {patent.status}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Books Section */}
+                {booksData && (
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Books & Publications
+                    </h2>
+                    <div style={{ display: "grid", gap: "15px" }}>
+                      {booksData.books_authored?.map((book, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{book.title}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>Publisher:</strong> {book.publisher} | <strong>Year:</strong> {book.year} | <strong>ISBN:</strong> {book.isbn}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Research Guidance Section */}
+                {researchData && (
+                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Research Guidance
+                    </h2>
+                    <div style={{ display: "grid", gap: "15px" }}>
+                      {researchData.phd_students?.map((student, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>PhD: {student.student_name}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>Thesis:</strong> {student.thesis_title} | <strong>Year:</strong> {student.year_of_completion}
+                          </p>
+                        </div>
+                      ))}
+                      {researchData.pg_students?.map((student, idx) => (
+                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>PG: {student.student_name}</h5>
+                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
+                            <strong>Thesis:</strong> {student.thesis_title} | <strong>Year:</strong> {student.year_of_completion}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
             <div
               style={{
                 padding: "20px 30px",
@@ -1422,35 +1673,74 @@ function Profile() {
                 background: 'white',
               }}
             >
-              <button
-                type="submit"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "15px",
-                  padding: "16px 40px",
-                  fontSize: "1.1rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
-                  minWidth: "100px",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow =
-                    "0 12px 35px rgba(96, 147, 236, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow =
-                    "0 8px 25px rgba(96, 147, 236, 0.3)";
-                }}
-              >
-                Save
-              </button>
+              {viewingMode === 'viewing' ? (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'end',
+                  alignItems: 'center'
+                }}>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Navigate back to faculty directory
+                      navigate('/faculty');
+                    }}
+                    style={{
+                      background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "15px",
+                      padding: "16px 30px",
+                      fontSize: "1rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 8px 25px rgba(79, 172, 254, 0.3)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow = "0 12px 35px rgba(79, 172, 254, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 8px 25px rgba(79, 172, 254, 0.3)";
+                    }}
+                  >
+                    ← Back to Faculty Directory
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "15px",
+                    padding: "16px 40px",
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
+                    minWidth: "100px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 12px 35px rgba(96, 147, 236, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow =
+                      "0 8px 25px rgba(96, 147, 236, 0.3)";
+                  }}
+                >
+                  Save
+                </button>
+              )}
             </div>
           </form>
         </div>

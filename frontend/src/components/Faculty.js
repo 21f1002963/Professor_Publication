@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
 
 function Faculty() {
@@ -7,8 +9,27 @@ function Faculty() {
   const [filterDepartment, setFilterDepartment] = useState('');
   const [filterDesignation, setFilterDesignation] = useState('');
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState('faculty'); // Track user role
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Check user role from token/localStorage
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
+    if (token && user) {
+      try {
+        const userInfo = JSON.parse(user);
+        const decoded = jwtDecode(token);
+        const role = userInfo.role || decoded.role || 'faculty';
+        console.log('User role detected:', role);
+        setUserRole(role);
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        setUserRole('faculty'); // Default to faculty if error
+      }
+    }
+
     fetchProfessors();
   }, []);
 
@@ -41,6 +62,48 @@ function Faculty() {
       setProfessors([]); // Set empty array instead of mock data
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to view a specific professor's profile (HOD only)
+  const viewProfessorProfile = (professorId) => {
+    console.log('Attempting to view profile for professor ID:', professorId);
+    console.log('Current user role:', userRole);
+    
+    // Navigate to profile page with professor ID as URL parameter
+    navigate(`/profile/${professorId}`);
+  };
+
+  // Temporary function to promote current user to HOD for testing
+  const promoteToHOD = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/promote-to-hod', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Successfully promoted to HOD! Role: ${data.role}`);
+        
+        // Update localStorage user info
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        user.role = 'hod';
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        setUserRole('hod');
+        window.location.reload(); // Refresh to update UI
+      } else {
+        const error = await response.text();
+        alert(`Failed to promote to HOD: ${error}`);
+      }
+    } catch (error) {
+      console.error('Error promoting to HOD:', error);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -284,6 +347,17 @@ function Faculty() {
                   }}>
                     🔬 Expertise
                   </th>
+                  {userRole === 'hod' && (
+                    <th style={{
+                      padding: '20px',
+                      textAlign: 'center',
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      borderBottom: 'none'
+                    }}>
+                      Actions
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -425,6 +499,45 @@ function Faculty() {
                         : professor.area_of_expertise || 'Not specified'
                       }
                     </td>
+                    {userRole === 'hod' && (
+                      <td style={{
+                        padding: '20px',
+                        verticalAlign: 'top',
+                        textAlign: 'center'
+                      }}>
+                        <button
+                          onClick={() => viewProfessorProfile(professor._id)}
+                          style={{
+                            background: 'linear-gradient(135deg, #6093ecff 0%, #4facfe 100%)',
+                            color: '#fff',
+                            border: 'none',
+                            padding: '10px 16px',
+                            borderRadius: '10px',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            minWidth: '120px',
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 12px rgba(96, 147, 236, 0.3)'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 6px 20px rgba(96, 147, 236, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 4px 12px rgba(96, 147, 236, 0.3)';
+                          }}
+                          title="View detailed profile"
+                        >
+                          View
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

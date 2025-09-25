@@ -166,6 +166,67 @@ app.put('/api/professor/profile', authenticateToken, async (req, res) => {
     }
 });
 
+// Get specific professor profile by ID (HOD access only)
+app.get('/api/professor/profile/:professorId', authenticateToken, async (req, res) => {
+    try {
+        console.log('HOD profile view request received');
+        console.log('Requesting user ID:', req.user.id);
+        console.log('Target professor ID:', req.params.professorId);
+        
+        // Check if the requesting user is HOD
+        const requestingUser = await Professor.findById(req.user.id);
+        console.log('Requesting user found:', requestingUser ? 'Yes' : 'No');
+        console.log('Requesting user role:', requestingUser?.role);
+        
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            console.log('Access denied - not HOD');
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professorId = req.params.professorId;
+        const professor = await Professor.findById(professorId).select('-password');
+        
+        console.log('Target professor found:', professor ? 'Yes' : 'No');
+        
+        if (!professor) {
+            console.log('Professor not found');
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Successfully returning professor profile');
+        res.status(200).json(professor);
+    } catch (error) {
+        console.error('Error fetching professor profile:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Temporary endpoint to promote user to HOD (for testing only - remove in production)
+app.post('/api/promote-to-hod', authenticateToken, async (req, res) => {
+    try {
+        console.log('Promoting user to HOD:', req.user.id);
+        
+        const updatedUser = await Professor.findByIdAndUpdate(
+            req.user.id,
+            { role: 'hod' },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        console.log('User promoted to HOD successfully');
+        res.status(200).json({ 
+            message: 'Successfully promoted to HOD',
+            role: updatedUser.role 
+        });
+    } catch (error) {
+        console.error('Error promoting user:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Get professor experience
 app.get('/api/professor/experience', authenticateToken, async (req, res) => {
     try {
@@ -1059,6 +1120,136 @@ app.get('/api/hod/faculty-list', authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching faculty list:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// HOD COMPREHENSIVE PROFILE VIEWING ENDPOINTS
+// =============================================================================
+
+// Get specific professor's experience data (HOD access only)
+app.get('/api/professor/experience/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const experienceData = {
+            teaching_experience: professor.teaching_experience || [],
+            research_experience: professor.research_experience || []
+        };
+
+        res.status(200).json(experienceData);
+    } catch (error) {
+        console.error('Error fetching professor experience:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get specific professor's publications data (HOD access only)
+app.get('/api/professor/publications/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const publicationsData = {
+            journal_publications: professor.journal_publications || [],
+            conference_publications: professor.conference_publications || [],
+            other_publications: professor.other_publications || []
+        };
+
+        res.status(200).json(publicationsData);
+    } catch (error) {
+        console.error('Error fetching professor publications:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get specific professor's patents data (HOD access only)
+app.get('/api/professor/patents/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const patentsData = {
+            patents: professor.patents || []
+        };
+
+        res.status(200).json(patentsData);
+    } catch (error) {
+        console.error('Error fetching professor patents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get specific professor's books data (HOD access only)
+app.get('/api/professor/books/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const booksData = {
+            books_authored: professor.books_authored || [],
+            books_edited: professor.books_edited || [],
+            chapters_in_books: professor.chapters_in_books || []
+        };
+
+        res.status(200).json(booksData);
+    } catch (error) {
+        console.error('Error fetching professor books:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get specific professor's research guidance data (HOD access only)
+app.get('/api/professor/research-guidance/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const researchData = {
+            phd_students: professor.phd_student_guided || [],
+            pg_students: professor.pg_student_guided || []
+        };
+
+        res.status(200).json(researchData);
+    } catch (error) {
+        console.error('Error fetching professor research guidance:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

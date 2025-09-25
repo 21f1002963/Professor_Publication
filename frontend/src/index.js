@@ -39,6 +39,11 @@ root.render(
             <Profile />
           </ProtectedRoute>
         } />
+        <Route path='/profile/:professorId'  element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
         <Route path='/faculty'  element={
           <ProtectedRoute>
             <Faculty />
