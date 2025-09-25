@@ -10,6 +10,7 @@ import Profile from './components/Profile';
 import Faculty from './components/Faculty';
 import Publications from './components/Publications';
 import Patents from './components/Patents';
+import Books from './components/Books';
 import ProjectStudents from './components/ProjectStudents';
 import Experience from './components/Experience';
 import HODVerification from './components/HODVerification';
@@ -46,6 +47,11 @@ root.render(
         <Route path='/patents'  element={
           <ProtectedRoute>
             <Patents />
+          </ProtectedRoute>
+        } />
+        <Route path='/books'  element={
+          <ProtectedRoute>
+            <Books />
           </ProtectedRoute>
         } />
         <Route path='/project-students'  element={

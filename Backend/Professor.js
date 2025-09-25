@@ -138,6 +138,22 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
+    // New Patents Structure
+    innovation_contributions: [{
+        work_name: { type: String, default: '' },
+        specialization: { type: String, default: '' },
+        remarks: { type: String, default: '' }
+    }],
+
+    patent_details: [{
+        title: { type: String, default: '' },
+        status: { type: String, default: '' },
+        patent_number: { type: String, default: '' },
+        year_of_award: { type: String, default: '' },
+        type: { type: String, default: '' },
+        commercialized_status: { type: String, default: '' }
+    }],
+
     books: [{
         title: { type: String, default: '' },
         authors: { type: String, default: '' },
@@ -148,19 +164,19 @@ const ProfessorSchema = new mongoose.Schema({
 
     chapters_in_books: [{
         chapter_title: { type: String, default: '' },
+        authors: { type: String, default: '' },
         book_title: { type: String, default: '' },
-        editors: { type: String, default: '' },
         publisher: { type: String, default: '' },
-        pages: { type: String, default: '' },
-        year: { type: String, default: '' }
+        year: { type: String, default: '' },
+        isbn: { type: String, default: '' }
     }],
 
     edited_books: [{
         title: { type: String, default: '' },
-        editors: { type: String, default: '' },
+        authors: { type: String, default: '' },
         publisher: { type: String, default: '' },
-        isbn: { type: String, default: '' },
-        year: { type: String, default: '' }
+        year: { type: String, default: '' },
+        isbn: { type: String, default: '' }
     }],
 
     // Projects and Students

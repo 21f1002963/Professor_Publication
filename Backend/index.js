@@ -322,6 +322,147 @@ app.put('/api/professor/publications', authenticateToken, async (req, res) => {
     }
 });
 
+// Get professor patents
+app.get('/api/professor/patents', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return patents data or default structure
+        const patentsData = {
+            innovation_contributions: professor.innovation_contributions || [{
+                work_name: "",
+                specialization: "",
+                remarks: "",
+            }],
+            patent_details: professor.patent_details || [{
+                title: "",
+                status: "",
+                patent_number: "",
+                year_of_award: "",
+                type: "",
+                commercialized_status: "",
+            }]
+        };
+
+        res.status(200).json(patentsData);
+    } catch (error) {
+        console.error('Error fetching patents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update patents directly (no approval needed)
+app.put('/api/professor/patents', authenticateToken, async (req, res) => {
+    try {
+        const patentsData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                innovation_contributions: patentsData.innovation_contributions || [],
+                patent_details: patentsData.patent_details || [],
+                lastPatentsUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Patents updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Patents updated successfully',
+            patents: {
+                innovation_contributions: updatedProfessor.innovation_contributions,
+                patent_details: updatedProfessor.patent_details
+            }
+        });
+    } catch (error) {
+        console.error('Error updating patents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor books
+app.get('/api/professor/books', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return books data or default structure
+        const booksData = {
+            books: professor.books || [{
+                title: "",
+                authors: "",
+                publisher: "",
+                year: "",
+                isbn: "",
+            }],
+            chapters_in_books: professor.chapters_in_books || [{
+                chapter_title: "",
+                authors: "",
+                book_title: "",
+                publisher: "",
+                year: "",
+                isbn: "",
+            }],
+            edited_books: professor.edited_books || [{
+                title: "",
+                authors: "",
+                publisher: "",
+                year: "",
+                isbn: "",
+            }]
+        };
+
+        res.status(200).json(booksData);
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update books directly (no approval needed)
+app.put('/api/professor/books', authenticateToken, async (req, res) => {
+    try {
+        const booksData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                books: booksData.books || [],
+                chapters_in_books: booksData.chapters_in_books || [],
+                edited_books: booksData.edited_books || [],
+                lastBooksUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Books updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Books updated successfully',
+            books: {
+                books: updatedProfessor.books,
+                chapters_in_books: updatedProfessor.chapters_in_books,
+                edited_books: updatedProfessor.edited_books
+            }
+        });
+    } catch (error) {
+        console.error('Error updating books:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Submit profile changes for HOD approval
 app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
     try {

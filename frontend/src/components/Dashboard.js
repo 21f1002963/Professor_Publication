@@ -127,6 +127,7 @@ function Dashboard() {
     { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
+    { label: 'Books', path: '/books', icon: '📚' },
     { label: 'Project Students', path: '/project-students', icon: '👨‍🎓' }
   ];
 
