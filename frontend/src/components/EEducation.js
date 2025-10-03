@@ -150,7 +150,7 @@ function EEducation() {
             marginBottom: "10px",
             marginTop: "0px"
           }}>
-            E-Education
+            E-Education/ MOOC/ Swayam/ e-Pathshala
           </h1>
           <p style={{ fontSize: "1rem", opacity:0.8, marginBottom: "30px", marginTop: "0px" }}>
             Update your E-Education details below. Please ensure all information is accurate before submitting.
