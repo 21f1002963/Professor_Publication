@@ -200,7 +200,8 @@ const ProfessorSchema = new mongoose.Schema({
         authors: { type: String, default: '' },
         publisher: { type: String, default: '' },
         year: { type: String, default: '' },
-        isbn: { type: String, default: '' }
+        isbn: { type: String, default: '' },
+        chapter_titles: { type: String, default: '' }
     }],
 
     // Fellowship Details

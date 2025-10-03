@@ -2040,29 +2040,101 @@ function Profile() {
                       Books & Publications
                     </h2>
 
-                    {booksData.books_authored?.length > 0 && (
-                      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
-                        <thead>
-                          <tr style={{ background: "#f1f5f9" }}>
-                            <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
-                            <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
-                            <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
-                            <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
-                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {booksData.books_authored.map((book, idx) => (
-                            <tr key={idx}>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.title}</td>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.publisher}</td>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.year}</td>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.isbn}</td>
+                    {/* Books Authored Table */}
+                    {booksData.books?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Books Authored</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {booksData.books.map((book, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.publisher}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.isbn}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Chapters in Books Table */}
+                    {booksData.chapters_in_books?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Chapters in Books</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Chapter Title</th>
+                              <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Book Title</th>
+                              <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {booksData.chapters_in_books.map((chapter, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.chapter_title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.book_title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.publisher}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{chapter.isbn}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Edited Books Table */}
+                    {booksData.edited_books?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Edited Books</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title of the Book</th>
+                              <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN No.</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title of the Chapters</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {booksData.edited_books.map((book, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.publisher}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.isbn}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.chapter_titles}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     )}
                   </div>
                 )}

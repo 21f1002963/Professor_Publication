@@ -33,6 +33,7 @@ function Books() {
         publisher: "",
         year: "",
         isbn: "",
+        chapter_titles: "",
       },
     ],
   });
@@ -151,6 +152,7 @@ function Books() {
         publisher: "",
         year: "",
         isbn: "",
+        chapter_titles: "",
       },
     };
 
@@ -499,11 +501,12 @@ function Books() {
                   <thead>
                     <tr style={{ background: "#f1f5f9" }}>
                       <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
-                      <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title of the Book</th>
-                      <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
-                      <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
-                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
-                      <th style={{ width: "140px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN No.</th>
+                      <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title of the Book</th>
+                      <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title of the Chapters</th>
+                      <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                      <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
+                      <th style={{ width: "70px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN No.</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
                   </thead>
@@ -518,6 +521,15 @@ function Books() {
                             onChange={(e) => handleArrayChange("edited_books", idx, "title", e.target.value)}
                             style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Book Title"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={book.chapter_titles}
+                            onChange={(e) => handleArrayChange("edited_books", idx, "chapter_titles", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Title of the Chapters"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>

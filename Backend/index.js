@@ -530,6 +530,7 @@ app.get('/api/professor/books', authenticateToken, async (req, res) => {
                 publisher: "",
                 year: "",
                 isbn: "",
+                chapter_titles: "",
             }]
         };
 
