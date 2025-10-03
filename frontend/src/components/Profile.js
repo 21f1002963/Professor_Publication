@@ -1271,7 +1271,7 @@ function Profile() {
                           fontWeight: 600,
                         }}
                       >
-                        Type
+                        Category/Type of Award
                       </th>
                       <th
                         style={{
