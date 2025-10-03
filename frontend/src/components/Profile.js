@@ -241,7 +241,7 @@ function Profile() {
         const img = new Image();
         img.onload = () => {
           setImagePreview(e.target.result);
-        // Update profile state with image
+          // Update profile state with image
           setProfile(prev => ({
             ...prev,
             profileImage: e.target.result
@@ -500,7 +500,7 @@ function Profile() {
               fontFamily: "Segoe UI, Arial, sans-serif",
             }}
           >
-            {viewingMode === 'viewing' ? `${viewedProfessorName}'s Profile` : 'Faculty Profile'}
+            {viewingMode === 'viewing' ? `${viewedProfessorName}` : 'Faculty Profile'}
           </h1>
           <p
             style={{
@@ -1062,6 +1062,159 @@ function Profile() {
                 )}
               </div>
 
+              <div
+                style={{
+                  margin: "0",
+                  background: "#fff",
+                  borderRadius: "20px",
+                  maxWidth: "87vw",
+                }}
+              >
+                <h2
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    color: "#2d3748",
+                    marginBottom: "25px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontFamily: "Segoe UI, Arial, sans-serif",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Area of Specialization
+                </h2>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+                    gap: "20px",
+                  }}
+                >
+                  {Array.isArray(profile.area_of_expertise) ? (
+                    profile.area_of_expertise.map((spec, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <input
+                          type="text"
+                          value={spec}
+                          onChange={(e) => {
+                            const newSpecs = [...profile.area_of_expertise];
+                            newSpecs[idx] = e.target.value;
+                            setProfile((prev) => ({
+                              ...prev,
+                              area_of_expertise: newSpecs,
+                            }));
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "12px 16px",
+                            border: "2px solid #e2e8f0",
+                            borderRadius: "10px",
+                            fontSize: "1rem",
+                            transition: "border-color 0.3s ease",
+                            boxSizing: "border-box",
+                            fontFamily: "Segoe UI, Arial, sans-serif",
+                          }}
+                          placeholder={`Specialization ${idx + 1}`}
+                        />
+                        {!isDisabled && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfile((prev) => ({
+                                ...prev,
+                                area_of_expertise: prev.area_of_expertise.filter(
+                                  (_, i) => i !== idx
+                                ),
+                              }));
+                            }}
+                            style={{
+                              background: "#e53e3e",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "6px",
+                              padding: "4px 10px",
+                              cursor: "pointer",
+                              fontSize: "0.95rem",
+                            }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        value={profile.area_of_expertise}
+                        onChange={(e) =>
+                          setProfile((prev) => ({
+                            ...prev,
+                            area_of_expertise: [e.target.value],
+                          }))
+                        }
+                        style={{
+                          width: "100%",
+                          padding: "12px 16px",
+                          border: "2px solid #e2e8f0",
+                          borderRadius: "10px",
+                          fontSize: "1rem",
+                          transition: "border-color 0.3s ease",
+                          boxSizing: "border-box",
+                          fontFamily: "Segoe UI, Arial, sans-serif",
+                        }}
+                        placeholder="Specialization 1"
+                      />
+
+                    </div>
+                  )}
+                </div>
+                {!isDisabled && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setProfile((prev) => ({
+                        ...prev,
+                        area_of_expertise: [
+                          ...(Array.isArray(prev.area_of_expertise)
+                            ? prev.area_of_expertise
+                            : [prev.area_of_expertise]),
+                          "",
+                        ],
+                      }))
+                    }
+                    style={{
+                      background: "#3182ce",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "8px 18px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      marginTop: "15px",
+                    }}
+                  >
+                    Add Specialization
+                  </button>
+                )}
+              </div>
+
               {/* Awards / Prizes Conferred Section */}
               <div style={{ marginTop: "40px" }}>
                 <h2
@@ -1390,212 +1543,287 @@ function Profile() {
 
             {/* Submit Button Section */}
             {/* Area of Specialization Section - aligned and styled */}
-            <div
-              style={{
-                margin: "0",
-                padding: "5px 30px 30px",
-                background: "#fff",
-                borderRadius: "20px",
-                boxShadow: "0 8px 25px rgba(96, 147, 236, 0.08)",
-                maxWidth: "87vw",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: "1.8rem",
-                  fontWeight: 700,
-                  color: "#2d3748",
-                  marginBottom: "25px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  fontFamily: "Segoe UI, Arial, sans-serif",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Area of Specialization
-              </h2>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {Array.isArray(profile.area_of_expertise) ? (
-                  profile.area_of_expertise.map((spec, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <input
-                        type="text"
-                        value={spec}
-                        onChange={(e) => {
-                          const newSpecs = [...profile.area_of_expertise];
-                          newSpecs[idx] = e.target.value;
-                          setProfile((prev) => ({
-                            ...prev,
-                            area_of_expertise: newSpecs,
-                          }));
-                        }}
-                        style={{
-                          width: "100%",
-                          padding: "12px 16px",
-                          border: "2px solid #e2e8f0",
-                          borderRadius: "10px",
-                          fontSize: "1rem",
-                          transition: "border-color 0.3s ease",
-                          boxSizing: "border-box",
-                          fontFamily: "Segoe UI, Arial, sans-serif",
-                        }}
-                        placeholder={`Specialization ${idx + 1}`}
-                      />
-                      {!isDisabled && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setProfile((prev) => ({
-                              ...prev,
-                              area_of_expertise: prev.area_of_expertise.filter(
-                                (_, i) => i !== idx
-                              ),
-                            }));
-                          }}
-                          style={{
-                            background: "#e53e3e",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "6px",
-                            padding: "4px 10px",
-                            cursor: "pointer",
-                            fontSize: "0.95rem",
-                          }}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={profile.area_of_expertise}
-                      onChange={(e) =>
-                        setProfile((prev) => ({
-                          ...prev,
-                          area_of_expertise: [e.target.value],
-                        }))
-                      }
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        border: "2px solid #e2e8f0",
-                        borderRadius: "10px",
-                        fontSize: "1rem",
-                        transition: "border-color 0.3s ease",
-                        boxSizing: "border-box",
-                        fontFamily: "Segoe UI, Arial, sans-serif",
-                      }}
-                      placeholder="Specialization 1"
-                    />
-
-                  </div>
-                )}
-              </div>
-              {!isDisabled && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setProfile((prev) => ({
-                      ...prev,
-                      area_of_expertise: [
-                        ...(Array.isArray(prev.area_of_expertise)
-                          ? prev.area_of_expertise
-                          : [prev.area_of_expertise]),
-                        "",
-                      ],
-                    }))
-                  }
-                  style={{
-                    background: "#3182ce",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "8px 18px",
-                    cursor: "pointer",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    marginTop: "15px",
-                  }}
-                >
-                  Add Specialization
-                </button>
-              )}
-            </div>
 
             {/* Comprehensive Profile Data for HOD Viewing */}
             {viewingMode === 'viewing' && (
               <>
                 {/* Experience Section */}
                 {experienceData && (
-                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
                     <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                       Professional Experience
                     </h2>
-                    <div style={{ display: "grid", gap: "20px" }}>
-                      {experienceData.teaching_experience?.map((exp, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
-                          <h4 style={{ color: "#2d3748", margin: "0 0 10px 0" }}>{exp.designation} at {exp.institution}</h4>
-                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Department:</strong> {exp.department}</p>
-                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Duration:</strong> {exp.from} - {exp.to}</p>
-                        </div>
-                      ))}
-                      {experienceData.research_experience?.map((exp, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
-                          <h4 style={{ color: "#2d3748", margin: "0 0 10px 0" }}>{exp.position} at {exp.organization}</h4>
-                          <p style={{ margin: "5px 0", color: "#4a5568" }}><strong>Duration:</strong> {exp.from} - {exp.to}</p>
-                        </div>
-                      ))}
-                    </div>
+
+                    {/* Teaching Experience Table */}
+                    {experienceData.teaching_experience?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Teaching Experience</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Designation</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Institution</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Department</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>From</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>To</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {experienceData.teaching_experience.map((exp, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.designation}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.institution}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.department}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.from}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.to}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Research Experience Table */}
+                    {experienceData.research_experience?.length > 0 && (
+                      <div>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Research Experience</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Position</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Organization</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>From</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>To</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {experienceData.research_experience.map((exp, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.position}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.organization}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.from}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{exp.to}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {/* Publications Section */}
                 {publicationsData && (
-                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
                     <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                       Publications
                     </h2>
-                    <div style={{ display: "grid", gap: "15px" }}>
-                      {publicationsData.journal_publications?.map((pub, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{pub.title}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>{pub.journal}</strong> ({pub.year}) - Volume {pub.volume}, Pages {pub.pages}
-                          </p>
-                        </div>
-                      ))}
-                      {publicationsData.conference_publications?.map((pub, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{pub.title}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>{pub.conference}</strong> ({pub.year}) - Pages {pub.pages}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+
+                    {/* SEIE Journals Table */}
+                    {publicationsData.seie_journals?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>SEIE Journals</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal Name</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Issue</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.seie_journals.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.journal_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.volume}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.issue}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* UGC Approved Journals Table */}
+                    {publicationsData.ugc_approved_journals?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>UGC Approved Journals</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal Name</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Issue</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.ugc_approved_journals.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.journal_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.volume}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.issue}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Non-UGC Journals Table */}
+                    {publicationsData.non_ugc_journals?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Other Journals</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal Name</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Issue</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.non_ugc_journals.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.journal_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.volume}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.issue}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Conference Proceedings Table */}
+                    {publicationsData.conference_proceedings?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Conference Proceedings</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference Details</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.conference_proceedings.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.authors}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.conference_details}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Journal Publications Table (Legacy) */}
+                    {publicationsData.journal_publications?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Journal Publications (Legacy)</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Pages</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.journal_publications.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.journal}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.volume}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.pages}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Conference Publications Table */}
+                    {publicationsData.conference_publications?.length > 0 && (
+                      <div>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Conference Publications</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Pages</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {publicationsData.conference_publications.map((pub, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.conference}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.pages}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1605,16 +1833,31 @@ function Profile() {
                     <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                       Patents
                     </h2>
-                    <div style={{ display: "grid", gap: "15px" }}>
-                      {patentsData.patents?.map((patent, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{patent.title}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>Patent No:</strong> {patent.patent_number} | <strong>Year:</strong> {patent.year} | <strong>Status:</strong> {patent.status}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+
+                    {patentsData.patents?.length > 0 && (
+                      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                        <thead>
+                          <tr style={{ background: "#f1f5f9" }}>
+                            <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                            <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Patent Number</th>
+                            <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {patentsData.patents.map((patent, idx) => (
+                            <tr key={idx}>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.title}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.patent_number}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.year}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.status}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
                   </div>
                 )}
 
@@ -1624,43 +1867,94 @@ function Profile() {
                     <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                       Books & Publications
                     </h2>
-                    <div style={{ display: "grid", gap: "15px" }}>
-                      {booksData.books_authored?.map((book, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>{book.title}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>Publisher:</strong> {book.publisher} | <strong>Year:</strong> {book.year} | <strong>ISBN:</strong> {book.isbn}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+
+                    {booksData.books_authored?.length > 0 && (
+                      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                        <thead>
+                          <tr style={{ background: "#f1f5f9" }}>
+                            <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                            <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                            <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Publisher</th>
+                            <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>ISBN</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {booksData.books_authored.map((book, idx) => (
+                            <tr key={idx}>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.title}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.publisher}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.year}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{book.isbn}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
                   </div>
                 )}
 
                 {/* Research Guidance Section */}
                 {researchData && (
-                  <div style={{ marginTop: "40px", padding: "30px",  borderRadius: "15px" }}>
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
                     <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
                       Research Guidance
                     </h2>
-                    <div style={{ display: "grid", gap: "15px" }}>
-                      {researchData.phd_students?.map((student, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>PhD: {student.student_name}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>Thesis:</strong> {student.thesis_title} | <strong>Year:</strong> {student.year_of_completion}
-                          </p>
-                        </div>
-                      ))}
-                      {researchData.pg_students?.map((student, idx) => (
-                        <div key={idx} style={{ background: "#fff", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                          <h5 style={{ color: "#2d3748", margin: "0 0 8px 0" }}>PG: {student.student_name}</h5>
-                          <p style={{ margin: "0", color: "#4a5568", fontSize: "0.9rem" }}>
-                            <strong>Thesis:</strong> {student.thesis_title} | <strong>Year:</strong> {student.year_of_completion}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+
+                    {/* PhD Students Table */}
+                    {researchData.phd_students?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>PhD Students</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Student Name</th>
+                              <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Thesis Title</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year of Completion</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {researchData.phd_students.map((student, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.student_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.thesis_title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.year_of_completion}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* PG Students Table */}
+                    {researchData.pg_students?.length > 0 && (
+                      <div>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>PG Students</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Student Name</th>
+                              <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Thesis Title</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year of Completion</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {researchData.pg_students.map((student, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.student_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.thesis_title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{student.year_of_completion}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 )}
               </>

@@ -235,10 +235,10 @@ function Dashboard() {
         </div>
 
         {/* Navigation Menu */}
-        <div 
+        <div
           className="dashboard-menu-scroll"
-          style={{ 
-            flex: 1, 
+          style={{
+            flex: 1,
             padding: '5px 0',
             overflowY: 'auto',
             overflowX: 'hidden',

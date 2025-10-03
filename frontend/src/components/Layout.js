@@ -111,10 +111,10 @@ function Layout({ children }) {
         </div>
 
         {/* Navigation Menu */}
-        <div 
+        <div
           className="sidebar-menu-scroll"
-          style={{ 
-            flex: 1, 
+          style={{
+            flex: 1,
             padding: '5px 0',
             overflowY: 'auto',
             overflowX: 'hidden',

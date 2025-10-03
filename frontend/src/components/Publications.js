@@ -4,6 +4,19 @@ import Layout from "./Layout";
 
 function Publications() {
   const [publications, setPublications] = useState({
+    // Papers Published in SEIE Journals
+    seie_journals: [
+      {
+        title: "",
+        authors: "",
+        journal_name: "",
+        volume: "",
+        issue: "",
+        page_nos: "",
+        year: "",
+        impact_factor: "",
+      },
+    ],
     // Papers Published in UGC Approved Journals
     ugc_approved_journals: [
       {
@@ -135,6 +148,16 @@ function Publications() {
 
   const addArrayItem = (arrayName) => {
     const defaultItems = {
+      seie_journals: {
+        title: "",
+        authors: "",
+        journal_name: "",
+        volume: "",
+        issue: "",
+        page_nos: "",
+        year: "",
+        impact_factor: "",
+      },
       ugc_approved_journals: {
         title: "",
         authors: "",
@@ -221,8 +244,161 @@ function Publications() {
                 marginBottom: "30px",
               }}
             >
-              {/* UGC Approved Journals Section */}
               <div style={{ marginTop: "0px" }}>
+                <h2
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    color: "#2d3748",
+                    marginBottom: "25px",
+                    marginTop: "0px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontFamily: "Segoe UI, Arial, sans-serif",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Papers Published in SEIE Journals
+                </h2>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <thead>
+                    <tr style={{ background: "#f1f5f9" }}>
+                      <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                      <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                      <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                      <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal Name</th>
+                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
+                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Issue</th>
+                      <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
+                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                      <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {publications.seie_journals.map((pub, idx) => (
+                      <tr key={idx}>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.title}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "title", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Paper Title"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.authors}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "authors", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Authors"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.journal_name}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "journal_name", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Journal Name"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.volume}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "volume", e.target.value)}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Vol"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.issue}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "issue", e.target.value)}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Issue"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.page_nos}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "page_nos", e.target.value)}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Pages"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.year}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "year", e.target.value)}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Year"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="text"
+                            value={pub.impact_factor}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "impact_factor", e.target.value)}
+                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="IF"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+                          <button
+                            type="button"
+                            onClick={() => removeArrayItem("seie_journals", idx)}
+                            style={{
+                              background: "#ef4444",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "4px",
+                              padding: "4px 8px",
+                              fontSize: "0.7rem",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button
+                  type="button"
+                  onClick={() => addArrayItem("seie_journals")}
+                  style={{
+                    background: "#10b981",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "10px 20px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    marginTop: "10px",
+                  }}
+                >
+                  + Add SEIE Journal Paper
+                </button>
+              </div>
+
+              {/* UGC Approved Journals Section */}
+              <div style={{ marginTop: "40px" }}>
                 <h2
                   style={{
                     fontSize: "1.8rem",
@@ -390,7 +566,7 @@ function Publications() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  Papers Published in Non UGC Approved Peer Reviewed Journals
+                  Papers Published in Other Journals
                 </h2>
                 <table
                   style={{

@@ -69,7 +69,7 @@ function Faculty() {
   const viewProfessorProfile = (professorId) => {
     console.log('Attempting to view profile for professor ID:', professorId);
     console.log('Current user role:', userRole);
-    
+
     // Navigate to profile page with professor ID as URL parameter
     navigate(`/profile/${professorId}`);
   };
@@ -89,12 +89,12 @@ function Faculty() {
       if (response.ok) {
         const data = await response.json();
         alert(`Successfully promoted to HOD! Role: ${data.role}`);
-        
+
         // Update localStorage user info
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         user.role = 'hod';
         localStorage.setItem('user', JSON.stringify(user));
-        
+
         setUserRole('hod');
         window.location.reload(); // Refresh to update UI
       } else {

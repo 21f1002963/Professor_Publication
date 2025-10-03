@@ -108,6 +108,17 @@ const ProfessorSchema = new mongoose.Schema({
     }],
 
     // New Publications Structure
+    seie_journals: [{
+        title: { type: String, default: '' },
+        authors: { type: String, default: '' },
+        journal_name: { type: String, default: '' },
+        volume: { type: String, default: '' },
+        issue: { type: String, default: '' },
+        page_nos: { type: String, default: '' },
+        year: { type: String, default: '' },
+        impact_factor: { type: String, default: '' }
+    }],
+
     ugc_approved_journals: [{
         title: { type: String, default: '' },
         authors: { type: String, default: '' },

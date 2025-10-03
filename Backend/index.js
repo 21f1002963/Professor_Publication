@@ -172,12 +172,12 @@ app.get('/api/professor/profile/:professorId', authenticateToken, async (req, re
         console.log('HOD profile view request received');
         console.log('Requesting user ID:', req.user.id);
         console.log('Target professor ID:', req.params.professorId);
-        
+
         // Check if the requesting user is HOD
         const requestingUser = await Professor.findById(req.user.id);
         console.log('Requesting user found:', requestingUser ? 'Yes' : 'No');
         console.log('Requesting user role:', requestingUser?.role);
-        
+
         if (!requestingUser || requestingUser.role !== 'hod') {
             console.log('Access denied - not HOD');
             return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
@@ -185,9 +185,9 @@ app.get('/api/professor/profile/:professorId', authenticateToken, async (req, re
 
         const professorId = req.params.professorId;
         const professor = await Professor.findById(professorId).select('-password');
-        
+
         console.log('Target professor found:', professor ? 'Yes' : 'No');
-        
+
         if (!professor) {
             console.log('Professor not found');
             return res.status(404).json({ message: 'Professor not found' });
@@ -205,21 +205,21 @@ app.get('/api/professor/profile/:professorId', authenticateToken, async (req, re
 app.post('/api/promote-to-hod', authenticateToken, async (req, res) => {
     try {
         console.log('Promoting user to HOD:', req.user.id);
-        
+
         const updatedUser = await Professor.findByIdAndUpdate(
             req.user.id,
             { role: 'hod' },
             { new: true }
         );
-        
+
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
-        
+
         console.log('User promoted to HOD successfully');
-        res.status(200).json({ 
+        res.status(200).json({
             message: 'Successfully promoted to HOD',
-            role: updatedUser.role 
+            role: updatedUser.role
         });
     } catch (error) {
         console.error('Error promoting user:', error);
