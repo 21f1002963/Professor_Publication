@@ -1843,6 +1843,7 @@ function Profile() {
                             <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Patent Number</th>
                             <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                             <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Status</th>
+                            <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Scope</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1853,6 +1854,7 @@ function Profile() {
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.patent_number}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.year}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.status}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.scope}</td>
                             </tr>
                           ))}
                         </tbody>

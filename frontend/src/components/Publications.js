@@ -89,7 +89,15 @@ function Publications() {
 
       if (response.ok) {
         const data = await response.json();
-        setPublications(data);
+        setPublications(prevState => ({
+          ...prevState,
+          ...data,
+          // Ensure all required arrays exist with defaults
+          seie_journals: data.seie_journals || prevState.seie_journals || [],
+          ugc_approved_journals: data.ugc_approved_journals || prevState.ugc_approved_journals || [],
+          non_ugc_journals: data.non_ugc_journals || prevState.non_ugc_journals || [],
+          conference_proceedings: data.conference_proceedings || prevState.conference_proceedings || []
+        }));
       }
     } catch (error) {
       console.error("Error fetching publications:", error);
@@ -283,7 +291,7 @@ function Publications() {
                     </tr>
                   </thead>
                   <tbody>
-                    {publications.seie_journals.map((pub, idx) => (
+                    {(publications.seie_journals || []).map((pub, idx) => (
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
@@ -437,7 +445,7 @@ function Publications() {
                     </tr>
                   </thead>
                   <tbody>
-                    {publications.ugc_approved_journals.map((pub, idx) => (
+                    {(publications.ugc_approved_journals || []).map((pub, idx) => (
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
@@ -566,7 +574,7 @@ function Publications() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  Papers Published in Other Journals
+                  Papers Published in Scopus Journals
                 </h2>
                 <table
                   style={{
@@ -590,7 +598,7 @@ function Publications() {
                     </tr>
                   </thead>
                   <tbody>
-                    {publications.non_ugc_journals.map((pub, idx) => (
+                    {(publications.non_ugc_journals || []).map((pub, idx) => (
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
@@ -719,7 +727,7 @@ function Publications() {
                     letterSpacing: "0.5px",
                   }}
                 >
-                  Papers Published in Conference Proceedings
+                  Papers Published in Conference
                 </h2>
                 <table
                   style={{
@@ -740,7 +748,7 @@ function Publications() {
                     </tr>
                   </thead>
                   <tbody>
-                    {publications.conference_proceedings.map((pub, idx) => (
+                    {(publications.conference_proceedings || []).map((pub, idx) => (
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>

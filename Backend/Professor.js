@@ -162,6 +162,7 @@ const ProfessorSchema = new mongoose.Schema({
         patent_number: { type: String, default: '' },
         year_of_award: { type: String, default: '' },
         type: { type: String, default: '' },
+        scope: { type: String, default: '' },
         commercialized_status: { type: String, default: '' }
     }],
 

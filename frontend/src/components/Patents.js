@@ -20,6 +20,7 @@ function Patents() {
         patent_number: "",
         year_of_award: "",
         type: "",
+        scope: "",
         commercialized_status: "",
       },
     ],
@@ -129,6 +130,7 @@ function Patents() {
         patent_number: "",
         year_of_award: "",
         type: "",
+        scope: "",
         commercialized_status: "",
       },
     };
@@ -510,6 +512,16 @@ function Patents() {
                       </th>
                       <th
                         style={{
+                          width: "120px",
+                          padding: "10px",
+                          border: "1px solid #e2e8f0",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Scope
+                      </th>
+                      <th
+                        style={{
                           width: "140px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
@@ -714,6 +726,41 @@ function Patents() {
                             <option value="Design">Design</option>
                             <option value="Plant">Plant</option>
                             <option value="Provisional">Provisional</option>
+                          </select>
+                        </td>
+                        <td
+                          style={{
+                            width: "120px",
+                            padding: "8px",
+                            border: "1px solid #e2e8f0",
+                            textAlign: "center"
+                          }}
+                        >
+                          <select
+                            value={patent.scope}
+                            onChange={(e) =>
+                              handleArrayChange(
+                                "patent_details",
+                                idx,
+                                "scope",
+                                e.target.value
+                              )
+                            }
+                            style={{
+                              width: "100%",
+                              minWidth: "0",
+                              maxWidth: "140px",
+                              padding: "12px 16px",
+                              borderRadius: "10px",
+                              border: "2px solid #e2e8f0",
+                              boxSizing: "border-box",
+                              fontSize: "1rem",
+                              textAlign: "center"
+                            }}
+                          >
+                            <option value="">Select Scope</option>
+                            <option value="National">National</option>
+                            <option value="International">International</option>
                           </select>
                         </td>
                         <td
