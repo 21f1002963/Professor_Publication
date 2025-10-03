@@ -15,6 +15,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
     ],
     // Papers Published in UGC Approved Journals
@@ -28,6 +31,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
     ],
     // Papers Published in Non UGC Approved Peer Reviewed Journals
@@ -41,6 +47,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
     ],
     // Papers Published in Conference Proceedings
@@ -51,6 +60,9 @@ function Publications() {
         conference_details: "",
         page_nos: "",
         year: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
     ],
   });
@@ -102,6 +114,16 @@ function Publications() {
     } catch (error) {
       console.error("Error fetching publications:", error);
     }
+  };
+
+  const handleFileUpload = (arrayName, index, file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result;
+      handleArrayChange(arrayName, index, 'paper_upload', base64);
+      handleArrayChange(arrayName, index, 'paper_upload_filename', file.name);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -165,6 +187,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
       ugc_approved_journals: {
         title: "",
@@ -175,6 +200,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
       non_ugc_journals: {
         title: "",
@@ -185,6 +213,9 @@ function Publications() {
         page_nos: "",
         year: "",
         impact_factor: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
       conference_proceedings: {
         title: "",
@@ -192,6 +223,9 @@ function Publications() {
         conference_details: "",
         page_nos: "",
         year: "",
+        paper_upload: "",
+        paper_upload_filename: "",
+        paper_link: "",
       },
     };
 
@@ -287,6 +321,8 @@ function Publications() {
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
                   </thead>
@@ -366,6 +402,32 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => {
+                              if (e.target.files[0]) {
+                                handleFileUpload("seie_journals", idx, e.target.files[0]);
+                              }
+                            }}
+                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
+                          />
+                          {pub.paper_upload_filename && (
+                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
+                              {pub.paper_upload_filename}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="url"
+                            value={pub.paper_link}
+                            onChange={(e) => handleArrayChange("seie_journals", idx, "paper_link", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Paper Link"
+                          />
+                        </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                           <button
                             type="button"
@@ -441,6 +503,8 @@ function Publications() {
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
                   </thead>
@@ -520,6 +584,32 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => {
+                              if (e.target.files[0]) {
+                                handleFileUpload("ugc_approved_journals", idx, e.target.files[0]);
+                              }
+                            }}
+                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
+                          />
+                          {pub.paper_upload_filename && (
+                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
+                              {pub.paper_upload_filename}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="url"
+                            value={pub.paper_link}
+                            onChange={(e) => handleArrayChange("ugc_approved_journals", idx, "paper_link", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Paper Link"
+                          />
+                        </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                           <button
                             type="button"
@@ -594,6 +684,8 @@ function Publications() {
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
                   </thead>
@@ -673,6 +765,32 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => {
+                              if (e.target.files[0]) {
+                                handleFileUpload("non_ugc_journals", idx, e.target.files[0]);
+                              }
+                            }}
+                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
+                          />
+                          {pub.paper_upload_filename && (
+                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
+                              {pub.paper_upload_filename}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="url"
+                            value={pub.paper_link}
+                            onChange={(e) => handleArrayChange("non_ugc_journals", idx, "paper_link", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Paper Link"
+                          />
+                        </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                           <button
                             type="button"
@@ -744,6 +862,8 @@ function Publications() {
                       <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference Details</th>
                       <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                      <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
                   </thead>
@@ -794,6 +914,32 @@ function Publications() {
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "year", e.target.value)}
                             style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
                             placeholder="Year"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => {
+                              if (e.target.files[0]) {
+                                handleFileUpload("conference_proceedings", idx, e.target.files[0]);
+                              }
+                            }}
+                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
+                          />
+                          {pub.paper_upload_filename && (
+                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
+                              {pub.paper_upload_filename}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="url"
+                            value={pub.paper_link}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "paper_link", e.target.value)}
+                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            placeholder="Paper Link"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>

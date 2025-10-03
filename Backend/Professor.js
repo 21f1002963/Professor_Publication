@@ -116,7 +116,10 @@ const ProfessorSchema = new mongoose.Schema({
         issue: { type: String, default: '' },
         page_nos: { type: String, default: '' },
         year: { type: String, default: '' },
-        impact_factor: { type: String, default: '' }
+        impact_factor: { type: String, default: '' },
+        paper_upload: { type: String, default: '' },
+        paper_upload_filename: { type: String, default: '' },
+        paper_link: { type: String, default: '' }
     }],
 
     ugc_approved_journals: [{
@@ -127,7 +130,10 @@ const ProfessorSchema = new mongoose.Schema({
         issue: { type: String, default: '' },
         page_nos: { type: String, default: '' },
         year: { type: String, default: '' },
-        impact_factor: { type: String, default: '' }
+        impact_factor: { type: String, default: '' },
+        paper_upload: { type: String, default: '' },
+        paper_upload_filename: { type: String, default: '' },
+        paper_link: { type: String, default: '' }
     }],
 
     non_ugc_journals: [{
@@ -138,7 +144,10 @@ const ProfessorSchema = new mongoose.Schema({
         issue: { type: String, default: '' },
         page_nos: { type: String, default: '' },
         year: { type: String, default: '' },
-        impact_factor: { type: String, default: '' }
+        impact_factor: { type: String, default: '' },
+        paper_upload: { type: String, default: '' },
+        paper_upload_filename: { type: String, default: '' },
+        paper_link: { type: String, default: '' }
     }],
 
     conference_proceedings: [{
@@ -146,7 +155,10 @@ const ProfessorSchema = new mongoose.Schema({
         authors: { type: String, default: '' },
         conference_details: { type: String, default: '' },
         page_nos: { type: String, default: '' },
-        year: { type: String, default: '' }
+        year: { type: String, default: '' },
+        paper_upload: { type: String, default: '' },
+        paper_upload_filename: { type: String, default: '' },
+        paper_link: { type: String, default: '' }
     }],
 
     // New Patents Structure
@@ -160,8 +172,8 @@ const ProfessorSchema = new mongoose.Schema({
         title: { type: String, default: '' },
         status: { type: String, default: '' },
         patent_number: { type: String, default: '' },
-        year_of_award: { type: String, default: '' },
-        type: { type: String, default: '' },
+        date_of_award: { type: String, default: '' },
+        awarding_agency: { type: String, default: '' },
         scope: { type: String, default: '' },
         commercialized_status: { type: String, default: '' }
     }],

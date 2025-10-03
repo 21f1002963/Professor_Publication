@@ -1641,6 +1641,8 @@ function Profile() {
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                               <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1655,6 +1657,33 @@ function Profile() {
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_upload_filename ? (
+                                    <a
+                                      href={pub.paper_upload}
+                                      download={pub.paper_upload_filename}
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      {pub.paper_upload_filename}
+                                    </a>
+                                  ) : (
+                                    "No file"
+                                  )}
+                                </td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_link ? (
+                                    <a
+                                      href={pub.paper_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      View Paper
+                                    </a>
+                                  ) : (
+                                    "No link"
+                                  )}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -1678,6 +1707,8 @@ function Profile() {
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                               <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1692,6 +1723,33 @@ function Profile() {
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_upload_filename ? (
+                                    <a
+                                      href={pub.paper_upload}
+                                      download={pub.paper_upload_filename}
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      {pub.paper_upload_filename}
+                                    </a>
+                                  ) : (
+                                    "No file"
+                                  )}
+                                </td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_link ? (
+                                    <a
+                                      href={pub.paper_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      View Paper
+                                    </a>
+                                  ) : (
+                                    "No link"
+                                  )}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -1715,6 +1773,8 @@ function Profile() {
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                               <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1729,6 +1789,33 @@ function Profile() {
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.impact_factor}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_upload_filename ? (
+                                    <a
+                                      href={pub.paper_upload}
+                                      download={pub.paper_upload_filename}
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      {pub.paper_upload_filename}
+                                    </a>
+                                  ) : (
+                                    "No file"
+                                  )}
+                                </td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_link ? (
+                                    <a
+                                      href={pub.paper_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      View Paper
+                                    </a>
+                                  ) : (
+                                    "No link"
+                                  )}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -1749,6 +1836,8 @@ function Profile() {
                               <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference Details</th>
                               <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                               <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1760,6 +1849,33 @@ function Profile() {
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.conference_details}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.page_nos}</td>
                                 <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{pub.year}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_upload_filename ? (
+                                    <a
+                                      href={pub.paper_upload}
+                                      download={pub.paper_upload_filename}
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      {pub.paper_upload_filename}
+                                    </a>
+                                  ) : (
+                                    "No file"
+                                  )}
+                                </td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                  {pub.paper_link ? (
+                                    <a
+                                      href={pub.paper_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#3182ce", textDecoration: "underline", fontSize: "0.9rem" }}
+                                    >
+                                      View Paper
+                                    </a>
+                                  ) : (
+                                    "No link"
+                                  )}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -1841,9 +1957,10 @@ function Profile() {
                         <thead>
                           <tr style={{ background: "#f1f5f9" }}>
                             <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
-                            <th style={{ width: "300px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                            <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
                             <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Patent Number</th>
-                            <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Date of Award</th>
+                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Awarding Agency</th>
                             <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Status</th>
                             <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Scope</th>
                           </tr>
@@ -1854,7 +1971,8 @@ function Profile() {
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.title}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.patent_number}</td>
-                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.year}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.date_of_award}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.awarding_agency}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.status}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.scope}</td>
                             </tr>

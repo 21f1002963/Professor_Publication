@@ -18,8 +18,8 @@ function Patents() {
         title: "",
         status: "",
         patent_number: "",
-        year_of_award: "",
-        type: "",
+        date_of_award: "",
+        awarding_agency: "",
         scope: "",
         commercialized_status: "",
       },
@@ -128,8 +128,8 @@ function Patents() {
         title: "",
         status: "",
         patent_number: "",
-        year_of_award: "",
-        type: "",
+        date_of_award: "",
+        awarding_agency: "",
         scope: "",
         commercialized_status: "",
       },
@@ -498,17 +498,17 @@ function Patents() {
                           fontWeight: 600,
                         }}
                       >
-                        Year of Award
+                        Date of Award
                       </th>
                       <th
                         style={{
-                          width: "100px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
                         }}
                       >
-                        Type
+                        Awarding Agency
                       </th>
                       <th
                         style={{
@@ -665,13 +665,13 @@ function Patents() {
                           }}
                         >
                           <input
-                            type="number"
-                            value={patent.year_of_award}
+                            type="date"
+                            value={patent.date_of_award}
                             onChange={(e) =>
                               handleArrayChange(
                                 "patent_details",
                                 idx,
-                                "year_of_award",
+                                "date_of_award",
                                 e.target.value
                               )
                             }
@@ -686,33 +686,31 @@ function Patents() {
                               fontSize: "1rem",
                               textAlign: "center"
                             }}
-                            placeholder="Year"
-                            min="1900"
-                            max="2030"
                           />
                         </td>
                         <td
                           style={{
-                            width: "100px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
                           }}
                         >
-                          <select
-                            value={patent.type}
+                          <input
+                            type="text"
+                            value={patent.awarding_agency}
                             onChange={(e) =>
                               handleArrayChange(
                                 "patent_details",
                                 idx,
-                                "type",
+                                "awarding_agency",
                                 e.target.value
                               )
                             }
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "120px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -720,13 +718,8 @@ function Patents() {
                               fontSize: "1rem",
                               textAlign: "center"
                             }}
-                          >
-                            <option value="">Select Type</option>
-                            <option value="Utility">Utility</option>
-                            <option value="Design">Design</option>
-                            <option value="Plant">Plant</option>
-                            <option value="Provisional">Provisional</option>
-                          </select>
+                            placeholder="Awarding Agency"
+                          />
                         </td>
                         <td
                           style={{
