@@ -18,6 +18,7 @@ import ConferenceSeminarWorkshop from './components/ConferenceSeminarWorkshop';
 import ParticipationCollaboration from './components/ParticipationCollaboration';
 import Programme from './components/Programme';
 import Experience from './components/Experience';
+import Fellowship from './components/Fellowship';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -57,6 +58,11 @@ root.render(
         <Route path='/patents'  element={
           <ProtectedRoute>
             <Patents />
+          </ProtectedRoute>
+        } />
+        <Route path='/fellowship'  element={
+          <ProtectedRoute>
+            <Fellowship />
           </ProtectedRoute>
         } />
         <Route path='/books'  element={

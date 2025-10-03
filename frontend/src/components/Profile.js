@@ -217,6 +217,7 @@ function Profile() {
   const [experienceData, setExperienceData] = useState(null);
   const [publicationsData, setPublicationsData] = useState(null);
   const [patentsData, setPatentsData] = useState(null);
+  const [fellowshipData, setFellowshipData] = useState(null);
   const [booksData, setBooksData] = useState(null);
   const [researchData, setResearchData] = useState(null);
   const [projectData, setProjectData] = useState(null);
@@ -349,6 +350,7 @@ function Profile() {
         { name: 'experience', url: `http://localhost:5000/api/professor/experience/${professorId}`, setter: setExperienceData },
         { name: 'publications', url: `http://localhost:5000/api/professor/publications/${professorId}`, setter: setPublicationsData },
         { name: 'patents', url: `http://localhost:5000/api/professor/patents/${professorId}`, setter: setPatentsData },
+        { name: 'fellowship', url: `http://localhost:5000/api/professor/fellowship/${professorId}`, setter: setFellowshipData },
         { name: 'books', url: `http://localhost:5000/api/professor/books/${professorId}`, setter: setBooksData },
         { name: 'research', url: `http://localhost:5000/api/professor/research-guidance/${professorId}`, setter: setResearchData },
         { name: 'projects', url: `http://localhost:5000/api/professor/project-consultancy/${professorId}`, setter: setProjectData },
@@ -1855,6 +1857,56 @@ function Profile() {
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.year}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.status}</td>
                               <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{patent.scope}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                )}
+
+                {/* Fellowship Section */}
+                {fellowshipData && (
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Fellowship
+                    </h2>
+
+                    {fellowshipData.fellowship_details?.length > 0 && (
+                      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                        <thead>
+                          <tr style={{ background: "#f1f5f9" }}>
+                            <th style={{ width: "50px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                            <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Fellowship Name</th>
+                            <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Financial Support (INR)</th>
+                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Purpose of Grant</th>
+                            <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Stature</th>
+                            <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Awarding Agency</th>
+                            <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year of Award</th>
+                            <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Grant Letter</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {fellowshipData.fellowship_details.map((fellowship, idx) => (
+                            <tr key={idx}>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.fellowship_name}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.financial_support}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.purpose_of_grant}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.stature}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.awarding_agency}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{fellowship.year_of_award}</td>
+                              <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                                {fellowship.grant_letter && fellowship.grant_letter_filename && (
+                                  <a
+                                    href={fellowship.grant_letter}
+                                    download={fellowship.grant_letter_filename}
+                                    style={{ color: "#0066cc", textDecoration: "underline" }}
+                                  >
+                                    {fellowship.grant_letter_filename}
+                                  </a>
+                                )}
+                              </td>
                             </tr>
                           ))}
                         </tbody>

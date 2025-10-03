@@ -191,6 +191,18 @@ const ProfessorSchema = new mongoose.Schema({
         isbn: { type: String, default: '' }
     }],
 
+    // Fellowship Details
+    fellowship_details: [{
+        fellowship_name: { type: String, default: '' },
+        financial_support: { type: String, default: '' },
+        purpose_of_grant: { type: String, default: '' },
+        stature: { type: String, default: '' },
+        awarding_agency: { type: String, default: '' },
+        year_of_award: { type: String, default: '' },
+        grant_letter: { type: String, default: '' },
+        grant_letter_filename: { type: String, default: '' }
+    }],
+
     // Projects and Students
     projects: [{
         title: { type: String, default: '' },

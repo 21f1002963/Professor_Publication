@@ -448,6 +448,57 @@ app.put('/api/professor/patents', authenticateToken, async (req, res) => {
     }
 });
 
+// Get professor fellowship
+app.get('/api/professor/fellowship', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return fellowship data or default structure
+        const fellowshipData = {
+            fellowship_details: professor.fellowship_details || []
+        };
+
+        res.status(200).json(fellowshipData);
+    } catch (error) {
+        console.error('Error getting fellowship:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update professor fellowship
+app.put('/api/professor/fellowship', authenticateToken, async (req, res) => {
+    try {
+        const fellowshipData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                fellowship_details: fellowshipData.fellowship_details || [],
+                lastFellowshipUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Fellowship updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Fellowship updated successfully',
+            fellowship: {
+                fellowship_details: updatedProfessor.fellowship_details
+            }
+        });
+    } catch (error) {
+        console.error('Error updating fellowship:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Get professor books
 app.get('/api/professor/books', authenticateToken, async (req, res) => {
     try {
@@ -1199,6 +1250,30 @@ app.get('/api/professor/patents/:professorId', authenticateToken, async (req, re
         res.status(200).json(patentsData);
     } catch (error) {
         console.error('Error fetching professor patents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get specific professor's fellowship data (HOD access only)
+app.get('/api/professor/fellowship/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const fellowshipData = {
+            fellowship_details: professor.fellowship_details || []
+        };
+
+        res.status(200).json(fellowshipData);
+    } catch (error) {
+        console.error('Error fetching professor fellowship:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
