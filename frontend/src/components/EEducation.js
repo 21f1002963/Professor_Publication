@@ -217,17 +217,24 @@ function EEducation() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <select
                               value={lecture.institution_platform}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "institution_platform", e.target.value)}
                               style={{
                                 width: "100%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                backgroundColor: "white"
                               }}
-                            />
+                            >
+                              <option value="">Select Institution/Platform</option>
+                              <option value="MOOC">MOOC</option>
+                              <option value="Swayam">Swayam</option>
+                              <option value="e-Pathshala">e-Pathshala</option>
+                              <option value="CEC">CEC</option>
+                              <option value="Institutional LMS">Institutional LMS</option>
+                            </select>
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <input
