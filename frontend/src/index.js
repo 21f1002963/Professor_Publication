@@ -19,6 +19,7 @@ import ParticipationCollaboration from './components/ParticipationCollaboration'
 import Programme from './components/Programme';
 import Experience from './components/Experience';
 import Fellowship from './components/Fellowship';
+import Training from './components/Training';
 import HODVerification from './components/HODVerification';
 import FacultyManagement from './components/FacultyManagement';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -103,6 +104,11 @@ root.render(
         <Route path='/experience'  element={
           <ProtectedRoute>
             <Experience />
+          </ProtectedRoute>
+        } />
+        <Route path='/training'  element={
+          <ProtectedRoute>
+            <Training />
           </ProtectedRoute>
         } />
         <Route path='/hod-verification'  element={

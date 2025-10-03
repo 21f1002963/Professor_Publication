@@ -17,6 +17,7 @@ function Layout({ children }) {
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Fellowship', path: '/fellowship', icon: '🏆' },
+    { label: 'Training & Consultancy', path: '/training', icon: '💰' },
     { label: 'Books', path: '/books', icon: '📚' },
     { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' },
     { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' },

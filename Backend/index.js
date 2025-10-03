@@ -900,6 +900,70 @@ app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
 // =============================================================================
 
 // =============================================================================
+// TRAINING API ENDPOINTS
+// =============================================================================
+
+// Get training data
+app.get('/api/professor/training', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return training data or default structure
+        const trainingData = {
+            revenue_consultancy_training: professor.revenue_consultancy_training || [{
+                organization: "",
+                from_date: "",
+                to_date: "",
+                amount_generated: "",
+            }]
+        };
+
+        res.status(200).json(trainingData);
+    } catch (error) {
+        console.error('Error fetching training data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update training data
+app.put('/api/professor/training', authenticateToken, async (req, res) => {
+    try {
+        const trainingData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                revenue_consultancy_training: trainingData.revenue_consultancy_training || [],
+                lastTrainingUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('Training data updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'Training data updated successfully',
+            training: {
+                revenue_consultancy_training: updatedProfessor.revenue_consultancy_training
+            }
+        });
+    } catch (error) {
+        console.error('Error updating training data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END TRAINING API ENDPOINTS
+// =============================================================================
+
+// =============================================================================
 // PARTICIPATION & COLLABORATION API ENDPOINTS
 // =============================================================================
 

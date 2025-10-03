@@ -457,6 +457,14 @@ const ProfessorSchema = new mongoose.Schema({
         nature: { type: String, default: '' }
     }],
 
+    // Training and Consultancy Revenue
+    revenue_consultancy_training: [{
+        organization: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' },
+        amount_generated: { type: String, default: '' }
+    }],
+
     // Verification Status
     profileStatus: {
         type: String,
