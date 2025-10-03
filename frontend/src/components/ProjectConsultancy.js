@@ -40,6 +40,16 @@ function ProjectConsultancy() {
         year: "",
       },
     ],
+    research_projects_funded: [
+      {
+        pi_name: "",
+        project_title: "",
+        funding_agency: "",
+        duration: "",
+        year_of_award: "",
+        amount: "",
+      },
+    ],
   });
 
   const handleSubmit = async (e) => {
@@ -108,6 +118,14 @@ function ProjectConsultancy() {
         sanctioned_amount: "",
         year: "",
       },
+      research_projects_funded: {
+        pi_name: "",
+        project_title: "",
+        funding_agency: "",
+        duration: "",
+        year_of_award: "",
+        amount: "",
+      },
     };
 
     setProjectConsultancy((prev) => ({
@@ -151,6 +169,9 @@ function ProjectConsultancy() {
             ],
             completed_consultancy_works: data.completed_consultancy_works || [
               { title_of_consultancy_work: "", sponsored_by: "", period: "", sanctioned_amount: "", year: "" },
+            ],
+            research_projects_funded: data.research_projects_funded || [
+              { pi_name: "", project_title: "", funding_agency: "", duration: "", year_of_award: "", amount: "" },
             ],
           });
         }
@@ -697,6 +718,153 @@ function ProjectConsultancy() {
                   }}
                 >
                   + Add Completed Consultancy Work
+                </button>
+              </div>
+
+              {/* Research Projects Funded Table */}
+              <div style={{ marginTop: "40px" }}>
+                <h2 style={{ color: "#2d3748",marginBottom: "20px", fontSize: "1.8rem", fontWeight: "700" }}>
+                  Research Projects funded by Government, Non-Government, Industry, Corporate Houses, International Bodies
+                </h2>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1000px" }}>
+                    <thead>
+                      <tr style={{ background: "#f1f5f9" }}>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Name of PI/Co-PI/Chair Holder</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Title of Research Project/Endowments/Research Chairs</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Name of Funding Agency</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Duration</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Year of Award/Sanction</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Amount (INR)</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(projectConsultancy.research_projects_funded || []).map((project, index) => (
+                        <tr key={index} style={{ background: index % 2 === 0 ? "#fff" : "#f8fafc" }}>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{index + 1}</td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.pi_name}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "pi_name", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="Enter PI/Co-PI/Chair holder name"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.project_title}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "project_title", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="Enter project title"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.funding_agency}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "funding_agency", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="Enter funding agency"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.duration}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "duration", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="e.g., 2 years"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.year_of_award}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "year_of_award", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="Enter year"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={project.amount}
+                              onChange={(e) => handleArrayChange("research_projects_funded", index, "amount", e.target.value)}
+                              style={{
+                                width: "100%",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                padding: "8px"
+                              }}
+                              placeholder="Enter amount in INR"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("research_projects_funded", index)}
+                              style={{
+                                background: "#dc2626",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "6px",
+                                padding: "6px 12px",
+                                cursor: "pointer",
+                                fontSize: "12px"
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => addArrayItem("research_projects_funded")}
+                  style={{
+                    background: "#7c3aed",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontSize: "14px"
+                  }}
+                >
+                  + Add Research Project
                 </button>
               </div>
 

@@ -701,6 +701,14 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                 period: "",
                 sanctioned_amount: "",
                 year: "",
+            }],
+            research_projects_funded: professor.research_projects_funded || [{
+                pi_name: "",
+                project_title: "",
+                funding_agency: "",
+                duration: "",
+                year_of_award: "",
+                amount: "",
             }]
         };
 
@@ -724,6 +732,7 @@ app.put('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                 ongoing_consultancy_works: projectConsultancyData.ongoing_consultancy_works || [],
                 completed_projects: projectConsultancyData.completed_projects || [],
                 completed_consultancy_works: projectConsultancyData.completed_consultancy_works || [],
+                research_projects_funded: projectConsultancyData.research_projects_funded || [],
                 lastProjectConsultancyUpdate: new Date()
             },
             { new: true, select: '-password' }
@@ -740,7 +749,8 @@ app.put('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                 ongoing_projects: updatedProfessor.ongoing_projects,
                 ongoing_consultancy_works: updatedProfessor.ongoing_consultancy_works,
                 completed_projects: updatedProfessor.completed_projects,
-                completed_consultancy_works: updatedProfessor.completed_consultancy_works
+                completed_consultancy_works: updatedProfessor.completed_consultancy_works,
+                research_projects_funded: updatedProfessor.research_projects_funded
             }
         });
     } catch (error) {
@@ -1332,6 +1342,34 @@ app.get('/api/professor/research-guidance/:professorId', authenticateToken, asyn
 // =============================================================================
 // END HOD MANAGEMENT API ENDPOINTS
 // =============================================================================
+
+// Get specific professor's project consultancy data (HOD access only)
+app.get('/api/professor/project-consultancy/:professorId', authenticateToken, async (req, res) => {
+    try {
+        const requestingUser = await Professor.findById(req.user.id);
+        if (!requestingUser || requestingUser.role !== 'hod') {
+            return res.status(403).json({ message: 'Access denied. HOD privileges required.' });
+        }
+
+        const professor = await Professor.findById(req.params.professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        const projectConsultancyData = {
+            ongoing_projects: professor.ongoing_projects || [],
+            ongoing_consultancy_works: professor.ongoing_consultancy_works || [],
+            completed_projects: professor.completed_projects || [],
+            completed_consultancy_works: professor.completed_consultancy_works || [],
+            research_projects_funded: professor.research_projects_funded || []
+        };
+
+        res.status(200).json(projectConsultancyData);
+    } catch (error) {
+        console.error('Error fetching professor project consultancy:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Start server
 app.listen(PORT, () => {

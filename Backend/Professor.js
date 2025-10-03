@@ -308,6 +308,15 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
+    research_projects_funded: [{
+        pi_name: { type: String, default: '' },
+        project_title: { type: String, default: '' },
+        funding_agency: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        year_of_award: { type: String, default: '' },
+        amount: { type: String, default: '' }
+    }],
+
     // E-Education
     e_lecture_details: [{
         e_lecture_title: { type: String, default: '' },

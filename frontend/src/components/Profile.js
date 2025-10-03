@@ -2011,6 +2011,174 @@ function Profile() {
                     )}
                   </div>
                 )}
+
+                {/* Project Consultancy Section */}
+                {projectData && (
+                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      Project & Consultancy
+                    </h2>
+
+                    {/* Research Projects Funded Table */}
+                    {projectData.research_projects_funded?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, marginBottom: "15px" }}>
+                          Research Projects funded by Government, Non-Government, Industry, Corporate Houses, International Bodies
+                        </h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "50px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>PI/Co-PI/Chair Holder</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Project Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Funding Agency</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Duration</th>
+                              <th style={{ width: "100px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year of Award</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Amount (INR)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projectData.research_projects_funded.map((project, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.pi_name}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.project_title}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.funding_agency}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.duration}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.year_of_award}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.amount}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Ongoing Projects Table */}
+                    {projectData.ongoing_projects?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Ongoing Projects</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Project Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Sponsored By</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Period</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Amount</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projectData.ongoing_projects.map((project, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.title_of_project}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.sponsored_by}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.period}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.sanctioned_amount}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Completed Projects Table */}
+                    {projectData.completed_projects?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Completed Projects</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Project Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Sponsored By</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Period</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Amount</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projectData.completed_projects.map((project, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.title_of_project}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.sponsored_by}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.period}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.sanctioned_amount}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{project.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Ongoing Consultancy Works Table */}
+                    {projectData.ongoing_consultancy_works?.length > 0 && (
+                      <div style={{ marginBottom: "30px" }}>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Ongoing Consultancy Works</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Consultancy Work Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Sponsored By</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Period</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Amount</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projectData.ongoing_consultancy_works.map((work, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.title_of_consultancy_work}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.sponsored_by}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.period}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.sanctioned_amount}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {/* Completed Consultancy Works Table */}
+                    {projectData.completed_consultancy_works?.length > 0 && (
+                      <div>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Completed Consultancy Works</h3>
+                        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
+                          <thead>
+                            <tr style={{ background: "#f1f5f9" }}>
+                              <th style={{ width: "60px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                              <th style={{ width: "250px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Consultancy Work Title</th>
+                              <th style={{ width: "180px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Sponsored By</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Period</th>
+                              <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Amount</th>
+                              <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projectData.completed_consultancy_works.map((work, idx) => (
+                              <tr key={idx}>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.title_of_consultancy_work}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.sponsored_by}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.period}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.sanctioned_amount}</td>
+                                <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>{work.year}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             )}
 
