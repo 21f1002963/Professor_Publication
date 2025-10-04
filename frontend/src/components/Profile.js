@@ -226,9 +226,64 @@ function Profile() {
   const [participationData, setParticipationData] = useState(null);
   const [programmeData, setProgrammeData] = useState(null);
 
+  // Section filter states
+  const [showSectionFilter, setShowSectionFilter] = useState(false);
+  const [selectedSections, setSelectedSections] = useState({
+    personalInfo: true,
+    education: true,
+    expertise: true,
+    awards: true,
+    experience: true,
+    publications: true,
+    books: true,
+    patents: true,
+    projects: true,
+    fellowships: true
+  });
+
   // React Router hooks
   const { professorId } = useParams();
   const navigate = useNavigate();
+
+  // Toggle section selection for report
+  const toggleSection = (sectionKey) => {
+    setSelectedSections(prev => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey]
+    }));
+  };
+
+  // Select all sections
+  const selectAllSections = () => {
+    setSelectedSections({
+      personalInfo: true,
+      education: true,
+      expertise: true,
+      awards: true,
+      experience: true,
+      publications: true,
+      books: true,
+      patents: true,
+      projects: true,
+      fellowships: true
+    });
+  };
+
+  // Deselect all sections
+  const deselectAllSections = () => {
+    setSelectedSections({
+      personalInfo: false,
+      education: false,
+      expertise: false,
+      awards: false,
+      experience: false,
+      publications: false,
+      books: false,
+      patents: false,
+      projects: false,
+      fellowships: false
+    });
+  };
 
   // Generate formatted faculty report for printing
   const generateFacultyReport = () => {
@@ -243,7 +298,7 @@ function Profile() {
             size: A4;
             margin: 15mm;
           }
-          
+
           body {
             font-family: 'Times New Roman', serif;
             font-size: 10pt;
@@ -253,33 +308,33 @@ function Profile() {
             padding: 0;
             background: white;
           }
-          
+
           .header {
             text-align: center;
             border-bottom: 2px solid #000;
             padding-bottom: 10px;
             margin-bottom: 15px;
           }
-          
+
           .header h1 {
             font-size: 16pt;
             font-weight: bold;
             margin: 0 0 3px 0;
             color: #000;
           }
-          
+
           .header h2 {
             font-size: 12pt;
             font-weight: normal;
             margin: 0;
             color: #333;
           }
-          
+
           .section {
             margin-bottom: 15px;
             page-break-inside: avoid;
           }
-          
+
           .section-title {
             font-size: 12pt;
             font-weight: bold;
@@ -288,42 +343,42 @@ function Profile() {
             padding-bottom: 2px;
             margin-bottom: 8px;
           }
-          
+
           .subsection-title {
             font-size: 11pt;
             font-weight: bold;
             color: #333;
             margin: 10px 0 5px 0;
           }
-          
+
           .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 10px;
           }
-          
+
           .info-item {
             margin-bottom: 5px;
           }
-          
+
           .info-label {
             font-weight: bold;
             color: #333;
           }
-          
+
           .info-value {
             color: #000;
             margin-left: 3px;
           }
-          
+
           .table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
             font-size: 9pt;
           }
-          
+
           .table th,
           .table td {
             border: 1px solid #ccc;
@@ -331,18 +386,18 @@ function Profile() {
             text-align: left;
             word-wrap: break-word;
           }
-          
+
           .table th {
             background-color: #f5f5f5;
             font-weight: bold;
             font-size: 9pt;
           }
-          
+
           .list-item {
             margin-bottom: 3px;
             padding-left: 8px;
           }
-          
+
           .footer {
             position: fixed;
             bottom: 8mm;
@@ -350,7 +405,7 @@ function Profile() {
             font-size: 8pt;
             color: #666;
           }
-          
+
           @media print {
             body { -webkit-print-color-adjust: exact; }
             .section { page-break-inside: avoid; }
@@ -364,6 +419,7 @@ function Profile() {
           <p style="margin: 3px 0 0 0; font-size: 9pt;">Generated on: ${new Date().toLocaleString()}</p>
         </div>
 
+        ${selectedSections.personalInfo ? `
         <div class="section">
           <div class="section-title">Personal Information</div>
           <div class="info-grid">
@@ -409,8 +465,9 @@ function Profile() {
             </div>
           </div>
         </div>
+        ` : ''}
 
-        ${profile.education && profile.education.length > 0 ? `
+        ${selectedSections.education && profile.education && profile.education.length > 0 ? `
         <div class="section">
           <div class="section-title">Educational Qualifications</div>
           <table class="table">
@@ -436,17 +493,17 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${profile.area_of_expertise && (Array.isArray(profile.area_of_expertise) ? profile.area_of_expertise.length > 0 : profile.area_of_expertise) ? `
+        ${selectedSections.expertise && profile.area_of_expertise && (Array.isArray(profile.area_of_expertise) ? profile.area_of_expertise.length > 0 : profile.area_of_expertise) ? `
         <div class="section">
           <div class="section-title">Areas of Expertise</div>
-          ${Array.isArray(profile.area_of_expertise) ? 
+          ${Array.isArray(profile.area_of_expertise) ?
             profile.area_of_expertise.map(expertise => `<div class="list-item">• ${expertise}</div>`).join('') :
             `<div class="list-item">• ${profile.area_of_expertise}</div>`
           }
         </div>
         ` : ''}
 
-        ${profile.awards && profile.awards.length > 0 && profile.awards.some(award => award.title) ? `
+        ${selectedSections.awards && profile.awards && profile.awards.length > 0 && profile.awards.some(award => award.title) ? `
         <div class="section">
           <div class="section-title">Awards and Recognition</div>
           <table class="table">
@@ -474,7 +531,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${experienceData && experienceData.teaching_experience && experienceData.teaching_experience.length > 0 ? `
+        ${selectedSections.experience && experienceData && experienceData.teaching_experience && experienceData.teaching_experience.length > 0 ? `
         <div class="section">
           <div class="section-title">Professional Experience</div>
           <div class="subsection-title">Teaching Experience</div>
@@ -503,7 +560,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${experienceData && experienceData.research_experience && experienceData.research_experience.length > 0 ? `
+        ${selectedSections.experience && experienceData && experienceData.research_experience && experienceData.research_experience.length > 0 ? `
         <div class="section">
           <div class="subsection-title">Research Experience</div>
           <table class="table">
@@ -529,7 +586,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${publicationsData && publicationsData.seie_journals && publicationsData.seie_journals.length > 0 ? `
+        ${selectedSections.publications && publicationsData && publicationsData.seie_journals && publicationsData.seie_journals.length > 0 ? `
         <div class="section">
           <div class="section-title">Publications</div>
           <div class="subsection-title">SCI-E Journals</div>
@@ -562,7 +619,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${publicationsData && publicationsData.scopus_journals && publicationsData.scopus_journals.length > 0 ? `
+        ${selectedSections.publications && publicationsData && publicationsData.scopus_journals && publicationsData.scopus_journals.length > 0 ? `
         <div class="section">
           <div class="subsection-title">Scopus Journals</div>
           <table class="table">
@@ -594,7 +651,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${booksData && booksData.books_authored && booksData.books_authored.length > 0 ? `
+        ${selectedSections.books && booksData && booksData.books_authored && booksData.books_authored.length > 0 ? `
         <div class="section">
           <div class="section-title">Books</div>
           <div class="subsection-title">Books Authored</div>
@@ -621,7 +678,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${patentsData && patentsData.patents && patentsData.patents.length > 0 ? `
+        ${selectedSections.patents && patentsData && patentsData.patents && patentsData.patents.length > 0 ? `
         <div class="section">
           <div class="section-title">Patents</div>
           <table class="table">
@@ -649,7 +706,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${projectData && projectData.ongoing_projects && projectData.ongoing_projects.length > 0 ? `
+        ${selectedSections.projects && projectData && projectData.ongoing_projects && projectData.ongoing_projects.length > 0 ? `
         <div class="section">
           <div class="section-title">Projects</div>
           <div class="subsection-title">Ongoing Projects</div>
@@ -678,7 +735,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${projectData && projectData.completed_projects && projectData.completed_projects.length > 0 ? `
+        ${selectedSections.projects && projectData && projectData.completed_projects && projectData.completed_projects.length > 0 ? `
         <div class="section">
           <div class="subsection-title">Completed Projects</div>
           <table class="table">
@@ -706,7 +763,7 @@ function Profile() {
         </div>
         ` : ''}
 
-        ${fellowshipData && fellowshipData.fellowships && fellowshipData.fellowships.length > 0 ? `
+        ${selectedSections.fellowships && fellowshipData && fellowshipData.fellowships && fellowshipData.fellowships.length > 0 ? `
         <div class="section">
           <div class="section-title">Fellowships</div>
           <table class="table">
@@ -741,7 +798,7 @@ function Profile() {
 
     reportWindow.document.write(reportContent);
     reportWindow.document.close();
-    
+
     // Wait for content to load then trigger print
     setTimeout(() => {
       reportWindow.focus();
@@ -1139,8 +1196,8 @@ function Profile() {
                   <button
                     type="button"
                     onClick={() => {
-                      // Generate and print formatted faculty report
-                      generateFacultyReport();
+                      // Show section filter modal when report button is clicked
+                      setShowSectionFilter(true);
                     }}
                     style={{
                       background: "linear-gradient(135deg, #fe4f5eff 0%, #fe0050ff 100%)",
@@ -1168,6 +1225,164 @@ function Profile() {
                 </div>
               ) : (
                 <></>
+            )}
+
+            {/* Section Filter Modal */}
+            {showSectionFilter && (
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000
+              }}>
+                <div style={{
+                  backgroundColor: 'white',
+                  borderRadius: '20px',
+                  padding: '30px',
+                  maxWidth: '500px',
+                  width: '90%',
+                  maxHeight: '80vh',
+                  overflowY: 'auto',
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 700,
+                    color: '#2d3748',
+                    marginBottom: '20px',
+                    textAlign: 'center'
+                  }}>
+                    Select Report Sections
+                  </h3>
+
+                  <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                    <button
+                      onClick={selectAllSections}
+                      style={{
+                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '8px 16px',
+                        marginRight: '10px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: 600
+                      }}
+                    >
+                      Select All
+                    </button>
+                    <button
+                      onClick={deselectAllSections}
+                      style={{
+                        background: 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '8px 16px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: 600
+                      }}
+                    >
+                      Deselect All
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
+                    {[
+                      { key: 'personalInfo', label: 'Personal Information' },
+                      { key: 'education', label: 'Education' },
+                      { key: 'expertise', label: 'Areas of Expertise' },
+                      { key: 'awards', label: 'Awards & Recognition' },
+                      { key: 'experience', label: 'Experience' },
+                      { key: 'publications', label: 'Publications' },
+                      { key: 'books', label: 'Books' },
+                      { key: 'patents', label: 'Patents' },
+                      { key: 'projects', label: 'Projects' },
+                      { key: 'fellowships', label: 'Fellowships' }
+                    ].map(section => (
+                      <label key={section.key} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        borderRadius: '10px',
+                        border: `2px solid ${selectedSections[section.key] ? '#667eea' : '#e2e8f0'}`,
+                        backgroundColor: selectedSections[section.key] ? '#f0f4ff' : 'white',
+                        transition: 'all 0.2s ease'
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedSections[section.key]}
+                          onChange={() => toggleSection(section.key)}
+                          style={{
+                            marginRight: '8px',
+                            width: '16px',
+                            height: '16px',
+                            accentColor: '#667eea'
+                          }}
+                        />
+                        <span style={{
+                          fontSize: '0.9rem',
+                          fontWeight: 500,
+                          color: selectedSections[section.key] ? '#667eea' : '#4a5568'
+                        }}>
+                          {section.label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+                    <button
+                      onClick={() => {
+                        setShowSectionFilter(false);
+                        generateFacultyReport();
+                      }}
+                      style={{
+                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '12px 24px',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        boxShadow: '0 4px 15px rgba(72, 187, 120, 0.3)'
+                      }}
+                    >
+                      Generate Report 🖨️
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowSectionFilter(false);
+                        // Reset to all sections selected
+                        selectAllSections();
+                      }}
+                      style={{
+                        background: 'linear-gradient(135deg, #a0aec0 0%, #718096 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '12px 24px',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        boxShadow: '0 4px 15px rgba(160, 174, 192, 0.3)'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
 
             <div style={{display:'flex', alignItems:'center'}}>
