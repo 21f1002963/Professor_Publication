@@ -241,6 +241,13 @@ function Profile() {
     fellowships: true
   });
 
+  // Timeline filter states
+  const [enableTimelineFilter, setEnableTimelineFilter] = useState(false);
+  const [timelineRange, setTimelineRange] = useState({
+    startYear: '',
+    endYear: ''
+  });
+
   // React Router hooks
   const { professorId } = useParams();
   const navigate = useNavigate();
@@ -282,6 +289,39 @@ function Profile() {
       patents: false,
       projects: false,
       fellowships: false
+    });
+  };
+
+  // Filter data by timeline
+  const filterDataByTimeline = (data, yearField) => {
+    if (!enableTimelineFilter || !timelineRange.startYear || !timelineRange.endYear) {
+      return data;
+    }
+
+    const startYear = parseInt(timelineRange.startYear);
+    const endYear = parseInt(timelineRange.endYear);
+
+    return data.filter(item => {
+      const itemYear = parseInt(item[yearField]);
+      return itemYear >= startYear && itemYear <= endYear;
+    });
+  };
+
+  // Filter experience data by timeline (using 'from' or 'to' fields)
+  const filterExperienceByTimeline = (data) => {
+    if (!enableTimelineFilter || !timelineRange.startYear || !timelineRange.endYear) {
+      return data;
+    }
+
+    const startYear = parseInt(timelineRange.startYear);
+    const endYear = parseInt(timelineRange.endYear);
+
+    return data.filter(item => {
+      const fromYear = parseInt(item.from);
+      const toYear = item.to === 'Present' ? new Date().getFullYear() : parseInt(item.to);
+      
+      // Check if the experience period overlaps with the timeline range
+      return (fromYear <= endYear && toYear >= startYear);
     });
   };
 
@@ -480,7 +520,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${profile.education.map(edu => `
+              ${filterDataByTimeline(profile.education, 'graduationYear').map(edu => `
                 <tr>
                   <td>${edu.degree || 'N/A'}</td>
                   <td>${edu.title || 'N/A'}</td>
@@ -517,7 +557,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${profile.awards.filter(award => award.title).map(award => `
+              ${filterDataByTimeline(profile.awards.filter(award => award.title), 'year').map(award => `
                 <tr>
                   <td>${award.title || 'N/A'}</td>
                   <td>${award.type || 'N/A'}</td>
@@ -546,7 +586,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${experienceData.teaching_experience.map(exp => `
+              ${filterExperienceByTimeline(experienceData.teaching_experience).map(exp => `
                 <tr>
                   <td>${exp.designation || 'N/A'}</td>
                   <td>${exp.institution || 'N/A'}</td>
@@ -573,7 +613,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${experienceData.research_experience.map(exp => `
+              ${filterExperienceByTimeline(experienceData.research_experience).map(exp => `
                 <tr>
                   <td>${exp.position || 'N/A'}</td>
                   <td>${exp.organization || 'N/A'}</td>
@@ -603,7 +643,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${publicationsData.seie_journals.map(pub => `
+              ${filterDataByTimeline(publicationsData.seie_journals, 'year').map(pub => `
                 <tr>
                   <td>${pub.title || 'N/A'}</td>
                   <td>${pub.authors || 'N/A'}</td>
@@ -635,7 +675,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${publicationsData.scopus_journals.map(pub => `
+              ${filterDataByTimeline(publicationsData.scopus_journals, 'year').map(pub => `
                 <tr>
                   <td>${pub.title || 'N/A'}</td>
                   <td>${pub.authors || 'N/A'}</td>
@@ -665,7 +705,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${booksData.books_authored.map(book => `
+              ${filterDataByTimeline(booksData.books_authored, 'year').map(book => `
                 <tr>
                   <td>${book.title || 'N/A'}</td>
                   <td>${book.authors || 'N/A'}</td>
@@ -692,7 +732,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${patentsData.patents.map(patent => `
+              ${filterDataByTimeline(patentsData.patents, 'year').map(patent => `
                 <tr>
                   <td>${patent.title || 'N/A'}</td>
                   <td>${patent.patent_number || 'N/A'}</td>
@@ -721,7 +761,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${projectData.ongoing_projects.map(project => `
+              ${filterDataByTimeline(projectData.ongoing_projects, 'year').map(project => `
                 <tr>
                   <td>${project.title_of_project || 'N/A'}</td>
                   <td>${project.sponsoredBy || 'N/A'}</td>
@@ -749,7 +789,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${projectData.completed_projects.map(project => `
+              ${filterDataByTimeline(projectData.completed_projects, 'year').map(project => `
                 <tr>
                   <td>${project.title_of_project || 'N/A'}</td>
                   <td>${project.sponsoredBy || 'N/A'}</td>
@@ -776,7 +816,7 @@ function Profile() {
               </tr>
             </thead>
             <tbody>
-              ${fellowshipData.fellowships.map(fellowship => `
+              ${filterDataByTimeline(fellowshipData.fellowships, 'year').map(fellowship => `
                 <tr>
                   <td>${fellowship.fellowship_title || 'N/A'}</td>
                   <td>${fellowship.awarded_by || 'N/A'}</td>
@@ -1293,6 +1333,116 @@ function Profile() {
                     >
                       Deselect All
                     </button>
+                  </div>
+
+                  {/* Timeline Filter Section */}
+                  <div style={{
+                    marginBottom: '20px',
+                    padding: '15px',
+                    backgroundColor: '#f8fafc',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0'
+                  }}>
+                    <label style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '10px',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      color: '#2d3748'
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={enableTimelineFilter}
+                        onChange={(e) => setEnableTimelineFilter(e.target.checked)}
+                        style={{
+                          marginRight: '8px',
+                          width: '16px',
+                          height: '16px',
+                          accentColor: '#667eea'
+                        }}
+                      />
+                      Enable Timeline Filter
+                    </label>
+                    
+                    {enableTimelineFilter && (
+                      <div style={{
+                        display: 'flex',
+                        gap: '10px',
+                        alignItems: 'center',
+                        marginTop: '10px'
+                      }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{
+                            display: 'block',
+                            fontSize: '0.9rem',
+                            fontWeight: 500,
+                            color: '#4a5568',
+                            marginBottom: '5px'
+                          }}>
+                            From Year
+                          </label>
+                          <input
+                            type="number"
+                            value={timelineRange.startYear}
+                            onChange={(e) => setTimelineRange(prev => ({
+                              ...prev,
+                              startYear: e.target.value
+                            }))}
+                            placeholder="e.g., 2000"
+                            min="1900"
+                            max="2030"
+                            style={{
+                              width: '100%',
+                              padding: '8px 12px',
+                              border: '2px solid #e2e8f0',
+                              borderRadius: '8px',
+                              fontSize: '0.9rem',
+                              outline: 'none',
+                              transition: 'border-color 0.2s',
+                              boxSizing: 'border-box'
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                            onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <label style={{
+                            display: 'block',
+                            fontSize: '0.9rem',
+                            fontWeight: 500,
+                            color: '#4a5568',
+                            marginBottom: '5px'
+                          }}>
+                            To Year
+                          </label>
+                          <input
+                            type="number"
+                            value={timelineRange.endYear}
+                            onChange={(e) => setTimelineRange(prev => ({
+                              ...prev,
+                              endYear: e.target.value
+                            }))}
+                            placeholder="e.g., 2024"
+                            min="1900"
+                            max="2030"
+                            style={{
+                              width: '100%',
+                              padding: '8px 12px',
+                              border: '2px solid #e2e8f0',
+                              borderRadius: '8px',
+                              fontSize: '0.9rem',
+                              outline: 'none',
+                              transition: 'border-color 0.2s',
+                              boxSizing: 'border-box'
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                            onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
