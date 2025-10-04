@@ -964,6 +964,71 @@ app.put('/api/professor/training', authenticateToken, async (req, res) => {
 // =============================================================================
 
 // =============================================================================
+// MOU API ENDPOINTS
+// =============================================================================
+
+// Get MOU data
+app.get('/api/professor/mou', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return MOU data or default structure
+        const mouData = {
+            functional_mous: professor.functional_mous || [{
+                organization_name: "",
+                duration: "",
+                purpose: "",
+                activities: "",
+                date: "",
+            }]
+        };
+
+        res.status(200).json(mouData);
+    } catch (error) {
+        console.error('Error fetching MOU data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update MOU data
+app.put('/api/professor/mou', authenticateToken, async (req, res) => {
+    try {
+        const mouData = req.body;
+
+        const updatedProfessor = await Professor.findByIdAndUpdate(
+            req.user.id,
+            {
+                functional_mous: mouData.functional_mous || [],
+                lastMouUpdate: new Date()
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedProfessor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        console.log('MOU data updated successfully for user:', req.user.id);
+        res.status(200).json({
+            message: 'MOU data updated successfully',
+            mou: {
+                functional_mous: updatedProfessor.functional_mous
+            }
+        });
+    } catch (error) {
+        console.error('Error updating MOU data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// END MOU API ENDPOINTS
+// =============================================================================
+
+// =============================================================================
 // PARTICIPATION & COLLABORATION API ENDPOINTS
 // =============================================================================
 

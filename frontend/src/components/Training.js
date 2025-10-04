@@ -294,7 +294,7 @@ function Training() {
                                         e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.4)";
                                     }}
                                 >
-                                    Save Training Data
+                                    Update
                                 </button>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ function Layout({ children }) {
   };
 
   const menuItems = [
+    { label: 'Dashboard', path: '/dashboard', icon: '🏠' },
     { label: 'Profile', path: '/profile', icon: '👤' },
     { label: 'Experience', path: '/experience', icon: '💼' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
@@ -18,13 +19,16 @@ function Layout({ children }) {
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Fellowship', path: '/fellowship', icon: '🏆' },
     { label: 'Training & Consultancy', path: '/training', icon: '💰' },
+    { label: 'MOU & Collaborations', path: '/mou', icon: '🤝' },
     { label: 'Books', path: '/books', icon: '📚' },
     { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' },
     { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' },
     { label: 'E-Education', path: '/e-education', icon: '💻' },
     { label: 'Conference/Seminar/Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
     { label: 'Participation & Collaboration', path: '/participation-collaboration', icon: '🤝' },
-    { label: 'Programme Details', path: '/programme', icon: '📋' }
+    { label: 'Programme Details', path: '/programme', icon: '📋' },
+    { label: 'HOD Verification', path: '/hod-verification', icon: '✅' },
+    { label: 'Faculty Management', path: '/faculty-management', icon: '⚙️' }
   ];
 
   return (

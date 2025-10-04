@@ -465,6 +465,15 @@ const ProfessorSchema = new mongoose.Schema({
         amount_generated: { type: String, default: '' }
     }],
 
+    // Functional MOUs with Institutions/Industries
+    functional_mous: [{
+        organization_name: { type: String, default: '' },
+        duration: { type: String, default: '' },
+        purpose: { type: String, default: '' },
+        activities: { type: String, default: '' },
+        date: { type: String, default: '' }
+    }],
+
     // Verification Status
     profileStatus: {
         type: String,
