@@ -161,10 +161,10 @@ function Layout({ children }) {
                 cursor: 'pointer',
                 borderRadius: '12px',
                 transition: 'all 0.2s ease',
-                background: window.location.pathname === item.path 
-                  ? 'rgba(255,255,255,0.2)' 
-                  : hoveredItem === index 
-                    ? 'rgba(255,255,255,0.1)' 
+                background: window.location.pathname === item.path
+                  ? 'rgba(255,255,255,0.2)'
+                  : hoveredItem === index
+                    ? 'rgba(255,255,255,0.1)'
                     : 'transparent',
                 transform: hoveredItem === index ? 'translateX(4px)' : 'translateX(0)',
                 position: 'relative',

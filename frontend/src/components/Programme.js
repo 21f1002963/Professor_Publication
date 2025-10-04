@@ -232,7 +232,7 @@ function Programme() {
               {/* Faculty Development Programme Section */}
               <div style={{ marginTop: "0px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem", marginTop: '0px' }}>
-                  Faculty Development Programme Attended (Orientation, Refresher, Other Short Term Courses)
+                  Faculty Development Programme Attended (Professional Development Programmes, Orientation, Induction Programmes, Refresher Course, Other Short Term Courses)
                 </h2>
                 <div style={{  }}>
                   <table style={{ width: "100%", borderCollapse: "collapse",  }}>
