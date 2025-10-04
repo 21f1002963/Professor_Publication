@@ -200,12 +200,12 @@ function ResearchGuidanceStudents() {
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Year</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Degree</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>No. of Students Awarded</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Department/Centre</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Action</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "8%" }}>S.No</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Year</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "35%" }}>Degree</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "17%" }}>No. of Students Awarded</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Department/Centre</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -317,16 +317,16 @@ function ResearchGuidanceStudents() {
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1200px" }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Student Name</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Registration Date</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Registration No.</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Thesis Title</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Thesis Submitted Status</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Thesis Submitted Date</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Vivavoce Completed Status</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Date Awarded</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Action</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>S.No</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Student Name</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Registration Date</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Registration No.</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "40%" }}>Thesis Title</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Thesis Submitted Status</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Thesis Submitted Date</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Vivavoce Completed Status</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Date Awarded</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -502,14 +502,14 @@ function ResearchGuidanceStudents() {
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1000px" }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Scholar Name</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Designation</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Funding Agency</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Fellowship Title</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Year of Joining</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Year of Completion</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Action</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>S.No</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Scholar Name</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "12%" }}>Designation</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "18%" }}>Funding Agency</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Fellowship Title</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>Year of Joining</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>Year of Completion</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
