@@ -134,7 +134,7 @@ function Dashboard() {
     { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' },
     { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' },
     { label: 'E-Education', path: '/e-education', icon: '💻' },
-    { label: 'Conference/Seminar/Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
+    { label: 'Conference/ Seminar/ Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
     { label: 'Participation & Collaboration', path: '/participation-collaboration', icon: '🤝' },
     { label: 'Programme Details', path: '/programme', icon: '📋' }
   ];

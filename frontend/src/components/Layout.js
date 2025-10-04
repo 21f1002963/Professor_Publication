@@ -12,7 +12,7 @@ function Layout({ children }) {
     // Get user role from token or localStorage
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    
+
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -50,7 +50,7 @@ function Layout({ children }) {
     { label: 'Research Guidance', path: '/research-guidance', icon: '👨‍🎓' },
     { label: 'Project & Consultancy', path: '/project-consultancy', icon: '🚀' },
     { label: 'E-Education', path: '/e-education', icon: '💻' },
-    { label: 'Conference/Seminar/Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
+    { label: 'Conference/ Seminar/ Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
     { label: 'Participation & Collaboration', path: '/participation-collaboration', icon: '🤝' },
     { label: 'Programme Details', path: '/programme', icon: '📋' }
   ];
@@ -62,8 +62,8 @@ function Layout({ children }) {
   ];
 
   // Filter menu items based on user role
-  const menuItems = userRole === 'hod' 
-    ? [...baseMenuItems, ...hodMenuItems] 
+  const menuItems = userRole === 'hod'
+    ? [...baseMenuItems, ...hodMenuItems]
     : baseMenuItems;
 
   return (

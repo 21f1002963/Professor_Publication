@@ -282,6 +282,20 @@ function Profile() {
     }
   }, [professorId]); // Add professorId as dependency
 
+  // Auto-expand all textareas when component mounts or data changes
+  useEffect(() => {
+    const expandAllTextareas = () => {
+      const textareas = document.querySelectorAll('textarea[data-field]');
+      textareas.forEach(textarea => {
+        autoExpandTextarea(textarea);
+      });
+    };
+
+    // Expand textareas after a short delay to ensure DOM is rendered
+    const timer = setTimeout(expandAllTextareas, 100);
+    return () => clearTimeout(timer);
+  }, [profile]);
+
   const fetchProfile = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -439,11 +453,37 @@ function Profile() {
     cursor: isDisabled ? "not-allowed" : "text"
   });
 
-  const isDisabled = viewingMode === 'viewing';
+  // Get textarea style with auto-expand functionality
+  const getTextareaStyle = (isDisabled = false) => ({
+    ...getInputStyle(isDisabled),
+    minHeight: "44px",
+    resize: "none",
+    overflow: "hidden",
+    lineHeight: "1.5"
+  });
 
-  const handleInputChange = (field, value) => {
-    setProfile((prev) => ({ ...prev, [field]: value }));
+  // Auto-expand textarea function
+  const autoExpandTextarea = (element) => {
+    element.style.height = "auto";
+    element.style.height = Math.max(44, element.scrollHeight) + "px";
   };
+
+  // Enhanced handleInputChange to handle auto-expanding textareas
+  const handleInputChange = (field, value, isTextarea = false) => {
+    setProfile((prev) => ({ ...prev, [field]: value }));
+
+    // Auto-expand textarea after state update
+    if (isTextarea) {
+      setTimeout(() => {
+        const textarea = document.querySelector(`textarea[data-field="${field}"]`);
+        if (textarea) {
+          autoExpandTextarea(textarea);
+        }
+      }, 0);
+    }
+  };
+
+  const isDisabled = viewingMode === 'viewing';
 
   const handleArrayChange = (arrayName, index, field, value) => {
     setProfile((prev) => ({
@@ -452,6 +492,14 @@ function Profile() {
         i === index ? { ...item, [field]: value } : item
       ),
     }));
+  };
+
+  // Enhanced handleArrayChange for auto-expanding textareas
+  const handleArrayChangeWithExpand = (arrayName, index, field, value, element) => {
+    handleArrayChange(arrayName, index, field, value);
+    if (element) {
+      setTimeout(() => autoExpandTextarea(element), 0);
+    }
   };
 
   const addArrayItem = (arrayName) => {
@@ -662,13 +710,18 @@ function Profile() {
                   >
                     Full Name
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={profile.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    onChange={(e) => {
+                      handleInputChange("name", e.target.value, true);
+                      autoExpandTextarea(e.target);
+                    }}
                     disabled={isDisabled}
-                    style={getInputStyle(isDisabled)}
+                    style={getTextareaStyle(isDisabled)}
                     placeholder="Enter your full name"
+                    data-field="name"
+                    rows="1"
+                    onInput={(e) => autoExpandTextarea(e.target)}
                   />
                 </div>
 
@@ -732,22 +785,18 @@ function Profile() {
                   >
                     Designation
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={profile.designation}
-                    onChange={(e) =>
-                      handleInputChange("designation", e.target.value)
-                    }
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "1rem",
-                      transition: "border-color 0.3s ease",
-                      boxSizing: "border-box",
+                    onChange={(e) => {
+                      handleInputChange("designation", e.target.value, true);
+                      autoExpandTextarea(e.target);
                     }}
+                    disabled={isDisabled}
+                    style={getTextareaStyle(isDisabled)}
                     placeholder="Enter your designation"
+                    data-field="designation"
+                    rows="1"
+                    onInput={(e) => autoExpandTextarea(e.target)}
                   />
                 </div>
 
@@ -762,22 +811,18 @@ function Profile() {
                   >
                     Department
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={profile.department}
-                    onChange={(e) =>
-                      handleInputChange("department", e.target.value)
-                    }
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "1rem",
-                      transition: "border-color 0.3s ease",
-                      boxSizing: "border-box",
+                    onChange={(e) => {
+                      handleInputChange("department", e.target.value, true);
+                      autoExpandTextarea(e.target);
                     }}
+                    disabled={isDisabled}
+                    style={getTextareaStyle(isDisabled)}
                     placeholder="Enter your department"
+                    data-field="department"
+                    rows="1"
+                    onInput={(e) => autoExpandTextarea(e.target)}
                   />
                 </div>
               </div>
@@ -922,17 +967,18 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
+                          <textarea
                             value={edu.title}
-                            onChange={(e) =>
-                              handleArrayChange(
+                            onChange={(e) => {
+                              handleArrayChangeWithExpand(
                                 "education",
                                 idx,
                                 "title",
-                                e.target.value
-                              )
-                            }
+                                e.target.value,
+                                e.target
+                              );
+                            }}
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -942,9 +988,18 @@ function Profile() {
                               border: "2px solid #e2e8f0",
                               boxSizing: "border-box",
                               fontSize: "1rem",
-                              textAlign: "center"
+                              textAlign: "center",
+                              minHeight: "44px",
+                              resize: "none",
+                              overflow: "hidden",
+                              lineHeight: "1.5",
+                              backgroundColor: isDisabled ? "#f7fafc" : "#fff",
+                              color: isDisabled ? "#718096" : "#2d3748",
+                              cursor: isDisabled ? "not-allowed" : "text"
                             }}
                             placeholder="Subject/Title of Thesis"
+                            rows="1"
+                            onInput={(e) => autoExpandTextarea(e.target)}
                           />
                         </td>
                         <td
@@ -1334,17 +1389,18 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
+                          <textarea
                             value={award.title}
-                            onChange={(e) =>
-                              handleArrayChange(
+                            onChange={(e) => {
+                              handleArrayChangeWithExpand(
                                 "awards",
                                 idx,
                                 "title",
-                                e.target.value
-                              )
-                            }
+                                e.target.value,
+                                e.target
+                              );
+                            }}
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1354,9 +1410,18 @@ function Profile() {
                               border: "2px solid #e2e8f0",
                               boxSizing: "border-box",
                               fontSize: "1rem",
-                              textAlign: "center"
+                              textAlign: "center",
+                              minHeight: "44px",
+                              resize: "none",
+                              overflow: "hidden",
+                              lineHeight: "1.5",
+                              backgroundColor: isDisabled ? "#f7fafc" : "#fff",
+                              color: isDisabled ? "#718096" : "#2d3748",
+                              cursor: isDisabled ? "not-allowed" : "text"
                             }}
                             placeholder="Name / Title of the Award"
+                            rows="1"
+                            onInput={(e) => autoExpandTextarea(e.target)}
                           />
                         </td>
                         <td
