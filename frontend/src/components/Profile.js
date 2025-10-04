@@ -2683,8 +2683,8 @@ function Profile() {
               <>
                 {/* Experience Section */}
                 {experienceData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Professional Experience
                     </h2>
 
@@ -2752,8 +2752,8 @@ function Profile() {
 
                 {/* Publications Section */}
                 {publicationsData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Publications
                     </h2>
 
@@ -3079,8 +3079,8 @@ function Profile() {
 
                 {/* Patents Section */}
                 {patentsData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Patents
                     </h2>
 
@@ -3117,8 +3117,8 @@ function Profile() {
 
                 {/* Fellowship Section */}
                 {fellowshipData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Fellowship
                     </h2>
 
@@ -3167,8 +3167,8 @@ function Profile() {
 
                 {/* Books Section */}
                 {booksData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Books & Publications
                     </h2>
 
@@ -3273,8 +3273,8 @@ function Profile() {
 
                 {/* Research Guidance Section */}
                 {researchData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Research Guidance
                     </h2>
 
@@ -3336,8 +3336,8 @@ function Profile() {
 
                 {/* Project Consultancy Section */}
                 {projectData && (
-                  <div style={{ marginTop: "40px", padding: "30px", borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
                       Project & Consultancy
                     </h2>
 
