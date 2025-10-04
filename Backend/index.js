@@ -573,6 +573,208 @@ app.put('/api/professor/books', authenticateToken, async (req, res) => {
 });
 
 // =============================================================================
+// MISSING ENDPOINTS FOR VIEWING OTHER PROFESSORS' DATA
+// =============================================================================
+
+// Get professor experience by ID (for HOD viewing)
+app.get('/api/professor/experience/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return experience data or default structure
+        const experienceData = {
+            teaching_experience: professor.teaching_experience || [{
+                designation: "",
+                institution: "",
+                department: "",
+                from: "",
+                to: "",
+            }],
+            research_experience: professor.research_experience || [{
+                position: "",
+                organization: "",
+                project: "",
+                from: "",
+                to: "",
+            }],
+            industry_experience: professor.industry_experience || [{
+                designation: "",
+                company: "",
+                sector: "",
+                from: "",
+                to: "",
+            }]
+        };
+
+        res.status(200).json(experienceData);
+    } catch (error) {
+        console.error('Error fetching experience:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor publications by ID (for HOD viewing)
+app.get('/api/professor/publications/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return publications data or default structure
+        const publicationsData = {
+            ugc_approved_journals: professor.ugc_approved_journals || [{
+                title: "",
+                authors: "",
+                journal_name: "",
+                volume: "",
+                issue: "",
+                page_nos: "",
+                year: "",
+                impact_factor: "",
+            }],
+            non_ugc_journals: professor.non_ugc_journals || [{
+                title: "",
+                authors: "",
+                journal_name: "",
+                volume: "",
+                issue: "",
+                page_nos: "",
+                year: "",
+                impact_factor: "",
+            }],
+            scopus_indexed_journals: professor.scopus_indexed_journals || [{
+                title: "",
+                authors: "",
+                journal_name: "",
+                volume: "",
+                issue: "",
+                page_nos: "",
+                year: "",
+                impact_factor: "",
+            }],
+            conference_proceedings: professor.conference_proceedings || [{
+                title: "",
+                authors: "",
+                conference_name: "",
+                pages: "",
+                year: "",
+                issn: "",
+            }]
+        };
+
+        res.status(200).json(publicationsData);
+    } catch (error) {
+        console.error('Error fetching publications:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor patents by ID (for HOD viewing)
+app.get('/api/professor/patents/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return patents data or default structure
+        const patentsData = {
+            patents: professor.patents || [{
+                title: "",
+                application_number: "",
+                status: "",
+                filed_date: "",
+                published_date: "",
+                granted_date: "",
+                inventors: "",
+            }]
+        };
+
+        res.status(200).json(patentsData);
+    } catch (error) {
+        console.error('Error fetching patents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor fellowship by ID (for HOD viewing)
+app.get('/api/professor/fellowship/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return fellowship data or default structure
+        const fellowshipData = {
+            fellowships: professor.fellowships || [{
+                title: "",
+                awarded_by: "",
+                year: "",
+                duration: "",
+                amount: "",
+            }]
+        };
+
+        res.status(200).json(fellowshipData);
+    } catch (error) {
+        console.error('Error fetching fellowship:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get professor books by ID (for HOD viewing)
+app.get('/api/professor/books/:id', authenticateToken, async (req, res) => {
+    try {
+        const professorId = req.params.id;
+        const professor = await Professor.findById(professorId).select('-password');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Return books data or default structure
+        const booksData = {
+            books_authored: professor.books_authored || [{
+                title: "",
+                publisher: "",
+                year: "",
+                isbn: "",
+                co_authors: "",
+            }],
+            books_edited: professor.books_edited || [{
+                title: "",
+                publisher: "",
+                year: "",
+                isbn: "",
+                co_editors: "",
+            }],
+            chapters_in_books: professor.chapters_in_books || [{
+                chapter_title: "",
+                book_title: "",
+                editors: "",
+                publisher: "",
+                pages: "",
+                year: "",
+                isbn: "",
+            }]
+        };
+
+        res.status(200).json(booksData);
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
 // RESEARCH GUIDANCE API ENDPOINTS
 // =============================================================================
 
