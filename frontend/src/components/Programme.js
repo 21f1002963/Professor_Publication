@@ -260,10 +260,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "title_fdp", e.target.value)}
                               placeholder="e.g., Orientation Programme, Refresher Course"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -274,10 +275,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "organiser", e.target.value)}
                               placeholder="Organizing Institution/Body"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -288,10 +290,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "venue", e.target.value)}
                               placeholder="Programme Venue"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -302,10 +305,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "duration", e.target.value)}
                               placeholder="e.g., 5 days, 2 weeks"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -315,10 +319,11 @@ function Programme() {
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -328,10 +333,11 @@ function Programme() {
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -342,10 +348,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("faculty_development_programme", idx, "year", e.target.value)}
                               placeholder="YYYY"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -421,10 +428,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "name_programme", e.target.value)}
                               placeholder="Executive/Management Development Programme Name"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -435,10 +443,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "no_participants", e.target.value)}
                               placeholder="Number"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -449,10 +458,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "venue", e.target.value)}
                               placeholder="Programme Venue"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -463,10 +473,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "duration", e.target.value)}
                               placeholder="e.g., 3 days, 1 week"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -476,10 +487,11 @@ function Programme() {
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -489,10 +501,11 @@ function Programme() {
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -503,10 +516,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "year", e.target.value)}
                               placeholder="YYYY"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -517,10 +531,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("executive_development_programme", idx, "revenue_generated", e.target.value)}
                               placeholder="Amount in ₹"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -591,10 +606,11 @@ function Programme() {
                               value={programme.programme_type}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "programme_type", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "95%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             >
                               <option value="">Select Programme Type</option>
@@ -610,10 +626,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "place", e.target.value)}
                               placeholder="Place/Location"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -623,10 +640,11 @@ function Programme() {
                               value={programme.from_date}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -636,10 +654,11 @@ function Programme() {
                               value={programme.to_date}
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -650,10 +669,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("participation_impress_imprint", idx, "year", e.target.value)}
                               placeholder="YYYY"
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -724,10 +744,11 @@ function Programme() {
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "name_programme", e.target.value)}
                               placeholder="ARPIT Programme Name"
                               style={{
-                                width: "100%",
+                                width: "95%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -737,10 +758,11 @@ function Programme() {
                               value={programme.period_from}
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "period_from", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -750,10 +772,11 @@ function Programme() {
                               value={programme.period_to}
                               onChange={(e) => handleArrayChange("enrolment_arpit_programme", idx, "period_to", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
