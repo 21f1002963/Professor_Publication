@@ -226,15 +226,18 @@ function ResearchGuidanceStudents() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={pg.degree}
                               onChange={(e) => handleArrayChange("pg_guidance", idx, "degree", e.target.value)}
                               style={{
                                 width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>
@@ -330,15 +333,18 @@ function ResearchGuidanceStudents() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={phd.student_name}
                               onChange={(e) => handleArrayChange("phd_guidance", idx, "student_name", e.target.value)}
                               style={{
                                 width: "80%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>
@@ -369,15 +375,18 @@ function ResearchGuidanceStudents() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={phd.thesis_title}
                               onChange={(e) => handleArrayChange("phd_guidance", idx, "thesis_title", e.target.value)}
                               style={{
                                 width: "80%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>
@@ -505,15 +514,18 @@ function ResearchGuidanceStudents() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={postdoc.scholar_name}
                               onChange={(e) => handleArrayChange("postdoc_guidance", idx, "scholar_name", e.target.value)}
                               style={{
                                 width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>
@@ -531,28 +543,34 @@ function ResearchGuidanceStudents() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={postdoc.funding_agency}
                               onChange={(e) => handleArrayChange("postdoc_guidance", idx, "funding_agency", e.target.value)}
                               style={{
                                 width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={postdoc.fellowship_title}
                               onChange={(e) => handleArrayChange("postdoc_guidance", idx, "fellowship_title", e.target.value)}
                               style={{
                                 width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit"
                               }}
                             />
                           </td>

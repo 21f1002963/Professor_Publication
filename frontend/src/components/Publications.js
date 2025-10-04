@@ -334,12 +334,12 @@ function Publications() {
                           <textarea
                             value={pub.title}
                             onChange={(e) => handleArrayChange("seie_journals", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -352,12 +352,12 @@ function Publications() {
                           <textarea
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("seie_journals", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -370,12 +370,12 @@ function Publications() {
                           <textarea
                             value={pub.journal_name}
                             onChange={(e) => handleArrayChange("seie_journals", idx, "journal_name", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -543,12 +543,12 @@ function Publications() {
                           <textarea
                             value={pub.title}
                             onChange={(e) => handleArrayChange("ugc_approved_journals", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -561,12 +561,12 @@ function Publications() {
                           <textarea
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("ugc_approved_journals", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -579,12 +579,12 @@ function Publications() {
                           <textarea
                             value={pub.journal_name}
                             onChange={(e) => handleArrayChange("ugc_approved_journals", idx, "journal_name", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -751,12 +751,12 @@ function Publications() {
                           <textarea
                             value={pub.title}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -769,12 +769,12 @@ function Publications() {
                           <textarea
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -787,12 +787,12 @@ function Publications() {
                           <textarea
                             value={pub.journal_name}
                             onChange={(e) => handleArrayChange("non_ugc_journals", idx, "journal_name", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -956,12 +956,12 @@ function Publications() {
                           <textarea
                             value={pub.title}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -974,12 +974,12 @@ function Publications() {
                           <textarea
                             value={pub.authors}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -992,12 +992,12 @@ function Publications() {
                           <textarea
                             value={pub.conference_details}
                             onChange={(e) => handleArrayChange("conference_proceedings", idx, "conference_details", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",

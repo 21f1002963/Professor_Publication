@@ -232,28 +232,36 @@ function ProjectConsultancy() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.title_of_project}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "title_of_project", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.sponsored_by}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "sponsored_by", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -263,7 +271,7 @@ function ProjectConsultancy() {
                               value={project.period}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "period", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -277,7 +285,7 @@ function ProjectConsultancy() {
                               value={project.sanctioned_amount}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "sanctioned_amount", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -290,7 +298,7 @@ function ProjectConsultancy() {
                               value={project.year}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -360,28 +368,36 @@ function ProjectConsultancy() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={consultancy.title_of_consultancy_work}
                               onChange={(e) => handleArrayChange("ongoing_consultancy_works", idx, "title_of_consultancy_work", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={consultancy.sponsored_by}
                               onChange={(e) => handleArrayChange("ongoing_consultancy_works", idx, "sponsored_by", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -391,7 +407,7 @@ function ProjectConsultancy() {
                               value={consultancy.period}
                               onChange={(e) => handleArrayChange("ongoing_consultancy_works", idx, "period", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -405,7 +421,7 @@ function ProjectConsultancy() {
                               value={consultancy.sanctioned_amount}
                               onChange={(e) => handleArrayChange("ongoing_consultancy_works", idx, "sanctioned_amount", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -418,7 +434,7 @@ function ProjectConsultancy() {
                               value={consultancy.year}
                               onChange={(e) => handleArrayChange("ongoing_consultancy_works", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -488,28 +504,36 @@ function ProjectConsultancy() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.title_of_project}
                               onChange={(e) => handleArrayChange("completed_projects", idx, "title_of_project", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.sponsored_by}
                               onChange={(e) => handleArrayChange("completed_projects", idx, "sponsored_by", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -519,7 +543,7 @@ function ProjectConsultancy() {
                               value={project.period}
                               onChange={(e) => handleArrayChange("completed_projects", idx, "period", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -533,7 +557,7 @@ function ProjectConsultancy() {
                               value={project.sanctioned_amount}
                               onChange={(e) => handleArrayChange("completed_projects", idx, "sanctioned_amount", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -546,7 +570,7 @@ function ProjectConsultancy() {
                               value={project.year}
                               onChange={(e) => handleArrayChange("completed_projects", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -616,28 +640,36 @@ function ProjectConsultancy() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={consultancy.title_of_consultancy_work}
                               onChange={(e) => handleArrayChange("completed_consultancy_works", idx, "title_of_consultancy_work", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={consultancy.sponsored_by}
                               onChange={(e) => handleArrayChange("completed_consultancy_works", idx, "sponsored_by", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -647,7 +679,7 @@ function ProjectConsultancy() {
                               value={consultancy.period}
                               onChange={(e) => handleArrayChange("completed_consultancy_works", idx, "period", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -661,7 +693,7 @@ function ProjectConsultancy() {
                               value={consultancy.sanctioned_amount}
                               onChange={(e) => handleArrayChange("completed_consultancy_works", idx, "sanctioned_amount", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -674,7 +706,7 @@ function ProjectConsultancy() {
                               value={consultancy.year}
                               onChange={(e) => handleArrayChange("completed_consultancy_works", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -745,43 +777,55 @@ function ProjectConsultancy() {
                         <tr key={index} style={{ background: index % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{index + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.pi_name}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "pi_name", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
-                                padding: "8px"
+                                padding: "8px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                               placeholder="Enter PI/Co-PI/Chair holder name"
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.project_title}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "project_title", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "95%",
+                                height: "60px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
-                                padding: "8px"
+                                padding: "8px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                               placeholder="Enter project title"
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={project.funding_agency}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "funding_agency", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
-                                padding: "8px"
+                                padding: "8px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                               placeholder="Enter funding agency"
                             />
@@ -792,7 +836,7 @@ function ProjectConsultancy() {
                               value={project.duration}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "duration", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
                                 padding: "8px"
@@ -806,7 +850,7 @@ function ProjectConsultancy() {
                               value={project.year_of_award}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "year_of_award", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
                                 padding: "8px"
@@ -820,7 +864,7 @@ function ProjectConsultancy() {
                               value={project.amount}
                               onChange={(e) => handleArrayChange("research_projects_funded", index, "amount", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
                                 padding: "8px"

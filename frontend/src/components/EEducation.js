@@ -191,28 +191,36 @@ function EEducation() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={lecture.e_lecture_title}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "e_lecture_title", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "85%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={lecture.content_module_title}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "content_module_title", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -221,7 +229,7 @@ function EEducation() {
                               value={lecture.institution_platform}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "institution_platform", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px",
@@ -242,7 +250,7 @@ function EEducation() {
                               value={lecture.year}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "85%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -250,42 +258,54 @@ function EEducation() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="url"
+                            <textarea
                               value={lecture.weblink}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "weblink", e.target.value)}
                               placeholder="https://"
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={lecture.member_of_editorial_bodies}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "member_of_editorial_bodies", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={lecture.reviewer_referee_of}
                               onChange={(e) => handleArrayChange("e_lecture_details", idx, "reviewer_referee_of", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -351,15 +371,19 @@ function EEducation() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={course.nature_of_online_course}
                               onChange={(e) => handleArrayChange("online_education_conducted", idx, "nature_of_online_course", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -369,7 +393,7 @@ function EEducation() {
                               value={course.no_of_sessions}
                               onChange={(e) => handleArrayChange("online_education_conducted", idx, "no_of_sessions", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -382,7 +406,7 @@ function EEducation() {
                               value={course.target_group}
                               onChange={(e) => handleArrayChange("online_education_conducted", idx, "target_group", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -395,7 +419,7 @@ function EEducation() {
                               value={course.date}
                               onChange={(e) => handleArrayChange("online_education_conducted", idx, "date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"

@@ -257,12 +257,12 @@ function Books() {
                           <textarea
                             value={book.title}
                             onChange={(e) => handleArrayChange("books", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -275,12 +275,12 @@ function Books() {
                           <textarea
                             value={book.authors}
                             onChange={(e) => handleArrayChange("books", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -293,12 +293,12 @@ function Books() {
                           <textarea
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("books", idx, "publisher", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -322,12 +322,12 @@ function Books() {
                           <textarea
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("books", idx, "isbn", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -419,12 +419,12 @@ function Books() {
                           <textarea
                             value={chapter.chapter_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "chapter_title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -437,12 +437,12 @@ function Books() {
                           <textarea
                             value={chapter.authors}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -455,12 +455,12 @@ function Books() {
                           <textarea
                             value={chapter.book_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "book_title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -493,12 +493,12 @@ function Books() {
                           <textarea
                             value={chapter.isbn}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "isbn", e.target.value)}
-                            style={{ 
-                              width: "80%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "80%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -590,12 +590,12 @@ function Books() {
                           <textarea
                             value={book.title}
                             onChange={(e) => handleArrayChange("edited_books", idx, "title", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -608,12 +608,12 @@ function Books() {
                           <textarea
                             value={book.chapter_titles}
                             onChange={(e) => handleArrayChange("edited_books", idx, "chapter_titles", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -626,12 +626,12 @@ function Books() {
                           <textarea
                             value={book.authors}
                             onChange={(e) => handleArrayChange("edited_books", idx, "authors", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -644,12 +644,12 @@ function Books() {
                           <textarea
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("edited_books", idx, "publisher", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
@@ -673,12 +673,12 @@ function Books() {
                           <textarea
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("edited_books", idx, "isbn", e.target.value)}
-                            style={{ 
-                              width: "90%", 
-                              height: "60px", 
-                              padding: "8px", 
-                              borderRadius: "6px", 
-                              border: "1px solid #e2e8f0", 
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
                               fontSize: "0.9rem",
                               resize: "vertical",
                               overflow: "auto",
