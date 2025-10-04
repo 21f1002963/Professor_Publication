@@ -261,41 +261,53 @@ function ConferenceSeminarWorkshop() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={talk.title_of_paper}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "title_of_paper", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "85%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={talk.conferences_seminar_workshop_training}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "conferences_seminar_workshop_training", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "95%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={talk.organized_by}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "organized_by", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "85%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -304,7 +316,7 @@ function ConferenceSeminarWorkshop() {
                               value={talk.level}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "level", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -322,7 +334,7 @@ function ConferenceSeminarWorkshop() {
                               value={talk.from_date}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -335,7 +347,7 @@ function ConferenceSeminarWorkshop() {
                               value={talk.to_date}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -348,7 +360,7 @@ function ConferenceSeminarWorkshop() {
                               value={talk.year}
                               onChange={(e) => handleArrayChange("invited_talks", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "85%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -420,41 +432,53 @@ function ConferenceSeminarWorkshop() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={conference.title_of_programme}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "title_of_programme", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={conference.sponsors}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "sponsors", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={conference.venue_duration}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "venue_duration", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -481,7 +505,7 @@ function ConferenceSeminarWorkshop() {
                               value={conference.from_date}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -494,7 +518,7 @@ function ConferenceSeminarWorkshop() {
                               value={conference.to_date}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -507,7 +531,7 @@ function ConferenceSeminarWorkshop() {
                               value={conference.year}
                               onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -579,41 +603,53 @@ function ConferenceSeminarWorkshop() {
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={workshop.title_of_programme}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "title_of_programme", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={workshop.sponsors}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "sponsors", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={workshop.venue_duration}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "venue_duration", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -622,7 +658,7 @@ function ConferenceSeminarWorkshop() {
                               value={workshop.level}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "level", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -640,7 +676,7 @@ function ConferenceSeminarWorkshop() {
                               value={workshop.from_date}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -653,7 +689,7 @@ function ConferenceSeminarWorkshop() {
                               value={workshop.to_date}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -666,7 +702,7 @@ function ConferenceSeminarWorkshop() {
                               value={workshop.year}
                               onChange={(e) => handleArrayChange("workshops_organized", idx, "year", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -738,15 +774,19 @@ function ConferenceSeminarWorkshop() {
                             {idx + 1}
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <input
-                              type="text"
+                            <textarea
                               value={item.title_conference_workshop}
                               onChange={(e) => handleArrayChange("financial_support", idx, "title_conference_workshop", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "95%",
+                                height: "60px",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
-                                borderRadius: "6px"
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                               placeholder="Conference/Workshop/Professional Body Title"
                             />
@@ -757,7 +797,7 @@ function ConferenceSeminarWorkshop() {
                               value={item.amount_provided}
                               onChange={(e) => handleArrayChange("financial_support", idx, "amount_provided", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -791,7 +831,7 @@ function ConferenceSeminarWorkshop() {
                               value={item.from_date}
                               onChange={(e) => handleArrayChange("financial_support", idx, "from_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
@@ -804,7 +844,7 @@ function ConferenceSeminarWorkshop() {
                               value={item.to_date}
                               onChange={(e) => handleArrayChange("financial_support", idx, "to_date", e.target.value)}
                               style={{
-                                width: "100%",
+                                width: "90%",
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"

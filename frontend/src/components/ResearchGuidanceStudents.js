@@ -237,7 +237,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -344,7 +345,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -386,7 +388,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -525,7 +528,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -554,7 +558,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
@@ -570,7 +575,8 @@ function ResearchGuidanceStudents() {
                                 borderRadius: "6px",
                                 resize: "vertical",
                                 overflow: "auto",
-                                fontFamily: "inherit"
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>
