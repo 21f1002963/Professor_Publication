@@ -4,7 +4,6 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Professor = require('./Professor');
-const ChangeRequest = require('./ChangeRequest');
 require('dotenv').config();
 const { TOKEN } = process.env;
 const { MONGO_URI } = process.env;
@@ -144,10 +143,7 @@ app.put('/api/professor/profile', authenticateToken, async (req, res) => {
 
         const updatedProfessor = await Professor.findByIdAndUpdate(
             req.user.id,
-            {
-                ...profileData,
-                lastProfileUpdate: new Date()
-            },
+            profileData,
             { new: true, select: '-password' }
         );
 
@@ -872,8 +868,7 @@ app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
                 invited_talks: invited_talks,
                 conferences_seminars_organized: conferences_seminars_organized,
                 workshops_organized: workshops_organized,
-                financial_support: financial_support,
-                lastProfileUpdate: new Date()
+                financial_support: financial_support
             },
             { new: true, runValidators: true }
         );
@@ -1068,8 +1063,7 @@ app.put('/api/professor/participation-collaboration/:id', authenticateToken, asy
             {
                 participation_extension_academic: participation_extension_academic,
                 participation_extension_cocurricular: participation_extension_cocurricular,
-                collaboration_institution_industry: collaboration_institution_industry,
-                lastProfileUpdate: new Date()
+                collaboration_institution_industry: collaboration_institution_industry
             },
             { new: true, runValidators: true }
         );
@@ -1136,8 +1130,7 @@ app.put('/api/professor/programme/:id', authenticateToken, async (req, res) => {
                 faculty_development_programme: faculty_development_programme,
                 executive_development_programme: executive_development_programme,
                 participation_impress_imprint: participation_impress_imprint,
-                enrolment_arpit_programme: enrolment_arpit_programme,
-                lastProfileUpdate: new Date()
+                enrolment_arpit_programme: enrolment_arpit_programme
             },
             { new: true, runValidators: true }
         );
@@ -1166,113 +1159,8 @@ app.put('/api/professor/programme/:id', authenticateToken, async (req, res) => {
 // END PROGRAMME API ENDPOINTS
 // =============================================================================
 
-// Submit profile changes for HOD approval
-app.post('/api/professor/submit-changes', authenticateToken, async (req, res) => {
-    try {
-        const { changes, description = 'Profile updates submitted for approval' } = req.body;
-
-        // Create change request
-        const changeRequest = new ChangeRequest({
-            facultyId: req.user.id,
-            changes: changes,
-            description: description,
-            status: 'pending'
-        });
-
-        await changeRequest.save();
-
-        res.status(201).json({
-            message: 'Changes submitted successfully for HOD approval',
-            changeRequestId: changeRequest._id
-        });
-    } catch (error) {
-        console.error('Error submitting changes:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Get pending change requests (for HOD)
-app.get('/api/hod/pending-changes', authenticateToken, async (req, res) => {
-    try {
-        // In a real app, check if user is HOD
-        const pendingChanges = await ChangeRequest.find({ status: 'pending' })
-            .populate('facultyId', 'name email department')
-            .sort({ submittedAt: -1 });
-
-        res.status(200).json(pendingChanges);
-    } catch (error) {
-        console.error('Error fetching pending changes:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// HOD approve/deny changes
-app.put('/api/hod/review-changes/:changeId', authenticateToken, async (req, res) => {
-    try {
-        const { changeId } = req.params;
-        const { status, feedback = '' } = req.body; // status: 'approved' or 'denied'
-
-        const changeRequest = await ChangeRequest.findById(changeId);
-        if (!changeRequest) {
-            return res.status(404).json({ message: 'Change request not found' });
-        }
-
-        // Update change request status
-        changeRequest.status = status;
-        changeRequest.reviewedBy = req.user.id;
-        changeRequest.reviewedAt = new Date();
-        changeRequest.feedback = feedback;
-        await changeRequest.save();
-
-        // If approved, update the professor's profile
-        if (status === 'approved') {
-            await Professor.findByIdAndUpdate(
-                changeRequest.facultyId,
-                {
-                    ...changeRequest.changes,
-                    profileStatus: 'approved',
-                    lastProfileUpdate: new Date()
-                }
-            );
-        } else {
-            // If denied, update only the profile status
-            await Professor.findByIdAndUpdate(
-                changeRequest.facultyId,
-                { profileStatus: 'denied' }
-            );
-        }
-
-        res.status(200).json({
-            message: `Changes ${status} successfully`,
-            changeRequest: changeRequest
-        });
-    } catch (error) {
-        console.error('Error reviewing changes:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Get faculty change request status
-app.get('/api/professor/change-status', authenticateToken, async (req, res) => {
-    try {
-        const latestRequest = await ChangeRequest.findOne({
-            facultyId: req.user.id
-        }).sort({ submittedAt: -1 });
-
-        const professor = await Professor.findById(req.user.id).select('profileStatus');
-
-        res.status(200).json({
-            profileStatus: professor.profileStatus,
-            latestRequest: latestRequest
-        });
-    } catch (error) {
-        console.error('Error fetching change status:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
 // Get all professors (for faculty directory)
-app.get('/api/professors', authenticateToken, async (req, res) => {
+app.get('/api/faculty', authenticateToken, async (req, res) => {
     try {
         const professors = await Professor.find({
             role: 'faculty'  // Only show faculty members, not HODs

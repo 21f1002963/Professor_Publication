@@ -21,8 +21,7 @@ import Experience from './components/Experience';
 import Fellowship from './components/Fellowship';
 import Training from './components/Training';
 import MOU from './components/MOU';
-import HODVerification from './components/HODVerification';
-import FacultyManagement from './components/FacultyManagement';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -117,16 +116,7 @@ root.render(
             <MOU />
           </ProtectedRoute>
         } />
-        <Route path='/hod-verification'  element={
-          <ProtectedRoute>
-            <HODVerification />
-          </ProtectedRoute>
-        } />
-        <Route path='/faculty-management'  element={
-          <ProtectedRoute>
-            <FacultyManagement />
-          </ProtectedRoute>
-        } />
+
         <Route path='*' element={<Login />} />
         <Route path='/' element={<Login />} />
       </Routes>

@@ -57,8 +57,7 @@ function Layout({ children }) {
 
   // HOD-specific menu items
   const hodMenuItems = [
-    { label: 'HOD Verification', path: '/hod-verification', icon: '✅' },
-    { label: 'Faculty Management', path: '/faculty-management', icon: '⚙️' }
+    // Faculty directory is available in the base menu for all users
   ];
 
   // Filter menu items based on user role

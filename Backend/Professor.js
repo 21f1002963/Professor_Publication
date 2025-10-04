@@ -481,19 +481,7 @@ const ProfessorSchema = new mongoose.Schema({
         purpose: { type: String, default: '' },
         activities: { type: String, default: '' },
         date: { type: String, default: '' }
-    }],
-
-    // Verification Status
-    profileStatus: {
-        type: String,
-        enum: ['pending', 'approved', 'denied'],
-        default: 'pending'
-    },
-
-    lastProfileUpdate: {
-        type: Date,
-        default: Date.now
-    }
+    }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Professor', ProfessorSchema, 'Professors');
