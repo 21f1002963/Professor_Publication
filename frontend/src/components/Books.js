@@ -254,29 +254,56 @@ function Books() {
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.title}
                             onChange={(e) => handleArrayChange("books", idx, "title", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Book Title"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.authors}
                             onChange={(e) => handleArrayChange("books", idx, "authors", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Authors"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("books", idx, "publisher", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Publisher"
                           />
                         </td>
@@ -292,11 +319,20 @@ function Books() {
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("books", idx, "isbn", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="ISBN"
                           />
                         </td>
@@ -380,29 +416,56 @@ function Books() {
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={chapter.chapter_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "chapter_title", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Chapter Title"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={chapter.authors}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "authors", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Authors"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={chapter.book_title}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "book_title", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Book Title"
                           />
                         </td>
@@ -427,11 +490,20 @@ function Books() {
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={chapter.isbn}
                             onChange={(e) => handleArrayChange("chapters_in_books", idx, "isbn", e.target.value)}
-                            style={{ width: "80%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "80%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="ISBN"
                           />
                         </td>
@@ -515,38 +587,74 @@ function Books() {
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.title}
                             onChange={(e) => handleArrayChange("edited_books", idx, "title", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Book Title"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.chapter_titles}
                             onChange={(e) => handleArrayChange("edited_books", idx, "chapter_titles", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Title of the Chapters"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.authors}
                             onChange={(e) => handleArrayChange("edited_books", idx, "authors", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Authors"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.publisher}
                             onChange={(e) => handleArrayChange("edited_books", idx, "publisher", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="Publisher"
                           />
                         </td>
@@ -562,11 +670,20 @@ function Books() {
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="text"
+                          <textarea
                             value={book.isbn}
                             onChange={(e) => handleArrayChange("edited_books", idx, "isbn", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+                            style={{ 
+                              width: "90%", 
+                              height: "60px", 
+                              padding: "8px", 
+                              borderRadius: "6px", 
+                              border: "1px solid #e2e8f0", 
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
                             placeholder="ISBN"
                           />
                         </td>

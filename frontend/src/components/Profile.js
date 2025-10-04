@@ -319,7 +319,7 @@ function Profile() {
     return data.filter(item => {
       const fromYear = parseInt(item.from);
       const toYear = item.to === 'Present' ? new Date().getFullYear() : parseInt(item.to);
-      
+
       // Check if the experience period overlaps with the timeline range
       return (fromYear <= endYear && toYear >= startYear);
     });
@@ -1365,7 +1365,7 @@ function Profile() {
                       />
                       Enable Timeline Filter
                     </label>
-                    
+
                     {enableTimelineFilter && (
                       <div style={{
                         display: 'flex',

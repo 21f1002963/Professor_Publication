@@ -290,8 +290,7 @@ function Patents() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
+                          <textarea
                             value={innovation.work_name}
                             onChange={(e) =>
                               handleArrayChange(
@@ -303,13 +302,17 @@ function Patents() {
                             }
                             style={{
                               width: "100%",
+                              height: "60px",
                               minWidth: "0",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
                               boxSizing: "border-box",
                               fontSize: "1rem",
-                              textAlign: "center"
+                              textAlign: "center",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
                             }}
                             placeholder="Work/Contribution Name"
                           />
@@ -322,8 +325,7 @@ function Patents() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
+                          <textarea
                             value={innovation.specialization}
                             onChange={(e) =>
                               handleArrayChange(
@@ -335,13 +337,17 @@ function Patents() {
                             }
                             style={{
                               width: "100%",
+                              height: "60px",
                               minWidth: "0",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
                               boxSizing: "border-box",
                               fontSize: "1rem",
-                              textAlign: "center"
+                              textAlign: "center",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
                             }}
                             placeholder="Specialization"
                           />
@@ -354,8 +360,7 @@ function Patents() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
+                          <textarea
                             value={innovation.remarks}
                             onChange={(e) =>
                               handleArrayChange(
@@ -367,13 +372,17 @@ function Patents() {
                             }
                             style={{
                               width: "100%",
+                              height: "60px",
                               minWidth: "0",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
                               boxSizing: "border-box",
                               fontSize: "1rem",
-                              textAlign: "center"
+                              textAlign: "center",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
                             }}
                             placeholder="Remarks"
                           />

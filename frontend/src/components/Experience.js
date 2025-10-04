@@ -281,7 +281,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -291,7 +291,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -423,7 +423,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -443,7 +443,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -455,7 +455,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -475,7 +475,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -599,7 +599,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -609,7 +609,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -741,7 +741,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -761,7 +761,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -773,7 +773,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -793,7 +793,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -917,7 +917,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -927,7 +927,7 @@ function Experience() {
                       </th>
                       <th
                         style={{
-                          width: "120px",
+                          width: "150px",
                           padding: "10px",
                           border: "1px solid #e2e8f0",
                           fontWeight: 600,
@@ -1059,7 +1059,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -1079,7 +1079,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
@@ -1091,7 +1091,7 @@ function Experience() {
                         </td>
                         <td
                           style={{
-                            width: "120px",
+                            width: "150px",
                             padding: "8px",
                             border: "1px solid #e2e8f0",
                             textAlign: "center"
@@ -1111,7 +1111,7 @@ function Experience() {
                             style={{
                               width: "100%",
                               minWidth: "0",
-                              maxWidth: "140px",
+                              maxWidth: "170px",
                               padding: "12px 16px",
                               borderRadius: "10px",
                               border: "2px solid #e2e8f0",
