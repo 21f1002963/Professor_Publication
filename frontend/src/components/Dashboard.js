@@ -8,6 +8,11 @@ function Dashboard() {
   const [userName, setUserName] = useState('Professor');
   const [userRole, setUserRole] = useState('faculty'); // 'faculty' or 'hod'
   const [profileImage, setProfileImage] = useState('');
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [facultyStats, setFacultyStats] = useState({
+    totalProfessors: 0,
+    designationCounts: {}
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +28,11 @@ function Dashboard() {
 
         // Fetch profile data to get the latest profile image
         fetchProfileData();
+
+        // If user is HOD, also fetch faculty statistics
+        if ((userInfo.role || decoded.role || 'faculty') === 'hod') {
+          fetchFacultyStats();
+        }
       } catch (error) {
         console.error('Error decoding token:', error);
       }
@@ -49,9 +59,44 @@ function Dashboard() {
         if (profileData.designation) {
           setuserDesignation(profileData.designation);
         }
+        // Update last updated timestamp
+        setLastUpdated(new Date());
       }
     } catch (error) {
       console.error('Error fetching profile data:', error);
+    }
+  };
+
+  const fetchFacultyStats = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:5000/api/faculty', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const facultyData = await response.json();
+
+        // Calculate statistics
+        const totalProfessors = facultyData.length;
+        const designationCounts = {};
+
+        facultyData.forEach(faculty => {
+          const designation = faculty.designation || 'Not Specified';
+          designationCounts[designation] = (designationCounts[designation] || 0) + 1;
+        });
+
+        setFacultyStats({
+          totalProfessors,
+          designationCounts
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching faculty statistics:', error);
     }
   };
 
@@ -330,6 +375,15 @@ function Dashboard() {
             }}>
               {userRole === 'hod' ? 'Head of Department Dashboard' : 'Faculty Dashboard'}
             </p>
+            <p style={{
+              fontSize: '0.9rem',
+              color: '#a0aec0',
+              marginLeft: 20,
+              margin: '5px 0 0 20px',
+              fontStyle: 'italic'
+            }}>
+              Last updated: {lastUpdated.toLocaleString()}
+            </p>
           </div>
 
           {/* Profile Picture */}
@@ -379,6 +433,152 @@ function Dashboard() {
             }}>{userDesignation}</p>
           </div>
         </div>
+
+        {/* Statistics Cards for HOD */}
+        {userRole === 'hod' && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '25px',
+            marginBottom: '40px'
+          }}>
+            {/* Faculty Statistics Card */}
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: '20px',
+              padding: '25px',
+              color: '#fff',
+              boxShadow: '0 10px 40px rgba(102, 126, 234, 0.3)',
+              transform: 'translateY(0)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onClick={() => navigate('/faculty')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 15px 50px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 40px rgba(102, 126, 234, 0.3)';
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '20px'
+              }}>
+
+                <div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.8rem',
+                    fontWeight: 700
+                  }}>Faculty Overview</h3>
+
+                </div>
+              </div>
+
+              <div style={{
+                fontSize: '3rem',
+                fontWeight: 800,
+                marginBottom: '15px',
+                textAlign: 'center'
+              }}>
+                {facultyStats.totalProfessors}
+              </div>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '12px',
+                padding: '15px',
+                marginTop: '20px'
+              }}>
+
+                {Object.entries(facultyStats.designationCounts).map(([designation, count]) => (
+                  <div key={designation} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '5px',
+                    fontSize: '0.95rem'
+                  }}>
+                    <span>{designation}</span>
+                    <span style={{
+                      background: 'rgba(255, 255, 255, 0.3)',
+                      padding: '2px 8px',
+                      borderRadius: '10px',
+                      fontWeight: 600
+                    }}>{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Statistics Card 2 - Empty for now */}
+            <div style={{
+              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              borderRadius: '20px',
+              padding: '30px',
+              color: '#fff',
+              boxShadow: '0 10px 40px rgba(79, 172, 254, 0.3)',
+              transform: 'translateY(0)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 15px 50px rgba(79, 172, 254, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 40px rgba(79, 172, 254, 0.3)';
+            }}>
+              <div style={{
+                textAlign: 'center',
+                opacity: 0.7
+              }}>
+                <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📊</div>
+                <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Statistics Card 2</h3>
+                <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem' }}>Coming Soon</p>
+              </div>
+            </div>
+
+            {/* Statistics Card 3 - Empty for now */}
+            <div style={{
+              background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+              borderRadius: '20px',
+              padding: '30px',
+              color: '#fff',
+              boxShadow: '0 10px 40px rgba(250, 112, 154, 0.3)',
+              transform: 'translateY(0)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 15px 50px rgba(250, 112, 154, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 40px rgba(250, 112, 154, 0.3)';
+            }}>
+              <div style={{
+                textAlign: 'center',
+                opacity: 0.7
+              }}>
+                <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📈</div>
+                <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Statistics Card 3</h3>
+                <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem' }}>Coming Soon</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
