@@ -219,7 +219,7 @@ function ParticipationCollaboration() {
                                                             onChange={(e) => handleArrayChange("participation_extension_academic", idx, "position_name", e.target.value)}
                                                             placeholder="e.g., Head of Department, Dean, Coordinator"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "95%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
                                                                 borderRadius: "6px"

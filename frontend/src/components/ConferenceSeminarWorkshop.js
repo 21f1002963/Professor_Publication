@@ -247,12 +247,12 @@ function ConferenceSeminarWorkshop() {
                       <tr style={{ background: "#f1f5f9" }}>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Title of the Paper</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Conferences/Seminar/Workshop/Training Programme</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Conferences/ Seminar/ Workshop/  Training Programme</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Organized by</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Level</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>Level</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>From</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>To</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Year</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: '7%' }}>Year</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Action</th>
                       </tr>
                     </thead>
