@@ -379,6 +379,13 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
+    // Financial Support for Conferences/Workshops
+    financial_support: [{
+        title_conference_workshop: { type: String, default: '' },
+        amount_provided: { type: String, default: '' },
+        purpose: { type: String, default: '' }
+    }],
+
     // Participation & Collaboration
     participation_extension_academic: [{
         position_name: { type: String, default: '' },

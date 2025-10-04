@@ -37,6 +37,13 @@ function ConferenceSeminarWorkshop() {
         year: "",
       },
     ],
+    financial_support: [
+      {
+        title_conference_workshop: "",
+        amount_provided: "",
+        purpose: "",
+      },
+    ],
   });
 
   const handleSubmit = async (e) => {
@@ -104,6 +111,11 @@ function ConferenceSeminarWorkshop() {
         to_date: "",
         year: "",
       },
+      financial_support: {
+        title_conference_workshop: "",
+        amount_provided: "",
+        purpose: "",
+      },
     };
 
     setConferenceData((prev) => ({
@@ -167,6 +179,13 @@ function ConferenceSeminarWorkshop() {
                 from_date: "",
                 to_date: "",
                 year: "",
+              },
+            ],
+            financial_support: data.financial_support || [
+              {
+                title_conference_workshop: "",
+                amount_provided: "",
+                purpose: "",
               },
             ],
           });
@@ -685,6 +704,116 @@ function ConferenceSeminarWorkshop() {
                   }}
                 >
                   + Add Workshop Entry
+                </button>
+              </div>
+
+              {/* Financial Support Section */}
+              <div style={{ marginTop: "40px" }}>
+                <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px", color: "#2d3748" }}>
+                  Financial Support
+                </h2>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
+                    <thead>
+                      <tr style={{ background: "#f8f9fa" }}>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>S.No</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Title of the Conference/Workshop/Professional Body</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Amount provided by the HEI</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Purpose</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "center" }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {conferenceData.financial_support.map((item, idx) => (
+                        <tr key={idx} style={{ borderBottom: "1px solid #e2e8f0" }}>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+                            {idx + 1}
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={item.title_conference_workshop}
+                              onChange={(e) => handleArrayChange("financial_support", idx, "title_conference_workshop", e.target.value)}
+                              style={{
+                                width: "100%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                              placeholder="Conference/Workshop/Professional Body Title"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="number"
+                              value={item.amount_provided}
+                              onChange={(e) => handleArrayChange("financial_support", idx, "amount_provided", e.target.value)}
+                              style={{
+                                width: "100%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                              placeholder="Amount in INR"
+                              min="0"
+                              step="0.01"
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <select
+                              value={item.purpose}
+                              onChange={(e) => handleArrayChange("financial_support", idx, "purpose", e.target.value)}
+                              style={{
+                                width: "100%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                backgroundColor: "white"
+                              }}
+                            >
+                              <option value="">Select Purpose</option>
+                              <option value="Membership Fee">Membership Fee</option>
+                              <option value="Travel and Other Expenses">Travel and Other Expenses</option>
+                              <option value="Registration Fee">Registration Fee</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("financial_support", idx)}
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                padding: "6px 12px",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                                fontSize: "12px"
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => addArrayItem("financial_support")}
+                  style={{
+                    background: "#10b981",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px 24px",
+                    marginTop: "15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontSize: "14px"
+                  }}
+                >
+                  + Add Financial Support Entry
                 </button>
               </div>
 

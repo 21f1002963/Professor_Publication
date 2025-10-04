@@ -841,7 +841,7 @@ app.put('/api/professor/e-education/:id', authenticateToken, async (req, res) =>
 app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
-        const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_organized workshops_organized');
+        const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_organized workshops_organized financial_support');
 
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
@@ -851,7 +851,8 @@ app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
         res.status(200).json({
             invited_talks: professor.invited_talks || [],
             conferences_seminars_organized: professor.conferences_seminars_organized || [],
-            workshops_organized: professor.workshops_organized || []
+            workshops_organized: professor.workshops_organized || [],
+            financial_support: professor.financial_support || []
         });
     } catch (error) {
         console.error('Error fetching conference/seminar/workshop:', error);
@@ -863,7 +864,7 @@ app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
 app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
-        const { invited_talks, conferences_seminars_organized, workshops_organized } = req.body;
+        const { invited_talks, conferences_seminars_organized, workshops_organized, financial_support } = req.body;
 
         const updatedProfessor = await Professor.findByIdAndUpdate(
             professorId,
@@ -871,6 +872,7 @@ app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
                 invited_talks: invited_talks,
                 conferences_seminars_organized: conferences_seminars_organized,
                 workshops_organized: workshops_organized,
+                financial_support: financial_support,
                 lastProfileUpdate: new Date()
             },
             { new: true, runValidators: true }
@@ -886,7 +888,8 @@ app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
             conference_data: {
                 invited_talks: updatedProfessor.invited_talks,
                 conferences_seminars_organized: updatedProfessor.conferences_seminars_organized,
-                workshops_organized: updatedProfessor.workshops_organized
+                workshops_organized: updatedProfessor.workshops_organized,
+                financial_support: updatedProfessor.financial_support
             }
         });
     } catch (error) {
