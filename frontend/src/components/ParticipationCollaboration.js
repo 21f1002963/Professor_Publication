@@ -222,7 +222,8 @@ function ParticipationCollaboration() {
                                                                 width: "95%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -233,10 +234,11 @@ function ParticipationCollaboration() {
                                                             onChange={(e) => handleArrayChange("participation_extension_academic", idx, "duration", e.target.value)}
                                                             placeholder="e.g., 2020-2023"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -247,11 +249,12 @@ function ParticipationCollaboration() {
                                                             placeholder="Description of duties and responsibilities"
                                                             rows="2"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
                                                                 borderRadius: "6px",
-                                                                resize: "vertical"
+                                                                resize: "vertical",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -322,10 +325,11 @@ function ParticipationCollaboration() {
                                                             onChange={(e) => handleArrayChange("participation_extension_cocurricular", idx, "position_name", e.target.value)}
                                                             placeholder="e.g., NSS Program Officer, NCC Officer, Warden"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "95%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -336,10 +340,11 @@ function ParticipationCollaboration() {
                                                             onChange={(e) => handleArrayChange("participation_extension_cocurricular", idx, "duration", e.target.value)}
                                                             placeholder="e.g., 2021-2024"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -350,11 +355,12 @@ function ParticipationCollaboration() {
                                                             placeholder="Description of co-curricular duties and activities"
                                                             rows="2"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
                                                                 borderRadius: "6px",
-                                                                resize: "vertical"
+                                                                resize: "vertical",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -431,10 +437,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.collaborator_name}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "collaborator_name", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "85%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -444,10 +451,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.designation}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "designation", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "85%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -457,10 +465,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.institution_industry}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "institution_industry", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -469,10 +478,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.type}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "type", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         >
                                                             <option value="">Select Type</option>
@@ -489,10 +499,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.nature_of_collaboration}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "nature_of_collaboration", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "85%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -502,10 +513,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.period_from}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "period_from", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -515,10 +527,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.period_to}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "period_to", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -528,10 +541,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.visits_from}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "visits_from", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -541,10 +555,11 @@ function ParticipationCollaboration() {
                                                             value={collaboration.visits_to}
                                                             onChange={(e) => handleArrayChange("collaboration_institution_industry", idx, "visits_to", e.target.value)}
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
-                                                                borderRadius: "6px"
+                                                                borderRadius: "6px",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
@@ -555,11 +570,12 @@ function ParticipationCollaboration() {
                                                             placeholder="Details of collaborative research or teaching activities"
                                                             rows="2"
                                                             style={{
-                                                                width: "100%",
+                                                                width: "90%",
                                                                 padding: "8px",
                                                                 border: "1px solid #d1d5db",
                                                                 borderRadius: "6px",
-                                                                resize: "vertical"
+                                                                resize: "vertical",
+                                                                fontSize: "1rem"
                                                             }}
                                                         />
                                                     </td>
