@@ -648,36 +648,8 @@ function Profile() {
                   </button>
                 </div>
               ) : (
-                <button
-                  type="submit"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "15px",
-                    padding: "16px 40px",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
-                    minWidth: "100px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 12px 35px rgba(96, 147, 236, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 8px 25px rgba(96, 147, 236, 0.3)";
-                  }}
-                >
-                  Save
-                </button>
-              )}
+                <></>
+            )}
 
             <div style={{display:'flex', alignItems:'center'}}>
               {viewingMode === 'viewing' ? (
@@ -2634,8 +2606,43 @@ function Profile() {
                 background: 'white',
               }}
             >
-
             </div>
+            {viewingMode === 'viewing' ? (
+                <></>
+              ) : (
+                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "20px" }}>
+                <button
+                  type="submit"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "15px",
+                    padding: "16px 40px",
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
+                    minWidth: "100px",
+                    marginBottom: "20px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 12px 35px rgba(96, 147, 236, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow =
+                      "0 8px 25px rgba(96, 147, 236, 0.3)";
+                  }}
+                >
+                  Save
+                </button>
+                </div>
+            )}
           </form>
         </div>
       </div>
