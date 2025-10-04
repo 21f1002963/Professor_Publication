@@ -1816,6 +1816,53 @@ function Profile() {
                         color: "#4a5568",
                       }}
                     >
+                      Date of Birth
+                    </label>
+                    <input
+                      type="date"
+                      value={profile.date_of_birth}
+                      onChange={(e) => handleInputChange("date_of_birth", e.target.value)}
+                      disabled={isDisabled}
+                      style={getInputStyle(isDisabled)}
+                      placeholder="Select your date of birth"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Address
+                    </label>
+                    <textarea
+                      value={profile.address}
+                      onChange={(e) => {
+                        handleInputChange("address", e.target.value, true);
+                        autoExpandTextarea(e.target);
+                      }}
+                      disabled={isDisabled}
+                      style={getTextareaStyle(isDisabled)}
+                      placeholder="Enter your address"
+                      data-field="address"
+                      rows="1"
+                      onInput={(e) => autoExpandTextarea(e.target)}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
                       Designation
                     </label>
                     <textarea
@@ -1856,6 +1903,48 @@ function Profile() {
                       data-field="department"
                       rows="1"
                       onInput={(e) => autoExpandTextarea(e.target)}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Employee ID
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.employee_id}
+                      onChange={(e) => handleInputChange("employee_id", e.target.value)}
+                      disabled={isDisabled}
+                      style={getInputStyle(isDisabled)}
+                      placeholder="Enter your employee ID"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Date of Joining
+                    </label>
+                    <input
+                      type="date"
+                      value={profile.date_of_joining}
+                      onChange={(e) => handleInputChange("date_of_joining", e.target.value)}
+                      disabled={isDisabled}
+                      style={getInputStyle(isDisabled)}
+                      placeholder="Select your date of joining"
                     />
                   </div>
                 </div>
