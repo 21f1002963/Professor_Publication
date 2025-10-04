@@ -578,32 +578,18 @@ function Profile() {
                 padding: "5px 30px 30px",
               }}
             >
-              <h2
-                style={{
-                  fontSize: "1.8rem",
-                  fontWeight: 700,
-                  color: "#2d3748",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  fontFamily: "Segoe UI, Arial, sans-serif",
-                  letterSpacing: "0.5px",
-                  marginBottom: "25px",
-                }}
-              >
-                Profile Picture
-              </h2>
 
-              {/* Profile Picture Upload Section */}
-              <div style={{
+            <div style={{display:'flex', alignItems:'center'}}>
+              {viewingMode === 'viewing' ? (
+                <>
+                <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '20px',
-                marginBottom: '40px',
                 padding: '10px',
                 borderRadius: '15px',
-                background: '#f8fafc'
               }}>
                 {/* Image Preview */}
                 <div style={{
@@ -674,167 +660,264 @@ function Profile() {
                     Selected: {selectedImage.name}
                   </p>
                 )}
-              </div>
-
-              <h2
-                style={{
-                  fontSize: "1.8rem",
+               </div>
+               </>
+              ) : (
+              <>
+                <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '10px',
+                maxWidth: 'fit-content',
+              }}>
+                {/* Image Preview */}
+                <div style={{
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: '3rem',
                   fontWeight: 700,
-                  color: "#2d3748",
-                  marginBottom: "25px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  fontFamily: "Segoe UI, Arial, sans-serif",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Personal Information
-              </h2>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: 600,
-                      color: "#4a5568",
-                    }}
-                  >
-                    Full Name
-                  </label>
-                  <textarea
-                    value={profile.name}
-                    onChange={(e) => {
-                      handleInputChange("name", e.target.value, true);
-                      autoExpandTextarea(e.target);
-                    }}
-                    disabled={isDisabled}
-                    style={getTextareaStyle(isDisabled)}
-                    placeholder="Enter your full name"
-                    data-field="name"
-                    rows="1"
-                    onInput={(e) => autoExpandTextarea(e.target)}
-                  />
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  border: '4px solid #fff',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                }}>
+                  {imagePreview || profile.profileImage ? (
+                    <img
+                      src={imagePreview || profile.profileImage}
+                      alt="Profile"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                        borderRadius: '50%'
+                      }}
+                    />
+                  ) : (
+                    <span>{profile.name?.charAt(0) || '👤'}</span>
+                  )}
                 </div>
 
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: 600,
-                      color: "#4a5568",
-                    }}
-                  >
-                    Email
+                {/* Upload Button */}
+                {!isDisabled && (
+                  <label style={{
+                    background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '12px 24px',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      style={{ display: 'none' }}
+                    />
                   </label>
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    disabled={isDisabled}
-                    style={getInputStyle(isDisabled)}
-                    placeholder="Enter your email"
-                  />
-                </div>
+                )}
 
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: 600,
-                      color: "#4a5568",
-                    }}
-                  >
-                    Phone
-                  </label>
-                  <input
-                    type="text"
-                    value={profile.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "1rem",
-                      transition: "border-color 0.3s ease",
-                      boxSizing: "border-box",
-                    }}
-                    placeholder="Enter your phone number"
-                  />
+                {!isDisabled && selectedImage && (
+                  <p style={{
+                    color: '#4a5568',
+                    fontSize: '0.9rem',
+                    margin: 0,
+                    textAlign: 'center'
+                  }}>
+                    Selected: {selectedImage.name}
+                  </p>
+                )}
                 </div>
+              </>
 
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: 600,
-                      color: "#4a5568",
-                    }}
-                  >
-                    Designation
-                  </label>
-                  <textarea
-                    value={profile.designation}
-                    onChange={(e) => {
-                      handleInputChange("designation", e.target.value, true);
-                      autoExpandTextarea(e.target);
-                    }}
-                    disabled={isDisabled}
-                    style={getTextareaStyle(isDisabled)}
-                    placeholder="Enter your designation"
-                    data-field="designation"
-                    rows="1"
-                    onInput={(e) => autoExpandTextarea(e.target)}
-                  />
-                </div>
+              )}
 
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: 600,
-                      color: "#4a5568",
-                    }}
-                  >
-                    Department
-                  </label>
-                  <textarea
-                    value={profile.department}
-                    onChange={(e) => {
-                      handleInputChange("department", e.target.value, true);
-                      autoExpandTextarea(e.target);
-                    }}
-                    disabled={isDisabled}
-                    style={getTextareaStyle(isDisabled)}
-                    placeholder="Enter your department"
-                    data-field="department"
-                    rows="1"
-                    onInput={(e) => autoExpandTextarea(e.target)}
-                  />
-                </div>
-              </div>
-
-              {/* Educational Qualifications Section */}
-              <div style={{ marginTop: "40px" }}>
+              <div>
                 <h2
                   style={{
                     fontSize: "1.8rem",
                     fontWeight: 700,
                     color: "#2d3748",
                     marginBottom: "25px",
+                    marginLeft: '20px',
+                    marginTop: '30px',
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontFamily: "Segoe UI, Arial, sans-serif",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Personal Information
+                </h2>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginLeft: '20px',
+                    flexWrap: 'wrap',
+                    gap: '20px',
+                  }}
+                >
+                  <div >
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Full Name
+                    </label>
+                    <textarea
+                      value={profile.name}
+                      onChange={(e) => {
+                        handleInputChange("name", e.target.value, true);
+                        autoExpandTextarea(e.target);
+                      }}
+                      disabled={isDisabled}
+                      style={getTextareaStyle(isDisabled)}
+                      placeholder="Enter your full name"
+                      data-field="name"
+                      rows="1"
+                      onInput={(e) => autoExpandTextarea(e.target)}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      disabled={isDisabled}
+                      style={getInputStyle(isDisabled)}
+                      placeholder="Enter your email"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Phone
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "2px solid #e2e8f0",
+                        borderRadius: "10px",
+                        fontSize: "1rem",
+                        transition: "border-color 0.3s ease",
+                        boxSizing: "border-box",
+                      }}
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Designation
+                    </label>
+                    <textarea
+                      value={profile.designation}
+                      onChange={(e) => {
+                        handleInputChange("designation", e.target.value, true);
+                        autoExpandTextarea(e.target);
+                      }}
+                      disabled={isDisabled}
+                      style={getTextareaStyle(isDisabled)}
+                      placeholder="Enter your designation"
+                      data-field="designation"
+                      rows="1"
+                      onInput={(e) => autoExpandTextarea(e.target)}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                        color: "#4a5568",
+                      }}
+                    >
+                      Department
+                    </label>
+                    <textarea
+                      value={profile.department}
+                      onChange={(e) => {
+                        handleInputChange("department", e.target.value, true);
+                        autoExpandTextarea(e.target);
+                      }}
+                      disabled={isDisabled}
+                      style={getTextareaStyle(isDisabled)}
+                      placeholder="Enter your department"
+                      data-field="department"
+                      rows="1"
+                      onInput={(e) => autoExpandTextarea(e.target)}
+                    />
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+
+
+              {/* Educational Qualifications Section */}
+              <div style={{ marginTop: "30px" }}>
+                <h2
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    color: "#2d3748",
+                    marginBottom: "25px",
+                    marginTop: '0px',
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
@@ -1607,9 +1690,6 @@ function Profile() {
                 )}
               </div>
             </div>
-
-            {/* Submit Button Section */}
-            {/* Area of Specialization Section - aligned and styled */}
 
             {/* Comprehensive Profile Data for HOD Viewing */}
             {viewingMode === 'viewing' && (
