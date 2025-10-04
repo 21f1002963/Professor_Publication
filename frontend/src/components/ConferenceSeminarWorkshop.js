@@ -42,6 +42,8 @@ function ConferenceSeminarWorkshop() {
         title_conference_workshop: "",
         amount_provided: "",
         purpose: "",
+        from_date: "",
+        to_date: "",
       },
     ],
   });
@@ -115,6 +117,8 @@ function ConferenceSeminarWorkshop() {
         title_conference_workshop: "",
         amount_provided: "",
         purpose: "",
+        from_date: "",
+        to_date: "",
       },
     };
 
@@ -186,6 +190,8 @@ function ConferenceSeminarWorkshop() {
                 title_conference_workshop: "",
                 amount_provided: "",
                 purpose: "",
+                from_date: "",
+                to_date: "",
               },
             ],
           });
@@ -720,6 +726,8 @@ function ConferenceSeminarWorkshop() {
                         <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Title of the Conference/Workshop/Professional Body</th>
                         <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Amount provided by the HEI</th>
                         <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>Purpose</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>From</th>
+                        <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "left" }}>To</th>
                         <th style={{ padding: "15px", border: "1px solid #e2e8f0", fontWeight: "600", textAlign: "center" }}>Action</th>
                       </tr>
                     </thead>
@@ -776,6 +784,32 @@ function ConferenceSeminarWorkshop() {
                               <option value="Travel and Other Expenses">Travel and Other Expenses</option>
                               <option value="Registration Fee">Registration Fee</option>
                             </select>
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="date"
+                              value={item.from_date}
+                              onChange={(e) => handleArrayChange("financial_support", idx, "from_date", e.target.value)}
+                              style={{
+                                width: "100%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="date"
+                              value={item.to_date}
+                              onChange={(e) => handleArrayChange("financial_support", idx, "to_date", e.target.value)}
+                              style={{
+                                width: "100%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                             <button

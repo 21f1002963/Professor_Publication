@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -160,22 +161,23 @@ function Layout({ children }) {
                 cursor: 'pointer',
                 borderRadius: '12px',
                 transition: 'all 0.2s ease',
-                background: window.location.pathname === item.path ? 'rgba(255,255,255,0.2)' : 'transparent',
+                background: window.location.pathname === item.path 
+                  ? 'rgba(255,255,255,0.2)' 
+                  : hoveredItem === index 
+                    ? 'rgba(255,255,255,0.1)' 
+                    : 'transparent',
+                transform: hoveredItem === index ? 'translateX(4px)' : 'translateX(0)',
                 position: 'relative',
                 overflow: 'hidden'
               }}
               onClick={() => navigate(item.path)}
-              onMouseEnter={(e) => {
+              onMouseEnter={() => {
                 if (window.location.pathname !== item.path) {
-                  e.target.style.background = 'rgba(255,255,255,0.1)';
+                  setHoveredItem(index);
                 }
-                e.target.style.transform = 'translateX(4px)';
               }}
-              onMouseLeave={(e) => {
-                if (window.location.pathname !== item.path) {
-                  e.target.style.background = 'transparent';
-                }
-                e.target.style.transform = 'translateX(0)';
+              onMouseLeave={() => {
+                setHoveredItem(null);
               }}
             >
               <span
@@ -187,19 +189,14 @@ function Layout({ children }) {
                   justifyContent: 'center',
                   width: '24px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
+                  transform: hoveredItem === index ? 'scale(1.2)' : 'scale(1)'
                 }}
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent double click
+                  e.stopPropagation();
                   navigate(item.path);
                 }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'scale(1.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'scale(1)';
-                }}
-                title={item.label} // Add tooltip for better UX
+                title={item.label}
               >
                 {item.icon}
               </span>
@@ -225,20 +222,14 @@ function Layout({ children }) {
               padding: sidebarOpen ? '12px 20px' : '12px',
               cursor: 'pointer',
               borderRadius: '12px',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: hoveredItem === 'logout' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)',
+              border: hoveredItem === 'logout' ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(239, 68, 68, 0.3)',
               transition: 'all 0.2s ease',
               justifyContent: sidebarOpen ? 'flex-start' : 'center'
             }}
             onClick={handleLogout}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(239, 68, 68, 0.2)';
-              e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(239, 68, 68, 0.1)';
-              e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-            }}
+            onMouseEnter={() => setHoveredItem('logout')}
+            onMouseLeave={() => setHoveredItem(null)}
           >
             <span style={{ fontSize: '1.2rem', marginRight: sidebarOpen ? '12px' : '0' }}>➜</span>
             {sidebarOpen && (

@@ -383,7 +383,9 @@ const ProfessorSchema = new mongoose.Schema({
     financial_support: [{
         title_conference_workshop: { type: String, default: '' },
         amount_provided: { type: String, default: '' },
-        purpose: { type: String, default: '' }
+        purpose: { type: String, default: '' },
+        from_date: { type: String, default: '' },
+        to_date: { type: String, default: '' }
     }],
 
     // Participation & Collaboration
