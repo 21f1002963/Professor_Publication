@@ -1974,31 +1974,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={edu.degree}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "education",
-                                idx,
-                                "degree",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "210px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Degree"
-                          />
+                          {isDisabled ? (
+                            edu.degree || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={edu.degree}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "education",
+                                  idx,
+                                  "degree",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "210px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Degree"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2008,40 +2011,40 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <textarea
-                            value={edu.title}
-                            onChange={(e) => {
-                              handleArrayChangeWithExpand(
-                                "education",
-                                idx,
-                                "title",
-                                e.target.value,
-                                e.target
-                              );
-                            }}
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "350px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center",
-                              minHeight: "44px",
-                              resize: "none",
-                              overflow: "hidden",
-                              lineHeight: "1.5",
-                              backgroundColor: isDisabled ? "#f7fafc" : "#fff",
-                              color: isDisabled ? "#718096" : "#2d3748",
-                              cursor: isDisabled ? "not-allowed" : "text"
-                            }}
-                            placeholder="Subject/Title of Thesis"
-                            rows="1"
-                            onInput={(e) => autoExpandTextarea(e.target)}
-                          />
+                          {isDisabled ? (
+                            edu.title || "N/A"
+                          ) : (
+                            <textarea
+                              value={edu.title}
+                              onChange={(e) => {
+                                handleArrayChangeWithExpand(
+                                  "education",
+                                  idx,
+                                  "title",
+                                  e.target.value,
+                                  e.target
+                                );
+                              }}
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "350px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center",
+                                minHeight: "44px",
+                                resize: "none",
+                                overflow: "hidden",
+                                lineHeight: "1.5"
+                              }}
+                              placeholder="Subject/Title of Thesis"
+                              rows="1"
+                              onInput={(e) => autoExpandTextarea(e.target)}
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2051,31 +2054,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={edu.university}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "education",
-                                idx,
-                                "university",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "220px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="University/Board"
-                          />
+                          {isDisabled ? (
+                            edu.university || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={edu.university}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "education",
+                                  idx,
+                                  "university",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "220px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="University/Board"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2085,31 +2091,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={edu.graduationYear}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "education",
-                                idx,
-                                "graduationYear",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "150px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Year of Passing"
-                          />
+                          {isDisabled ? (
+                            edu.graduationYear || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={edu.graduationYear}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "education",
+                                  idx,
+                                  "graduationYear",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "150px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Year of Passing"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2434,40 +2443,40 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <textarea
-                            value={award.title}
-                            onChange={(e) => {
-                              handleArrayChangeWithExpand(
-                                "awards",
-                                idx,
-                                "title",
-                                e.target.value,
-                                e.target
-                              );
-                            }}
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "250px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center",
-                              minHeight: "44px",
-                              resize: "none",
-                              overflow: "hidden",
-                              lineHeight: "1.5",
-                              backgroundColor: isDisabled ? "#f7fafc" : "#fff",
-                              color: isDisabled ? "#718096" : "#2d3748",
-                              cursor: isDisabled ? "not-allowed" : "text"
-                            }}
-                            placeholder="Name / Title of the Award"
-                            rows="1"
-                            onInput={(e) => autoExpandTextarea(e.target)}
-                          />
+                          {isDisabled ? (
+                            award.title || "N/A"
+                          ) : (
+                            <textarea
+                              value={award.title}
+                              onChange={(e) => {
+                                handleArrayChangeWithExpand(
+                                  "awards",
+                                  idx,
+                                  "title",
+                                  e.target.value,
+                                  e.target
+                                );
+                              }}
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "250px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center",
+                                minHeight: "44px",
+                                resize: "none",
+                                overflow: "hidden",
+                                lineHeight: "1.5"
+                              }}
+                              placeholder="Name / Title of the Award"
+                              rows="1"
+                              onInput={(e) => autoExpandTextarea(e.target)}
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2477,31 +2486,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={award.type}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "awards",
-                                idx,
-                                "type",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "150px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Type"
-                          />
+                          {isDisabled ? (
+                            award.type || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={award.type}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "awards",
+                                  idx,
+                                  "type",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "150px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Type"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2511,31 +2523,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={award.agency}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "awards",
-                                idx,
-                                "agency",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "250px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Name of the Agency"
-                          />
+                          {isDisabled ? (
+                            award.agency || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={award.agency}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "awards",
+                                  idx,
+                                  "agency",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "250px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Name of the Agency"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2545,31 +2560,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={award.year}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "awards",
-                                idx,
-                                "year",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "100px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Year"
-                          />
+                          {isDisabled ? (
+                            award.year || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={award.year}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "awards",
+                                  idx,
+                                  "year",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "100px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Year"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
@@ -2579,31 +2597,34 @@ function Profile() {
                             textAlign: "center"
                           }}
                         >
-                          <input
-                            type="text"
-                            value={award.amount}
-                            onChange={(e) =>
-                              handleArrayChange(
-                                "awards",
-                                idx,
-                                "amount",
-                                e.target.value
-                              )
-                            }
-                            disabled={isDisabled}
-                            style={{
-                              width: "100%",
-                              minWidth: "0",
-                              maxWidth: "130px",
-                              padding: "12px 16px",
-                              borderRadius: "10px",
-                              border: "2px solid #e2e8f0",
-                              boxSizing: "border-box",
-                              fontSize: "1rem",
-                              textAlign: "center"
-                            }}
-                            placeholder="Amount"
-                          />
+                          {isDisabled ? (
+                            award.amount || "N/A"
+                          ) : (
+                            <input
+                              type="text"
+                              value={award.amount}
+                              onChange={(e) =>
+                                handleArrayChange(
+                                  "awards",
+                                  idx,
+                                  "amount",
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                width: "100%",
+                                minWidth: "0",
+                                maxWidth: "130px",
+                                padding: "12px 16px",
+                                borderRadius: "10px",
+                                border: "2px solid #e2e8f0",
+                                boxSizing: "border-box",
+                                fontSize: "1rem",
+                                textAlign: "center"
+                              }}
+                              placeholder="Amount"
+                            />
+                          )}
                         </td>
                         <td
                           style={{
