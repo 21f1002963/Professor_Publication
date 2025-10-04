@@ -230,6 +230,525 @@ function Profile() {
   const { professorId } = useParams();
   const navigate = useNavigate();
 
+  // Generate formatted faculty report for printing
+  const generateFacultyReport = () => {
+    const reportWindow = window.open('', '_blank');
+    const reportContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Faculty Profile Report - ${profile.name || 'Faculty Member'}</title>
+        <style>
+          @page {
+            size: A4;
+            margin: 15mm;
+          }
+          
+          body {
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+            line-height: 1.3;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            background: white;
+          }
+          
+          .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+          }
+          
+          .header h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            margin: 0 0 3px 0;
+            color: #000;
+          }
+          
+          .header h2 {
+            font-size: 12pt;
+            font-weight: normal;
+            margin: 0;
+            color: #333;
+          }
+          
+          .section {
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+          }
+          
+          .section-title {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #000;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+            margin-bottom: 8px;
+          }
+          
+          .subsection-title {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0 5px 0;
+          }
+          
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
+          
+          .info-item {
+            margin-bottom: 5px;
+          }
+          
+          .info-label {
+            font-weight: bold;
+            color: #333;
+          }
+          
+          .info-value {
+            color: #000;
+            margin-left: 3px;
+          }
+          
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 9pt;
+          }
+          
+          .table th,
+          .table td {
+            border: 1px solid #ccc;
+            padding: 4px 6px;
+            text-align: left;
+            word-wrap: break-word;
+          }
+          
+          .table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            font-size: 9pt;
+          }
+          
+          .list-item {
+            margin-bottom: 3px;
+            padding-left: 8px;
+          }
+          
+          .footer {
+            position: fixed;
+            bottom: 8mm;
+            right: 0;
+            font-size: 8pt;
+            color: #666;
+          }
+          
+          @media print {
+            body { -webkit-print-color-adjust: exact; }
+            .section { page-break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>FACULTY PROFILE REPORT</h1>
+          <h2>${profile.name || 'Faculty Member'}</h2>
+          <p style="margin: 3px 0 0 0; font-size: 9pt;">Generated on: ${new Date().toLocaleString()}</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Personal Information</div>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Full Name:</span>
+              <span class="info-value">${profile.name || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">${profile.email || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone:</span>
+              <span class="info-value">${profile.phone || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Department:</span>
+              <span class="info-value">${profile.department || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Designation:</span>
+              <span class="info-value">${profile.designation || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Employee ID:</span>
+              <span class="info-value">${profile.employee_id || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date of Joining:</span>
+              <span class="info-value">${profile.date_of_joining || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Experience:</span>
+              <span class="info-value">${profile.experience_years || 'N/A'} years</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date of Birth:</span>
+              <span class="info-value">${profile.date_of_birth || 'N/A'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Address:</span>
+              <span class="info-value">${profile.address || 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+
+        ${profile.education && profile.education.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Educational Qualifications</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 15%">Degree</th>
+                <th style="width: 35%">Subject/Title</th>
+                <th style="width: 35%">University/Board</th>
+                <th style="width: 15%">Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${profile.education.map(edu => `
+                <tr>
+                  <td>${edu.degree || 'N/A'}</td>
+                  <td>${edu.title || 'N/A'}</td>
+                  <td>${edu.university || 'N/A'}</td>
+                  <td>${edu.graduationYear || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${profile.area_of_expertise && (Array.isArray(profile.area_of_expertise) ? profile.area_of_expertise.length > 0 : profile.area_of_expertise) ? `
+        <div class="section">
+          <div class="section-title">Areas of Expertise</div>
+          ${Array.isArray(profile.area_of_expertise) ? 
+            profile.area_of_expertise.map(expertise => `<div class="list-item">• ${expertise}</div>`).join('') :
+            `<div class="list-item">• ${profile.area_of_expertise}</div>`
+          }
+        </div>
+        ` : ''}
+
+        ${profile.awards && profile.awards.length > 0 && profile.awards.some(award => award.title) ? `
+        <div class="section">
+          <div class="section-title">Awards and Recognition</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 35%">Award Title</th>
+                <th style="width: 15%">Type</th>
+                <th style="width: 30%">Agency</th>
+                <th style="width: 10%">Year</th>
+                <th style="width: 10%">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${profile.awards.filter(award => award.title).map(award => `
+                <tr>
+                  <td>${award.title || 'N/A'}</td>
+                  <td>${award.type || 'N/A'}</td>
+                  <td>${award.agency || 'N/A'}</td>
+                  <td>${award.year || 'N/A'}</td>
+                  <td>${award.amount || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${experienceData && experienceData.teaching_experience && experienceData.teaching_experience.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Professional Experience</div>
+          <div class="subsection-title">Teaching Experience</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 20%">Designation</th>
+                <th style="width: 30%">Institution</th>
+                <th style="width: 20%">Department</th>
+                <th style="width: 15%">From</th>
+                <th style="width: 15%">To</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${experienceData.teaching_experience.map(exp => `
+                <tr>
+                  <td>${exp.designation || 'N/A'}</td>
+                  <td>${exp.institution || 'N/A'}</td>
+                  <td>${exp.department || 'N/A'}</td>
+                  <td>${exp.from || 'N/A'}</td>
+                  <td>${exp.to || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${experienceData && experienceData.research_experience && experienceData.research_experience.length > 0 ? `
+        <div class="section">
+          <div class="subsection-title">Research Experience</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 25%">Position</th>
+                <th style="width: 35%">Organization</th>
+                <th style="width: 20%">From</th>
+                <th style="width: 20%">To</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${experienceData.research_experience.map(exp => `
+                <tr>
+                  <td>${exp.position || 'N/A'}</td>
+                  <td>${exp.organization || 'N/A'}</td>
+                  <td>${exp.from || 'N/A'}</td>
+                  <td>${exp.to || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${publicationsData && publicationsData.seie_journals && publicationsData.seie_journals.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Publications</div>
+          <div class="subsection-title">SCI-E Journals</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 30%">Title</th>
+                <th style="width: 20%">Authors</th>
+                <th style="width: 20%">Journal Name</th>
+                <th style="width: 8%">Volume</th>
+                <th style="width: 8%">Issue</th>
+                <th style="width: 7%">Year</th>
+                <th style="width: 7%">Impact Factor</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${publicationsData.seie_journals.map(pub => `
+                <tr>
+                  <td>${pub.title || 'N/A'}</td>
+                  <td>${pub.authors || 'N/A'}</td>
+                  <td>${pub.journal_name || 'N/A'}</td>
+                  <td>${pub.volume || 'N/A'}</td>
+                  <td>${pub.issue || 'N/A'}</td>
+                  <td>${pub.year || 'N/A'}</td>
+                  <td>${pub.impact_factor || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${publicationsData && publicationsData.scopus_journals && publicationsData.scopus_journals.length > 0 ? `
+        <div class="section">
+          <div class="subsection-title">Scopus Journals</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 30%">Title</th>
+                <th style="width: 20%">Authors</th>
+                <th style="width: 20%">Journal Name</th>
+                <th style="width: 8%">Volume</th>
+                <th style="width: 8%">Issue</th>
+                <th style="width: 7%">Year</th>
+                <th style="width: 7%">Impact Factor</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${publicationsData.scopus_journals.map(pub => `
+                <tr>
+                  <td>${pub.title || 'N/A'}</td>
+                  <td>${pub.authors || 'N/A'}</td>
+                  <td>${pub.journal_name || 'N/A'}</td>
+                  <td>${pub.volume || 'N/A'}</td>
+                  <td>${pub.issue || 'N/A'}</td>
+                  <td>${pub.year || 'N/A'}</td>
+                  <td>${pub.impact_factor || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${booksData && booksData.books_authored && booksData.books_authored.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Books</div>
+          <div class="subsection-title">Books Authored</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 40%">Title</th>
+                <th style="width: 25%">Authors</th>
+                <th style="width: 20%">Publisher</th>
+                <th style="width: 15%">Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${booksData.books_authored.map(book => `
+                <tr>
+                  <td>${book.title || 'N/A'}</td>
+                  <td>${book.authors || 'N/A'}</td>
+                  <td>${book.publisher || 'N/A'}</td>
+                  <td>${book.year || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${patentsData && patentsData.patents && patentsData.patents.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Patents</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 35%">Title</th>
+                <th style="width: 20%">Patent Number</th>
+                <th style="width: 15%">Status</th>
+                <th style="width: 15%">Year</th>
+                <th style="width: 15%">Co-Inventors</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${patentsData.patents.map(patent => `
+                <tr>
+                  <td>${patent.title || 'N/A'}</td>
+                  <td>${patent.patent_number || 'N/A'}</td>
+                  <td>${patent.status || 'N/A'}</td>
+                  <td>${patent.year || 'N/A'}</td>
+                  <td>${patent.co_inventors || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${projectData && projectData.ongoing_projects && projectData.ongoing_projects.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Projects</div>
+          <div class="subsection-title">Ongoing Projects</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 30%">Title</th>
+                <th style="width: 20%">Funding Agency</th>
+                <th style="width: 15%">Amount</th>
+                <th style="width: 15%">Duration</th>
+                <th style="width: 20%">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${projectData.ongoing_projects.map(project => `
+                <tr>
+                  <td>${project.title_of_project || 'N/A'}</td>
+                  <td>${project.sponsoredBy || 'N/A'}</td>
+                  <td>${project.sanctioned_amount || 'N/A'}</td>
+                  <td>${project.period || 'N/A'}</td>
+                  <td>${project.role || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${projectData && projectData.completed_projects && projectData.completed_projects.length > 0 ? `
+        <div class="section">
+          <div class="subsection-title">Completed Projects</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 30%">Title</th>
+                <th style="width: 20%">Funding Agency</th>
+                <th style="width: 15%">Amount</th>
+                <th style="width: 15%">Duration</th>
+                <th style="width: 20%">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${projectData.completed_projects.map(project => `
+                <tr>
+                  <td>${project.title_of_project || 'N/A'}</td>
+                  <td>${project.sponsoredBy || 'N/A'}</td>
+                  <td>${project.sanctioned_amount || 'N/A'}</td>
+                  <td>${project.period || 'N/A'}</td>
+                  <td>${project.role || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${fellowshipData && fellowshipData.fellowships && fellowshipData.fellowships.length > 0 ? `
+        <div class="section">
+          <div class="section-title">Fellowships</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 40%">Fellowship Title</th>
+                <th style="width: 30%">Awarded By</th>
+                <th style="width: 15%">Duration</th>
+                <th style="width: 15%">Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${fellowshipData.fellowships.map(fellowship => `
+                <tr>
+                  <td>${fellowship.fellowship_title || 'N/A'}</td>
+                  <td>${fellowship.awarded_by || 'N/A'}</td>
+                  <td>${fellowship.duration || 'N/A'}</td>
+                  <td>${fellowship.year || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        <div class="footer">
+          Faculty Profile Report | ${new Date().toLocaleDateString()}
+        </div>
+      </body>
+      </html>
+    `;
+
+    reportWindow.document.write(reportContent);
+    reportWindow.document.close();
+    
+    // Wait for content to load then trigger print
+    setTimeout(() => {
+      reportWindow.focus();
+      reportWindow.print();
+    }, 500);
+  };
+
   // Handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -620,8 +1139,8 @@ function Profile() {
                   <button
                     type="button"
                     onClick={() => {
-                      // Print the entire profile content
-                      window.print();
+                      // Generate and print formatted faculty report
+                      generateFacultyReport();
                     }}
                     style={{
                       background: "linear-gradient(135deg, #fe4f5eff 0%, #fe0050ff 100%)",
