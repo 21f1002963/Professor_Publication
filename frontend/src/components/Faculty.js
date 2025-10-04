@@ -327,15 +327,6 @@ function Faculty() {
                     fontWeight: 600,
                     borderBottom: 'none'
                   }}>
-                    Qualification
-                  </th>
-                  <th style={{
-                    padding: '20px',
-                    textAlign: 'left',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    borderBottom: 'none'
-                  }}>
                     Contact
                   </th>
                   <th style={{
@@ -419,12 +410,6 @@ function Faculty() {
                           }}>
                             {professor.name || 'N/A'}
                           </div>
-                          <div style={{
-                            fontSize: '0.85rem',
-                            color: '#718096'
-                          }}>
-                            {professor.experience_years ? `${professor.experience_years} years exp.` : 'Experience not specified'}
-                          </div>
                         </div>
                       </div>
                     </td>
@@ -455,15 +440,6 @@ function Faculty() {
                       }}>
                         {professor.designation || 'Not specified'}
                       </span>
-                    </td>
-                    <td style={{
-                      padding: '20px',
-                      verticalAlign: 'top',
-                      color: '#4a5568',
-                      fontSize: '0.9rem',
-                      lineHeight: '1.4'
-                    }}>
-                      {professor.qualification || 'Not specified'}
                     </td>
                     <td style={{
                       padding: '20px',

@@ -1163,7 +1163,7 @@ app.put('/api/professor/programme/:id', authenticateToken, async (req, res) => {
 app.get('/api/faculty', authenticateToken, async (req, res) => {
     try {
         const professors = await Professor.find({
-            role: 'faculty'  // Only show faculty members, not HODs
+            role: { $in: ['faculty', 'hod', 'dean'] }  // Show all academic staff
         }).select('-password -__v').sort({ name: 1 });
 
         res.status(200).json(professors);
