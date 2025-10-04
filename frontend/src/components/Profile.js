@@ -579,6 +579,106 @@ function Profile() {
               }}
             >
 
+            {viewingMode === 'viewing' ? (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: '20px',
+                }}>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Navigate back to faculty directory
+                      navigate('/faculty');
+                    }}
+                    style={{
+                      background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "15px",
+                      padding: "16px 25px",
+                      fontSize: "1rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 8px 25px rgba(79, 172, 254, 0.3)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow = "0 12px 35px rgba(79, 172, 254, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 8px 25px rgba(79, 172, 254, 0.3)";
+                    }}
+                  >
+                    ←
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Print the entire profile content
+                      window.print();
+                    }}
+                    style={{
+                      background: "linear-gradient(135deg, #fe4f5eff 0%, #fe0050ff 100%)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "15px",
+                      padding: "16px 20px",
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 8px 25px rgba(79, 172, 254, 0.3)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow = "0 12px 35px rgba(79, 172, 254, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 8px 25px rgba(79, 172, 254, 0.3)";
+                    }}
+                  >
+                    Report 🖨️
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "15px",
+                    padding: "16px 40px",
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
+                    minWidth: "100px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 12px 35px rgba(96, 147, 236, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow =
+                      "0 8px 25px rgba(96, 147, 236, 0.3)";
+                  }}
+                >
+                  Save
+                </button>
+              )}
+
             <div style={{display:'flex', alignItems:'center'}}>
               {viewingMode === 'viewing' ? (
                 <>
@@ -837,6 +937,7 @@ function Profile() {
                       type="text"
                       value={profile.phone}
                       onChange={(e) => handleInputChange("phone", e.target.value)}
+                      disabled={isDisabled}
                       style={{
                         width: "100%",
                         padding: "12px 16px",
@@ -1028,6 +1129,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1104,6 +1206,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1137,6 +1240,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1253,6 +1357,7 @@ function Profile() {
                               area_of_expertise: newSpecs,
                             }));
                           }}
+                          disabled={isDisabled}
                           style={{
                             width: "100%",
                             padding: "12px 16px",
@@ -1308,6 +1413,7 @@ function Profile() {
                             area_of_expertise: [e.target.value],
                           }))
                         }
+                        disabled={isDisabled}
                         style={{
                           width: "100%",
                           padding: "12px 16px",
@@ -1526,6 +1632,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1559,6 +1666,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1592,6 +1700,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -1625,6 +1734,7 @@ function Profile() {
                                 e.target.value
                               )
                             }
+                            disabled={isDisabled}
                             style={{
                               width: "100%",
                               minWidth: "0",
@@ -2524,74 +2634,7 @@ function Profile() {
                 background: 'white',
               }}
             >
-              {viewingMode === 'viewing' ? (
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'end',
-                  alignItems: 'center'
-                }}>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      // Navigate back to faculty directory
-                      navigate('/faculty');
-                    }}
-                    style={{
-                      background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "15px",
-                      padding: "16px 30px",
-                      fontSize: "1rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                      boxShadow: "0 8px 25px rgba(79, 172, 254, 0.3)",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.transform = "translateY(-2px)";
-                      e.target.style.boxShadow = "0 12px 35px rgba(79, 172, 254, 0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "0 8px 25px rgba(79, 172, 254, 0.3)";
-                    }}
-                  >
-                    ← Back to Faculty Directory
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "15px",
-                    padding: "16px 40px",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    boxShadow: "0 8px 25px rgba(96, 147, 236, 0.3)",
-                    minWidth: "100px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 12px 35px rgba(96, 147, 236, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 8px 25px rgba(96, 147, 236, 0.3)";
-                  }}
-                >
-                  Save
-                </button>
-              )}
             </div>
           </form>
         </div>
