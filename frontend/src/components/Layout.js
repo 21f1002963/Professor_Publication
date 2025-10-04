@@ -1,17 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [userRole, setUserRole] = useState('faculty'); // Default to faculty
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user role from token or localStorage
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role || 'faculty');
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    } else if (user) {
+      try {
+        const userInfo = JSON.parse(user);
+        setUserRole(userInfo.role || 'faculty');
+      } catch (error) {
+        console.error('Error parsing user info:', error);
+      }
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  const menuItems = [
+  // Base menu items available to all users
+  const baseMenuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: '🏠' },
     { label: 'Profile', path: '/profile', icon: '👤' },
     { label: 'Experience', path: '/experience', icon: '💼' },
@@ -27,10 +52,19 @@ function Layout({ children }) {
     { label: 'E-Education', path: '/e-education', icon: '💻' },
     { label: 'Conference/Seminar/Workshop', path: '/conference-seminar-workshop', icon: '🎤' },
     { label: 'Participation & Collaboration', path: '/participation-collaboration', icon: '🤝' },
-    { label: 'Programme Details', path: '/programme', icon: '📋' },
+    { label: 'Programme Details', path: '/programme', icon: '📋' }
+  ];
+
+  // HOD-specific menu items
+  const hodMenuItems = [
     { label: 'HOD Verification', path: '/hod-verification', icon: '✅' },
     { label: 'Faculty Management', path: '/faculty-management', icon: '⚙️' }
   ];
+
+  // Filter menu items based on user role
+  const menuItems = userRole === 'hod' 
+    ? [...baseMenuItems, ...hodMenuItems] 
+    : baseMenuItems;
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', position: 'relative' }}>
@@ -125,7 +159,8 @@ function Layout({ children }) {
             padding: '5px 0',
             overflowY: 'auto',
             overflowX: 'hidden',
-            maxHeight: 'calc(100vh - 160px)', // Account for header and logout button
+            minHeight: '0', // Allow flex shrinking
+            height: 'calc(100vh - 180px)', // Fixed height to ensure scrolling works
           }}
         >
           <style dangerouslySetInnerHTML={{
