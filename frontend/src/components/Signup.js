@@ -104,7 +104,7 @@ function Signup() {
                 </div>
                 {/* Left Side - Branding */}
                 <div style={{ flex: 1, background: 'linear-gradient(120deg, #787af7ff 60%, #818cf8 100%)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 30px' }}>
-                    <img src={FacultyIcon} style={{ width: '200px', height: '200px', marginBottom: '20px', borderRadius: '12px' }}></img>
+                    <img src={FacultyIcon} alt="Faculty Icon" style={{ width: '200px', height: '200px', marginBottom: '20px', borderRadius: '12px' }}></img>
                     <h2 style={{ fontWeight: 700, fontSize: '2rem', marginBottom: '8px' }}>
                         {form.role === 'hod' ? 'HOD Signup' : 'Faculty Signup'}
                     </h2>
