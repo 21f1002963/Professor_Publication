@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import PU from '../assets/PU.png';
 import bgImage from '../assets/pondicherry-university-banner.jpg';
 import FacultyIcon from '../assets/faculty.png';
+import { API_ENDPOINTS } from '../config/api';
 
 function Signup() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Signup() {
             return;
         }
         try {
-            const res = await fetch('http://localhost:5000/signup', {
+            const res = await fetch(API_ENDPOINTS.signup, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)

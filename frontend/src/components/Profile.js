@@ -350,10 +350,42 @@ function Profile() {
           }
 
           .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
             border-bottom: 2px solid #000;
             padding-bottom: 10px;
             margin-bottom: 15px;
+          }
+
+          .header .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #333;
+            flex-shrink: 0;
+          }
+
+          .header .profile-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24pt;
+            font-weight: bold;
+            border: 2px solid #333;
+            flex-shrink: 0;
+          }
+
+          .header .header-info {
+            text-align: left;
+            flex-grow: 1;
           }
 
           .header h1 {
@@ -454,9 +486,18 @@ function Profile() {
       </head>
       <body>
         <div class="header">
-          <h1>FACULTY PROFILE REPORT</h1>
-          <h2>${profile.name || 'Faculty Member'}</h2>
-          <p style="margin: 3px 0 0 0; font-size: 9pt;">Generated on: ${new Date().toLocaleString()}</p>
+          ${profile.profileImage || imagePreview ? `
+            <img src="${imagePreview || profile.profileImage}" alt="Profile Photo" class="profile-image" />
+          ` : `
+            <div class="profile-placeholder">
+              ${profile.name?.charAt(0) || '👤'}
+            </div>
+          `}
+          <div class="header-info">
+            <h1>FACULTY PROFILE REPORT</h1>
+            <h2>${profile.name || 'Faculty Member'}</h2>
+            <p style="margin: 3px 0 0 0; font-size: 9pt;">Generated on: ${new Date().toLocaleString()}</p>
+          </div>
         </div>
 
         ${selectedSections.personalInfo ? `
@@ -537,9 +578,9 @@ function Profile() {
         <div class="section">
           <div class="section-title">Areas of Expertise</div>
           ${Array.isArray(profile.area_of_expertise) ?
-            profile.area_of_expertise.map(expertise => `<div class="list-item">• ${expertise}</div>`).join('') :
-            `<div class="list-item">• ${profile.area_of_expertise}</div>`
-          }
+          profile.area_of_expertise.map(expertise => `<div class="list-item">• ${expertise}</div>`).join('') :
+          `<div class="list-item">• ${profile.area_of_expertise}</div>`
+        }
         </div>
         ` : ''}
 
@@ -1195,7 +1236,7 @@ function Profile() {
               }}
             >
 
-            {viewingMode === 'viewing' ? (
+              {viewingMode === 'viewing' ? (
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -1265,213 +1306,99 @@ function Profile() {
                 </div>
               ) : (
                 <></>
-            )}
+              )}
 
-            {/* Section Filter Modal */}
-            {showSectionFilter && (
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 1000
-              }}>
+              {/* Section Filter Modal */}
+              {showSectionFilter && (
                 <div style={{
-                  backgroundColor: 'white',
-                  borderRadius: '20px',
-                  padding: '30px',
-                  maxWidth: '500px',
-                  width: '90%',
-                  maxHeight: '80vh',
-                  overflowY: 'auto',
-                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  width: '100vw',
+                  height: '100vh',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  zIndex: 1000
                 }}>
-                  <h3 style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 700,
-                    color: '#2d3748',
-                    marginBottom: '20px',
-                    textAlign: 'center'
-                  }}>
-                    Select Report Sections
-                  </h3>
-
-                  <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                    <button
-                      onClick={selectAllSections}
-                      style={{
-                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        marginRight: '10px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: 600
-                      }}
-                    >
-                      Select All
-                    </button>
-                    <button
-                      onClick={deselectAllSections}
-                      style={{
-                        background: 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: 600
-                      }}
-                    >
-                      Deselect All
-                    </button>
-                  </div>
-
-                  {/* Timeline Filter Section */}
                   <div style={{
-                    marginBottom: '20px',
-                    padding: '15px',
-                    backgroundColor: '#f8fafc',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0'
+                    backgroundColor: 'white',
+                    borderRadius: '20px',
+                    padding: '30px',
+                    maxWidth: '500px',
+                    width: '90%',
+                    maxHeight: '80vh',
+                    overflowY: 'auto',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
                   }}>
-                    <label style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      marginBottom: '10px',
-                      cursor: 'pointer',
-                      fontSize: '1rem',
-                      fontWeight: 600,
-                      color: '#2d3748'
+                    <h3 style={{
+                      fontSize: '1.5rem',
+                      fontWeight: 700,
+                      color: '#2d3748',
+                      marginBottom: '20px',
+                      textAlign: 'center',
+                      marginTop: 0
                     }}>
-                      <input
-                        type="checkbox"
-                        checked={enableTimelineFilter}
-                        onChange={(e) => setEnableTimelineFilter(e.target.checked)}
+                      Select Report Sections
+                    </h3>
+
+                    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                      <button
+                        type="button"
+                        onClick={selectAllSections}
                         style={{
-                          marginRight: '8px',
-                          width: '16px',
-                          height: '16px',
-                          accentColor: '#667eea'
+                          background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '10px',
+                          padding: '8px 16px',
+                          marginRight: '10px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          fontWeight: 600
                         }}
-                      />
-                      Enable Timeline Filter
-                    </label>
+                      >
+                        Select All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={deselectAllSections}
+                        style={{
+                          background: 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '10px',
+                          padding: '8px 16px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        Deselect All
+                      </button>
+                    </div>
 
-                    {enableTimelineFilter && (
-                      <div style={{
-                        display: 'flex',
-                        gap: '10px',
-                        alignItems: 'center',
-                        marginTop: '10px'
-                      }}>
-                        <div style={{ flex: 1 }}>
-                          <label style={{
-                            display: 'block',
-                            fontSize: '0.9rem',
-                            fontWeight: 500,
-                            color: '#4a5568',
-                            marginBottom: '5px'
-                          }}>
-                            From Year
-                          </label>
-                          <input
-                            type="number"
-                            value={timelineRange.startYear}
-                            onChange={(e) => setTimelineRange(prev => ({
-                              ...prev,
-                              startYear: e.target.value
-                            }))}
-                            placeholder="e.g., 2000"
-                            min="1900"
-                            max="2030"
-                            style={{
-                              width: '100%',
-                              padding: '8px 12px',
-                              border: '2px solid #e2e8f0',
-                              borderRadius: '8px',
-                              fontSize: '0.9rem',
-                              outline: 'none',
-                              transition: 'border-color 0.2s',
-                              boxSizing: 'border-box'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#667eea'}
-                            onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                          />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <label style={{
-                            display: 'block',
-                            fontSize: '0.9rem',
-                            fontWeight: 500,
-                            color: '#4a5568',
-                            marginBottom: '5px'
-                          }}>
-                            To Year
-                          </label>
-                          <input
-                            type="number"
-                            value={timelineRange.endYear}
-                            onChange={(e) => setTimelineRange(prev => ({
-                              ...prev,
-                              endYear: e.target.value
-                            }))}
-                            placeholder="e.g., 2024"
-                            min="1900"
-                            max="2030"
-                            style={{
-                              width: '100%',
-                              padding: '8px 12px',
-                              border: '2px solid #e2e8f0',
-                              borderRadius: '8px',
-                              fontSize: '0.9rem',
-                              outline: 'none',
-                              transition: 'border-color 0.2s',
-                              boxSizing: 'border-box'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#667eea'}
-                            onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
-                    {[
-                      { key: 'personalInfo', label: 'Personal Information' },
-                      { key: 'education', label: 'Education' },
-                      { key: 'expertise', label: 'Areas of Expertise' },
-                      { key: 'awards', label: 'Awards & Recognition' },
-                      { key: 'experience', label: 'Experience' },
-                      { key: 'publications', label: 'Publications' },
-                      { key: 'books', label: 'Books' },
-                      { key: 'patents', label: 'Patents' },
-                      { key: 'projects', label: 'Projects' },
-                      { key: 'fellowships', label: 'Fellowships' }
-                    ].map(section => (
-                      <label key={section.key} style={{
+                    {/* Timeline Filter Section */}
+                    <div style={{
+                      marginBottom: '20px',
+                      padding: '15px',
+                      backgroundColor: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '2px solid #e2e8f0'
+                    }}>
+                      <label style={{
                         display: 'flex',
                         alignItems: 'center',
                         cursor: 'pointer',
-                        padding: '10px',
-                        borderRadius: '10px',
-                        border: `2px solid ${selectedSections[section.key] ? '#667eea' : '#e2e8f0'}`,
-                        backgroundColor: selectedSections[section.key] ? '#f0f4ff' : 'white',
-                        transition: 'all 0.2s ease'
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        color: '#2d3748'
                       }}>
                         <input
                           type="checkbox"
-                          checked={selectedSections[section.key]}
-                          onChange={() => toggleSection(section.key)}
+                          checked={enableTimelineFilter}
+                          onChange={(e) => setEnableTimelineFilter(e.target.checked)}
                           style={{
                             marginRight: '8px',
                             width: '16px',
@@ -1479,480 +1406,595 @@ function Profile() {
                             accentColor: '#667eea'
                           }}
                         />
-                        <span style={{
-                          fontSize: '0.9rem',
-                          fontWeight: 500,
-                          color: selectedSections[section.key] ? '#667eea' : '#4a5568'
-                        }}>
-                          {section.label}
-                        </span>
+                        Enable Timeline Filter
                       </label>
-                    ))}
+
+                      {enableTimelineFilter && (
+                        <div style={{
+                          display: 'flex',
+                          gap: '10px',
+                          alignItems: 'center',
+                          marginTop: '10px'
+                        }}>
+                          <div style={{ flex: 1 }}>
+                            <label style={{
+                              display: 'block',
+                              fontSize: '0.9rem',
+                              fontWeight: 500,
+                              color: '#4a5568',
+                              marginBottom: '5px'
+                            }}>
+                              From Year
+                            </label>
+                            <input
+                              type="number"
+                              value={timelineRange.startYear}
+                              onChange={(e) => setTimelineRange(prev => ({
+                                ...prev,
+                                startYear: e.target.value
+                              }))}
+                              placeholder="e.g., 2000"
+                              min="1900"
+                              max="2030"
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '2px solid #e2e8f0',
+                                borderRadius: '8px',
+                                fontSize: '0.9rem',
+                                outline: 'none',
+                                transition: 'border-color 0.2s',
+                                boxSizing: 'border-box'
+                              }}
+                              onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                              onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                            />
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <label style={{
+                              display: 'block',
+                              fontSize: '0.9rem',
+                              fontWeight: 500,
+                              color: '#4a5568',
+                              marginBottom: '5px'
+                            }}>
+                              To Year
+                            </label>
+                            <input
+                              type="number"
+                              value={timelineRange.endYear}
+                              onChange={(e) => setTimelineRange(prev => ({
+                                ...prev,
+                                endYear: e.target.value
+                              }))}
+                              placeholder="e.g., 2024"
+                              min="1900"
+                              max="2030"
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '2px solid #e2e8f0',
+                                borderRadius: '8px',
+                                fontSize: '0.9rem',
+                                outline: 'none',
+                                transition: 'border-color 0.2s',
+                                boxSizing: 'border-box'
+                              }}
+                              onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                              onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
+                      {[
+                        { key: 'personalInfo', label: 'Personal Information' },
+                        { key: 'education', label: 'Education' },
+                        { key: 'expertise', label: 'Areas of Expertise' },
+                        { key: 'awards', label: 'Awards & Recognition' },
+                        { key: 'experience', label: 'Experience' },
+                        { key: 'publications', label: 'Publications' },
+                        { key: 'books', label: 'Books' },
+                        { key: 'patents', label: 'Patents' },
+                        { key: 'projects', label: 'Projects' },
+                        { key: 'fellowships', label: 'Fellowships' }
+                      ].map(section => (
+                        <label key={section.key} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          padding: '10px',
+                          borderRadius: '10px',
+                          border: '2px solid #e2e8f0',
+                          transition: 'all 0.2s ease'
+                        }}>
+                          <input
+                            type="checkbox"
+                            checked={selectedSections[section.key]}
+                            onChange={() => toggleSection(section.key)}
+                            style={{
+                              marginRight: '8px',
+                              width: '16px',
+                              height: '16px',
+                              accentColor: '#667eea'
+                            }}
+                          />
+                          <span style={{
+                            fontSize: '0.9rem',
+                            fontWeight: 500,
+                            color: selectedSections[section.key] ? '#667eea' : '#4a5568'
+                          }}>
+                            {section.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+                      <button
+                        onClick={() => {
+                          setShowSectionFilter(false);
+                          generateFacultyReport();
+                        }}
+                        style={{
+                          background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 24px',
+                          cursor: 'pointer',
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          boxShadow: '0 4px 15px rgba(151, 240, 188, 0.3)'
+                        }}
+                      >
+                        Generate Report
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowSectionFilter(false);
+                          // Reset to all sections selected
+                          selectAllSections();
+                        }}
+                        style={{
+                          background: 'linear-gradient(135deg, #a0aec0 0%, #718096 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 24px',
+                          cursor: 'pointer',
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          boxShadow: '0 4px 15px rgba(160, 174, 192, 0.3)'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
-                    <button
-                      onClick={() => {
-                        setShowSectionFilter(false);
-                        generateFacultyReport();
-                      }}
-                      style={{
-                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '12px',
-                        padding: '12px 24px',
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        boxShadow: '0 4px 15px rgba(72, 187, 120, 0.3)'
-                      }}
-                    >
-                      Generate Report 🖨️
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowSectionFilter(false);
-                        // Reset to all sections selected
-                        selectAllSections();
-                      }}
-                      style={{
-                        background: 'linear-gradient(135deg, #a0aec0 0%, #718096 100%)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '12px',
-                        padding: '12px 24px',
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        boxShadow: '0 4px 15px rgba(160, 174, 192, 0.3)'
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
                 </div>
-              </div>
-            )}
-
-            <div style={{display:'flex', alignItems:'center'}}>
-              {viewingMode === 'viewing' ? (
-                <>
-                <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '20px',
-                padding: '10px',
-                borderRadius: '15px',
-              }}>
-                {/* Image Preview */}
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontSize: '3rem',
-                  fontWeight: 700,
-                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-                  border: '4px solid #fff',
-                  overflow: 'hidden',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                }}>
-                  {imagePreview || profile.profileImage ? (
-                    <img
-                      src={imagePreview || profile.profileImage}
-                      alt="Profile"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                        borderRadius: '50%'
-                      }}
-                    />
-                  ) : (
-                    <span>{profile.name?.charAt(0) || '👤'}</span>
-                  )}
-                </div>
-
-                {/* Upload Button */}
-                {!isDisabled && (
-                  <label style={{
-                    background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '12px',
-                    padding: '12px 24px',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      style={{ display: 'none' }}
-                    />
-                  </label>
-                )}
-
-                {!isDisabled && selectedImage && (
-                  <p style={{
-                    color: '#4a5568',
-                    fontSize: '0.9rem',
-                    margin: 0,
-                    textAlign: 'center'
-                  }}>
-                    Selected: {selectedImage.name}
-                  </p>
-                )}
-               </div>
-               </>
-              ) : (
-              <>
-                <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '10px',
-                maxWidth: 'fit-content',
-              }}>
-                {/* Image Preview */}
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontSize: '3rem',
-                  fontWeight: 700,
-                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-                  border: '4px solid #fff',
-                  overflow: 'hidden',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                }}>
-                  {imagePreview || profile.profileImage ? (
-                    <img
-                      src={imagePreview || profile.profileImage}
-                      alt="Profile"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                        borderRadius: '50%'
-                      }}
-                    />
-                  ) : (
-                    <span>{profile.name?.charAt(0) || '👤'}</span>
-                  )}
-                </div>
-
-                {/* Upload Button */}
-                {!isDisabled && (
-                  <label style={{
-                    background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '12px',
-                    padding: '12px 24px',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      style={{ display: 'none' }}
-                    />
-                  </label>
-                )}
-
-                {!isDisabled && selectedImage && (
-                  <p style={{
-                    color: '#4a5568',
-                    fontSize: '0.9rem',
-                    margin: 0,
-                    textAlign: 'center'
-                  }}>
-                    Selected: {selectedImage.name}
-                  </p>
-                )}
-                </div>
-              </>
-
               )}
 
-              <div>
-                <h2
-                  style={{
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    color: "#2d3748",
-                    marginBottom: "25px",
-                    marginLeft: '20px',
-                    marginTop: '30px',
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    fontFamily: "Segoe UI, Arial, sans-serif",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Personal Information
-                </h2>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {viewingMode === 'viewing' ? (
+                  <>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '20px',
+                      padding: '10px',
+                      borderRadius: '15px',
+                    }}>
+                      {/* Image Preview */}
+                      <div style={{
+                        width: '200px',
+                        height: '200px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        fontSize: '3rem',
+                        fontWeight: 700,
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                        border: '4px solid #fff',
+                        overflow: 'hidden',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                      }}>
+                        {imagePreview || profile.profileImage ? (
+                          <img
+                            src={imagePreview || profile.profileImage}
+                            alt="Profile"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center',
+                              borderRadius: '50%'
+                            }}
+                          />
+                        ) : (
+                          <span>{profile.name?.charAt(0) || '👤'}</span>
+                        )}
+                      </div>
 
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: '20px',
-                    flexWrap: 'wrap',
-                    gap: '20px',
-                  }}
-                >
-                  <div >
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Full Name
-                    </label>
-                    <textarea
-                      value={profile.name}
-                      onChange={(e) => {
-                        handleInputChange("name", e.target.value, true);
-                        autoExpandTextarea(e.target);
-                      }}
-                      disabled={isDisabled}
-                      style={getTextareaStyle(isDisabled)}
-                      placeholder="Enter your full name"
-                      data-field="name"
-                      rows="1"
-                      onInput={(e) => autoExpandTextarea(e.target)}
-                    />
+                      {/* Upload Button */}
+                      {!isDisabled && (
+                        <label style={{
+                          background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 24px',
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}>
+                          📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                      )}
+
+                      {!isDisabled && selectedImage && (
+                        <p style={{
+                          color: '#4a5568',
+                          fontSize: '0.9rem',
+                          margin: 0,
+                          textAlign: 'center'
+                        }}>
+                          Selected: {selectedImage.name}
+                        </p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '20px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '10px',
+                      maxWidth: 'fit-content',
+                    }}>
+                      {/* Image Preview */}
+                      <div style={{
+                        width: '200px',
+                        height: '200px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        fontSize: '3rem',
+                        fontWeight: 700,
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                        border: '4px solid #fff',
+                        overflow: 'hidden',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                      }}>
+                        {imagePreview || profile.profileImage ? (
+                          <img
+                            src={imagePreview || profile.profileImage}
+                            alt="Profile"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center',
+                              borderRadius: '50%'
+                            }}
+                          />
+                        ) : (
+                          <span>{profile.name?.charAt(0) || '👤'}</span>
+                        )}
+                      </div>
+
+                      {/* Upload Button */}
+                      {!isDisabled && (
+                        <label style={{
+                          background: 'linear-gradient(135deg, #6093ecff 0%, #1a202c 100%)',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 24px',
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}>
+                          📷 {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                      )}
+
+                      {!isDisabled && selectedImage && (
+                        <p style={{
+                          color: '#4a5568',
+                          fontSize: '0.9rem',
+                          margin: 0,
+                          textAlign: 'center'
+                        }}>
+                          Selected: {selectedImage.name}
+                        </p>
+                      )}
+                    </div>
+                  </>
+
+                )}
+
+                <div>
+                  <h2
+                    style={{
+                      fontSize: "1.8rem",
+                      fontWeight: 700,
+                      color: "#2d3748",
+                      marginBottom: "25px",
+                      marginLeft: '20px',
+                      marginTop: '30px',
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      fontFamily: "Segoe UI, Arial, sans-serif",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    Personal Information
+                  </h2>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginLeft: '20px',
+                      flexWrap: 'wrap',
+                      gap: '20px',
+                    }}
+                  >
+                    <div >
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Full Name
+                      </label>
+                      <textarea
+                        value={profile.name}
+                        onChange={(e) => {
+                          handleInputChange("name", e.target.value, true);
+                          autoExpandTextarea(e.target);
+                        }}
+                        disabled={isDisabled}
+                        style={getTextareaStyle(isDisabled)}
+                        placeholder="Enter your full name"
+                        data-field="name"
+                        rows="1"
+                        onInput={(e) => autoExpandTextarea(e.target)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={profile.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        disabled={isDisabled}
+                        style={getInputStyle(isDisabled)}
+                        placeholder="Enter your email"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Phone
+                      </label>
+                      <input
+                        type="text"
+                        value={profile.phone}
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        disabled={isDisabled}
+                        style={{
+                          width: "100%",
+                          padding: "12px 16px",
+                          border: "2px solid #e2e8f0",
+                          borderRadius: "10px",
+                          fontSize: "1rem",
+                          transition: "border-color 0.3s ease",
+                          boxSizing: "border-box",
+                        }}
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        value={profile.date_of_birth}
+                        onChange={(e) => handleInputChange("date_of_birth", e.target.value)}
+                        disabled={isDisabled}
+                        style={getInputStyle(isDisabled)}
+                        placeholder="Select your date of birth"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Address
+                      </label>
+                      <textarea
+                        value={profile.address}
+                        onChange={(e) => {
+                          handleInputChange("address", e.target.value, true);
+                          autoExpandTextarea(e.target);
+                        }}
+                        disabled={isDisabled}
+                        style={getTextareaStyle(isDisabled)}
+                        placeholder="Enter your address"
+                        data-field="address"
+                        rows="1"
+                        onInput={(e) => autoExpandTextarea(e.target)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Designation
+                      </label>
+                      <textarea
+                        value={profile.designation}
+                        onChange={(e) => {
+                          handleInputChange("designation", e.target.value, true);
+                          autoExpandTextarea(e.target);
+                        }}
+                        disabled={isDisabled}
+                        style={getTextareaStyle(isDisabled)}
+                        placeholder="Enter your designation"
+                        data-field="designation"
+                        rows="1"
+                        onInput={(e) => autoExpandTextarea(e.target)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Department
+                      </label>
+                      <textarea
+                        value={profile.department}
+                        onChange={(e) => {
+                          handleInputChange("department", e.target.value, true);
+                          autoExpandTextarea(e.target);
+                        }}
+                        disabled={isDisabled}
+                        style={getTextareaStyle(isDisabled)}
+                        placeholder="Enter your department"
+                        data-field="department"
+                        rows="1"
+                        onInput={(e) => autoExpandTextarea(e.target)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Employee ID
+                      </label>
+                      <input
+                        type="text"
+                        value={profile.employee_id}
+                        onChange={(e) => handleInputChange("employee_id", e.target.value)}
+                        disabled={isDisabled}
+                        style={getInputStyle(isDisabled)}
+                        placeholder="Enter your employee ID"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        style={{
+                          display: "block",
+                          marginBottom: "8px",
+                          fontWeight: 600,
+                          color: "#4a5568",
+                        }}
+                      >
+                        Date of Joining
+                      </label>
+                      <input
+                        type="date"
+                        value={profile.date_of_joining}
+                        onChange={(e) => handleInputChange("date_of_joining", e.target.value)}
+                        disabled={isDisabled}
+                        style={getInputStyle(isDisabled)}
+                        placeholder="Select your date of joining"
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={profile.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      disabled={isDisabled}
-                      style={getInputStyle(isDisabled)}
-                      placeholder="Enter your email"
-                    />
-                  </div>
 
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Phone
-                    </label>
-                    <input
-                      type="text"
-                      value={profile.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
-                      disabled={isDisabled}
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        border: "2px solid #e2e8f0",
-                        borderRadius: "10px",
-                        fontSize: "1rem",
-                        transition: "border-color 0.3s ease",
-                        boxSizing: "border-box",
-                      }}
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
 
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Date of Birth
-                    </label>
-                    <input
-                      type="date"
-                      value={profile.date_of_birth}
-                      onChange={(e) => handleInputChange("date_of_birth", e.target.value)}
-                      disabled={isDisabled}
-                      style={getInputStyle(isDisabled)}
-                      placeholder="Select your date of birth"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Address
-                    </label>
-                    <textarea
-                      value={profile.address}
-                      onChange={(e) => {
-                        handleInputChange("address", e.target.value, true);
-                        autoExpandTextarea(e.target);
-                      }}
-                      disabled={isDisabled}
-                      style={getTextareaStyle(isDisabled)}
-                      placeholder="Enter your address"
-                      data-field="address"
-                      rows="1"
-                      onInput={(e) => autoExpandTextarea(e.target)}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Designation
-                    </label>
-                    <textarea
-                      value={profile.designation}
-                      onChange={(e) => {
-                        handleInputChange("designation", e.target.value, true);
-                        autoExpandTextarea(e.target);
-                      }}
-                      disabled={isDisabled}
-                      style={getTextareaStyle(isDisabled)}
-                      placeholder="Enter your designation"
-                      data-field="designation"
-                      rows="1"
-                      onInput={(e) => autoExpandTextarea(e.target)}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Department
-                    </label>
-                    <textarea
-                      value={profile.department}
-                      onChange={(e) => {
-                        handleInputChange("department", e.target.value, true);
-                        autoExpandTextarea(e.target);
-                      }}
-                      disabled={isDisabled}
-                      style={getTextareaStyle(isDisabled)}
-                      placeholder="Enter your department"
-                      data-field="department"
-                      rows="1"
-                      onInput={(e) => autoExpandTextarea(e.target)}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Employee ID
-                    </label>
-                    <input
-                      type="text"
-                      value={profile.employee_id}
-                      onChange={(e) => handleInputChange("employee_id", e.target.value)}
-                      disabled={isDisabled}
-                      style={getInputStyle(isDisabled)}
-                      placeholder="Enter your employee ID"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: 600,
-                        color: "#4a5568",
-                      }}
-                    >
-                      Date of Joining
-                    </label>
-                    <input
-                      type="date"
-                      value={profile.date_of_joining}
-                      onChange={(e) => handleInputChange("date_of_joining", e.target.value)}
-                      disabled={isDisabled}
-                      style={getInputStyle(isDisabled)}
-                      placeholder="Select your date of joining"
-                    />
-                  </div>
                 </div>
-
-
-
               </div>
-            </div>
 
 
               {/* Educational Qualifications Section */}
@@ -3602,9 +3644,9 @@ function Profile() {
             >
             </div>
             {viewingMode === 'viewing' ? (
-                <></>
-              ) : (
-                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "20px" }}>
+              <></>
+            ) : (
+              <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "20px" }}>
                 <button
                   type="submit"
                   style={{
@@ -3635,7 +3677,7 @@ function Profile() {
                 >
                   Save
                 </button>
-                </div>
+              </div>
             )}
           </form>
         </div>

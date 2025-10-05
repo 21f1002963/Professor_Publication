@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
+import API_BASE_URL from '../config/api';
 
 function Faculty() {
   const [professors, setProfessors] = useState([]);
@@ -42,7 +43,7 @@ function Faculty() {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/faculty', {
+      const response = await fetch(`${API_BASE_URL}/api/faculty`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -78,7 +79,7 @@ function Faculty() {
   const promoteToHOD = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/promote-to-hod', {
+      const response = await fetch(`${API_BASE_URL}/api/promote-to-hod`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import bgImage from '../assets/pondicherry-university-banner.jpg';
 import PU from '../assets/PU.png';
 import FacultyIcon from '../assets/faculty.png';
+import { API_ENDPOINTS } from '../config/api';
 
 
 function Login() {
@@ -18,7 +19,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/login', {
+            const res = await fetch(API_ENDPOINTS.login, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)
