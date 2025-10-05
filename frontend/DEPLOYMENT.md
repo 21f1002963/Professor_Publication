@@ -3,7 +3,7 @@
 ## Render Deployment Instructions
 
 ### 1. Create New Static Site
-- Connect your GitHub repository  
+- Connect your GitHub repository
 - Select "frontend" folder as root directory
 - Build Command: `npm run build`
 - Publish Directory: `build`

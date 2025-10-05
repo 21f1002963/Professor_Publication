@@ -77,7 +77,7 @@ A comprehensive web application for managing faculty profiles, publications, res
 
 #### Frontend Deployment
 1. Create new **Static Site** on Render
-2. Connect GitHub repository  
+2. Connect GitHub repository
 3. Set root directory: `frontend`
 4. Build command: `npm install && npm run build`
 5. Publish directory: `build`
@@ -89,7 +89,7 @@ A comprehensive web application for managing faculty profiles, publications, res
 ## 💻 Local Development
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - MongoDB (local or Atlas)
 
 ### Setup
@@ -103,11 +103,11 @@ A comprehensive web application for managing faculty profiles, publications, res
    ```bash
    cd Backend
    npm install
-   
+
    # Create .env file with:
    MONGO_URI=your_mongodb_connection
    TOKEN=your_jwt_secret
-   
+
    npm run dev  # Development with nodemon
    # or
    npm start    # Production
@@ -184,6 +184,6 @@ For support, email your-email@domain.com or create an issue in this repository.
 
 **Ready for Production Deployment** ✅
 - Environment configurations ready
-- Database connections configured  
+- Database connections configured
 - Build scripts optimized
 - Deployment documentation complete
