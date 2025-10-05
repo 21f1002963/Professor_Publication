@@ -12,8 +12,25 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:3000',
+        'https://professorpublication-production.up.railway.app',
+        /\.netlify\.app$/,
+        /\.vercel\.app$/
+    ],
+    credentials: true
+}));
 app.use(express.json());
+
+// Security headers
+app.use((req, res, next) => {
+    res.header('X-Content-Type-Options', 'nosniff');
+    res.header('X-Frame-Options', 'DENY');
+    res.header('X-XSS-Protection', '1; mode=block');
+    res.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+});
 
 // MongoDB connection
 mongoose.connect(MONGO_URI).then(() => console.log('MongoDB connected'))
