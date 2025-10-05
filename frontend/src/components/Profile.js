@@ -959,7 +959,7 @@ function Profile() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/professor/profile",
+        "https://professorpublication-production.up.railway.app/api/professor/profile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -984,7 +984,7 @@ function Profile() {
     try {
       console.log('Attempting to fetch profile for professor ID:', professorId);
       const response = await fetch(
-        `http://localhost:5000/api/professor/profile/${professorId}`,
+        `https://professorpublication-production.up.railway.app/api/professor/profile/${professorId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1018,17 +1018,17 @@ function Profile() {
     try {
       // Fetch all data endpoints for comprehensive profile view
       const endpoints = [
-        { name: 'experience', url: `http://localhost:5000/api/professor/experience/${professorId}`, setter: setExperienceData },
-        { name: 'publications', url: `http://localhost:5000/api/professor/publications/${professorId}`, setter: setPublicationsData },
-        { name: 'patents', url: `http://localhost:5000/api/professor/patents/${professorId}`, setter: setPatentsData },
-        { name: 'fellowship', url: `http://localhost:5000/api/professor/fellowship/${professorId}`, setter: setFellowshipData },
-        { name: 'books', url: `http://localhost:5000/api/professor/books/${professorId}`, setter: setBooksData },
-        { name: 'research', url: `http://localhost:5000/api/professor/research-guidance/${professorId}`, setter: setResearchData },
-        { name: 'projects', url: `http://localhost:5000/api/professor/project-consultancy/${professorId}`, setter: setProjectData },
-        { name: 'education', url: `http://localhost:5000/api/professor/e-education/${professorId}`, setter: setEducationData },
-        { name: 'conferences', url: `http://localhost:5000/api/professor/conference-seminar-workshop/${professorId}`, setter: setConferenceData },
-        { name: 'participation', url: `http://localhost:5000/api/professor/participation-collaboration/${professorId}`, setter: setParticipationData },
-        { name: 'programmes', url: `http://localhost:5000/api/professor/programme/${professorId}`, setter: setProgrammeData }
+        { name: 'experience', url: `https://professorpublication-production.up.railway.app/api/professor/experience/${professorId}`, setter: setExperienceData },
+        { name: 'publications', url: `https://professorpublication-production.up.railway.app/api/professor/publications/${professorId}`, setter: setPublicationsData },
+        { name: 'patents', url: `https://professorpublication-production.up.railway.app/api/professor/patents/${professorId}`, setter: setPatentsData },
+        { name: 'fellowship', url: `https://professorpublication-production.up.railway.app/api/professor/fellowship/${professorId}`, setter: setFellowshipData },
+        { name: 'books', url: `https://professorpublication-production.up.railway.app/api/professor/books/${professorId}`, setter: setBooksData },
+        { name: 'research', url: `https://professorpublication-production.up.railway.app/api/professor/research-guidance/${professorId}`, setter: setResearchData },
+        { name: 'projects', url: `https://professorpublication-production.up.railway.app/api/professor/project-consultancy/${professorId}`, setter: setProjectData },
+        { name: 'education', url: `https://professorpublication-production.up.railway.app/api/professor/e-education/${professorId}`, setter: setEducationData },
+        { name: 'conferences', url: `https://professorpublication-production.up.railway.app/api/professor/conference-seminar-workshop/${professorId}`, setter: setConferenceData },
+        { name: 'participation', url: `https://professorpublication-production.up.railway.app/api/professor/participation-collaboration/${professorId}`, setter: setParticipationData },
+        { name: 'programmes', url: `https://professorpublication-production.up.railway.app/api/professor/programme/${professorId}`, setter: setProgrammeData }
       ];
 
       for (const endpoint of endpoints) {
@@ -1073,7 +1073,7 @@ function Profile() {
       }
 
       // Send profile data directly to backend for immediate saving
-      const response = await fetch("http://localhost:5000/api/professor/profile", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

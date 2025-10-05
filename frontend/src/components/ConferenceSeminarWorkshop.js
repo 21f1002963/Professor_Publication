@@ -55,7 +55,7 @@ function ConferenceSeminarWorkshop() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`http://localhost:5000/api/professor/conference-seminar-workshop/${userId}`, {
+      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/conference-seminar-workshop/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ function ConferenceSeminarWorkshop() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`http://localhost:5000/api/professor/conference-seminar-workshop/${userId}`, {
+        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/conference-seminar-workshop/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

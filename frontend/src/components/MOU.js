@@ -36,7 +36,7 @@ function MOU() {
   const fetchMouData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/professor/mou", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/mou", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,7 +55,7 @@ function MOU() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/professor/mou", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/mou", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

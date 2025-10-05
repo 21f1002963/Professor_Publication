@@ -59,7 +59,7 @@ function ProjectConsultancy() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`http://localhost:5000/api/professor/project-consultancy/${userId}`, {
+      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/project-consultancy/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,7 @@ function ProjectConsultancy() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`http://localhost:5000/api/professor/project-consultancy/${userId}`, {
+        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/project-consultancy/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

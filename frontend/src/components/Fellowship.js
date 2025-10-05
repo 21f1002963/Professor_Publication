@@ -28,7 +28,7 @@ function Fellowship() {
       }
 
       // Send fellowship data to backend
-      const response = await fetch("http://localhost:5000/api/professor/fellowship", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/fellowship", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ function Fellowship() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:5000/api/professor/fellowship", {
+        const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/fellowship", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

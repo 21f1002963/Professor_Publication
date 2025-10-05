@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
-import API_BASE_URL from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 function Faculty() {
   const [professors, setProfessors] = useState([]);

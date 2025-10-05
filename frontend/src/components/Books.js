@@ -62,7 +62,7 @@ function Books() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/professor/books",
+        "https://professorpublication-production.up.railway.app/api/professor/books",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ function Books() {
       }
 
       // Send books data directly to backend for immediate saving
-      const response = await fetch("http://localhost:5000/api/professor/books", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/books", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

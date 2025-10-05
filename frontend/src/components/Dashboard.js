@@ -44,7 +44,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:5000/api/professor/profile', {
+      const response = await fetch('https://professorpublication-production.up.railway.app/api/professor/profile', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -72,7 +72,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:5000/api/faculty', {
+      const response = await fetch('https://professorpublication-production.up.railway.app/api/faculty', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

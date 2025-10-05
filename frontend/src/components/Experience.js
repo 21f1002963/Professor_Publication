@@ -62,7 +62,7 @@ function Experience() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/professor/experience",
+        "https://professorpublication-production.up.railway.app/api/professor/experience",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ function Experience() {
       }
 
       // Send experience data directly to backend for immediate saving
-      const response = await fetch("http://localhost:5000/api/professor/experience", {
+      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/experience", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

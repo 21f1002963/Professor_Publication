@@ -35,7 +35,7 @@ function Training() {
     const fetchTrainingData = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/professor/training", {
+            const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/training", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -54,7 +54,7 @@ function Training() {
         e.preventDefault();
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/professor/training", {
+            const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/training", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

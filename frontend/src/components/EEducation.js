@@ -32,7 +32,7 @@ function EEducation() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`http://localhost:5000/api/professor/e-education/${userId}`, {
+      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/e-education/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ function EEducation() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`http://localhost:5000/api/professor/e-education/${userId}`, {
+        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/e-education/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

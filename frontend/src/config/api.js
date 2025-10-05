@@ -1,6 +1,13 @@
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+export { API_BASE_URL };
+
+// Helper function to build API URLs
+export const getApiUrl = (endpoint) => {
+  return `${API_BASE_URL}${endpoint}`;
+};
+
 export const API_ENDPOINTS = {
   // Authentication
   login: `${API_BASE_URL}/login`,

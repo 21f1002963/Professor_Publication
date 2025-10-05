@@ -43,7 +43,7 @@ function ResearchGuidanceStudents() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`http://localhost:5000/api/professor/research-guidance/${userId}`, {
+      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/research-guidance/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +120,7 @@ function ResearchGuidanceStudents() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`http://localhost:5000/api/professor/research-guidance/${userId}`, {
+        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/research-guidance/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
