@@ -81,11 +81,11 @@ function Publications() {
           email: decoded.email || "",
           role: decoded.role || "faculty"
         });
-        
+
         // Check if viewing someone else's profile via URL params or route
         const urlParams = new URLSearchParams(window.location.search);
         const facultyId = urlParams.get('facultyId');
-        
+
         if (facultyId && facultyId !== decoded.id) {
           setTargetFacultyId(facultyId);
           setIsOwnProfile(false);
@@ -235,7 +235,7 @@ function Publications() {
 
     try {
       let url = "https://professorpublication-production.up.railway.app/api/professor/publications";
-      
+
       // If viewing someone else's profile, fetch their publications
       if (targetFacultyId && !isOwnProfile) {
         url += `?facultyId=${targetFacultyId}`;

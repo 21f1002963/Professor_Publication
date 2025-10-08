@@ -38,30 +38,43 @@ function RequestPublications() {
 
     try {
       setLoading(true);
-      
-      // Fetch faculty profile
-      const profileResponse = await fetch(
-        `https://professorpublication-production.up.railway.app/api/professor/profile/${facultyId}`,
+
+      // First, get all faculty to find the specific faculty member
+      const facultyListResponse = await fetch(
+        'https://professorpublication-production.up.railway.app/api/faculty',
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
 
-      if (profileResponse.ok) {
-        const facultyData = await profileResponse.json();
-        setFaculty(facultyData);
-        
-        // Extract publications from faculty data
-        const publicationsData = {
-          seie_journals: facultyData.seie_journals || [],
-          ugc_approved_journals: facultyData.ugc_approved_journals || [],
-          non_ugc_journals: facultyData.non_ugc_journals || [],
-          conference_papers: facultyData.conference_papers || [],
-          book_chapters: facultyData.book_chapters || [],
-          books_published: facultyData.books_published || []
-        };
-        
-        setPublications(publicationsData);
+      if (facultyListResponse.ok) {
+        const facultyList = await facultyListResponse.json();
+        const targetFaculty = facultyList.find(f => f._id === facultyId);
+
+        if (targetFaculty) {
+          setFaculty(targetFaculty);
+
+          // Extract publications from faculty data
+          const publicationsData = {
+            seie_journals: targetFaculty.seie_journals || [],
+            ugc_approved_journals: targetFaculty.ugc_approved_journals || [],
+            non_ugc_journals: targetFaculty.non_ugc_journals || [],
+            conference_papers: targetFaculty.conference_papers || [],
+            book_chapters: targetFaculty.book_chapters || [],
+            books_published: targetFaculty.books_published || []
+          };
+
+          setPublications(publicationsData);
+          console.log('Faculty found and publications loaded:', targetFaculty.name);
+        } else {
+          console.error('Faculty not found in the list. Faculty ID:', facultyId);
+          console.log('Available faculty IDs:', facultyList.map(f => f._id));
+        }
+      } else {
+        console.error('Failed to fetch faculty list:', facultyListResponse.status, facultyListResponse.statusText);
+        const errorData = await facultyListResponse.json().catch(() => ({}));
+        console.error('Error details:', errorData);
+        alert('Error fetching faculty information');
       }
     } catch (error) {
       console.error('Error fetching faculty publications:', error);
@@ -69,9 +82,7 @@ function RequestPublications() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePublicationSelect = (publicationType, publicationIndex, publication) => {
+  };  const handlePublicationSelect = (publicationType, publicationIndex, publication) => {
     const publicationKey = `${publicationType}_${publicationIndex}`;
     const isSelected = selectedPublications.some(p => p.key === publicationKey);
 
@@ -126,10 +137,10 @@ function RequestPublications() {
       });
 
       await Promise.all(promises);
-      
+
       alert(`Successfully sent ${selectedPublications.length} access request(s) to ${faculty.name}!`);
       navigate('/faculty');
-      
+
     } catch (error) {
       console.error('Error sending access requests:', error);
       alert(error.message || 'Error sending access requests');
@@ -150,39 +161,35 @@ function RequestPublications() {
           fontWeight: 600,
           color: '#2d3748',
           marginBottom: '15px',
-          padding: '10px',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
+          padding: '10px 0'
         }}>
           {title}
         </h3>
-        
+
         <div style={{
           background: '#fff',
-          borderRadius: '12px',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+          borderRadius: '8px',
+          border: '1px solid #e2e8f0',
           overflow: 'hidden'
         }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: '#fff'
+                background: '#f8fafc',
+                borderBottom: '2px solid #e2e8f0'
               }}>
-                <th style={{ padding: '15px', textAlign: 'left', width: '50px' }}>Select</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Title</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Authors</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Journal/Conference</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Year</th>
+                <th style={{ padding: '15px', textAlign: 'left', width: '50px', fontWeight: 600 }}>Select</th>
+                <th style={{ padding: '15px', textAlign: 'left', fontWeight: 600 }}>Title</th>
+                <th style={{ padding: '15px', textAlign: 'left', fontWeight: 600 }}>Authors</th>
+                <th style={{ padding: '15px', textAlign: 'left', fontWeight: 600 }}>Journal/Conference</th>
+                <th style={{ padding: '15px', textAlign: 'left', fontWeight: 600 }}>Year</th>
               </tr>
             </thead>
             <tbody>
               {validPublications.map((publication, index) => {
                 const publicationKey = `${publicationType}_${index}`;
                 const isSelected = selectedPublications.some(p => p.key === publicationKey);
-                
+
                 return (
                   <tr key={index} style={{
                     borderBottom: '1px solid #e2e8f0',
@@ -228,13 +235,17 @@ function RequestPublications() {
       <Layout>
         <div style={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           height: '50vh',
           fontSize: '1.2rem',
           color: '#667eea'
         }}>
-          Loading publications...
+          <div>Loading faculty publications...</div>
+          <div style={{ fontSize: '0.9rem', marginTop: '10px', opacity: 0.7 }}>
+            Faculty ID: {facultyId}
+          </div>
         </div>
       </Layout>
     );
@@ -245,13 +256,31 @@ function RequestPublications() {
       <Layout>
         <div style={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           height: '50vh',
           fontSize: '1.2rem',
           color: '#e53e3e'
         }}>
-          Faculty not found
+          <div>Faculty not found</div>
+          <div style={{ fontSize: '0.9rem', marginTop: '10px', opacity: 0.7 }}>
+            Faculty ID: {facultyId}
+          </div>
+          <button
+            onClick={() => navigate('/faculty')}
+            style={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              background: '#667eea',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer'
+            }}
+          >
+            Back to Faculty Directory
+          </button>
         </div>
       </Layout>
     );
@@ -261,136 +290,129 @@ function RequestPublications() {
     <Layout>
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        padding: '20px'
+        padding: '40px 20px'
       }}>
         <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto'
+          padding: '10px 30px 30px'
         }}>
-          {/* Header */}
-          <div style={{
-            background: '#fff',
-            borderRadius: '20px',
-            padding: '30px',
-            marginBottom: '30px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
-          }}>
-            <button
-              onClick={() => navigate('/faculty')}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                marginBottom: '20px',
-                color: '#667eea'
-              }}
-            >
-              ← Back to Faculty Directory
-            </button>
-            
-            <h1 style={{
-              fontSize: '2.5rem',
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '10px'
-            }}>
-              Request Access to Publications
-            </h1>
-            
-            <div style={{
+          <div style={{ background: 'blue', borderRadius: '15px', width: 'fit-content', marginBottom: '20px', padding: '5px 10px' }}>
+          <button
+            onClick={() => navigate('/faculty')}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              color: 'white',
               display: 'flex',
               alignItems: 'center',
-              gap: '15px',
-              marginBottom: '20px'
-            }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                borderRadius: '50%',
-                background: faculty.profileImage ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: '1.5rem',
-                fontWeight: 600,
-                overflow: 'hidden'
-              }}>
-                {faculty.profileImage ? (
-                  <img
-                    src={faculty.profileImage}
-                    alt="Profile"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '50%'
-                    }}
-                  />
-                ) : (
-                  (faculty.name || 'U').charAt(0).toUpperCase()
-                )}
-              </div>
-              <div>
-                <h2 style={{ fontSize: '1.5rem', color: '#2d3748', margin: 0 }}>
-                  {faculty.name}
-                </h2>
-                <p style={{ color: '#718096', fontSize: '1rem', margin: '5px 0' }}>
-                  {faculty.designation} • {faculty.department}
-                </p>
-              </div>
-            </div>
-
-            <p style={{
-              color: '#4a5568',
-              fontSize: '1rem',
-              lineHeight: '1.6'
-            }}>
-              Select the publications you would like to request access to. The faculty member will be notified and can approve or deny your requests.
-            </p>
+              gap: '5px'
+            }}
+          >
+            ← Back to Faculty Directory
+          </button>
           </div>
 
-          {/* Publications */}
-          <div style={{
-            background: '#fff',
-            borderRadius: '20px',
-            padding: '30px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-            marginBottom: '30px'
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            marginBottom: '10px',
+            marginTop: '0px'
           }}>
+            Request Access to Publications
+          </h1>
+
+          <p style={{
+            fontSize: '1.1rem',
+            marginBottom: '40px',
+            opacity: 0.8,
+            marginTop: '0px'
+          }}>
+            Select the publications you would like to request access to from {faculty.name}.
+          </p>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px',
+            marginBottom: '30px',
+            padding: '20px',
+            background: '#f8fafc',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0'
+          }}>
+            <div style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: faculty.profileImage ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontSize: '1.5rem',
+              fontWeight: 600,
+              overflow: 'hidden'
+            }}>
+              {faculty.profileImage ? (
+                <img
+                  src={faculty.profileImage}
+                  alt="Profile"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '50%'
+                  }}
+                />
+              ) : (
+                (faculty.name || 'U').charAt(0).toUpperCase()
+              )}
+            </div>
+            <div>
+              <h2 style={{ fontSize: '1.5rem', color: '#2d3748', margin: 0 }}>
+                {faculty.name}
+              </h2>
+              <p style={{ color: '#718096', fontSize: '1rem', margin: '5px 0' }}>
+                {faculty.designation}
+              </p>
+              <div style={{ background: 'orange', display: 'inline-block', padding: '2px 8px', borderRadius: '15px', marginTop: '4px' }}>
+              <p style={{ color: 'white', fontSize: '1rem', margin: '5px 0' }}>
+                {faculty.role === 'faculty' ? 'Faculty Member' : faculty.role.charAt(0).toUpperCase() + faculty.role.slice(1)}
+              </p>
+              </div>
+            </div>
+          </div>
             {renderPublicationTable('seie_journals', publications.seie_journals, '📄 Papers Published in SEIE Journals')}
             {renderPublicationTable('ugc_approved_journals', publications.ugc_approved_journals, '📋 Papers Published in UGC Approved Journals')}
             {renderPublicationTable('non_ugc_journals', publications.non_ugc_journals, '📝 Papers Published in Non UGC Approved Peer Reviewed Journals')}
             {renderPublicationTable('conference_papers', publications.conference_papers, '🎤 Conference Papers')}
             {renderPublicationTable('book_chapters', publications.book_chapters, '📖 Book Chapters')}
             {renderPublicationTable('books_published', publications.books_published, '📚 Books Published')}
-            
+
             {Object.values(publications).every(arr => !arr || arr.length === 0 || arr.every(pub => !pub.title || pub.title.trim() === '')) && (
               <div style={{
                 textAlign: 'center',
                 padding: '60px 20px',
-                color: '#718096'
+                color: '#718096',
+                background: '#f8fafc',
+                borderRadius: '8px',
+                border: '1px solid #e2e8f0'
               }}>
                 <div style={{ fontSize: '4rem', marginBottom: '20px' }}>📝</div>
                 <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>No Publications Available</h3>
                 <p>This faculty member hasn't published any papers yet.</p>
               </div>
             )}
-          </div>
 
           {/* Request Form */}
           {selectedPublications.length > 0 && (
             <div style={{
-              background: '#fff',
-              borderRadius: '20px',
               padding: '30px',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-              marginBottom: '30px'
+              marginBottom: '30px',
+              background: '#f8fafc',
+              borderRadius: '12px',
+              border: '1px solid #e2e8f0'
             }}>
               <h3 style={{
                 fontSize: '1.3rem',
@@ -400,7 +422,7 @@ function RequestPublications() {
               }}>
                 Send Access Request ({selectedPublications.length} publication{selectedPublications.length !== 1 ? 's' : ''} selected)
               </h3>
-              
+
               <div style={{ marginBottom: '20px' }}>
                 <label style={{
                   display: 'block',
@@ -450,9 +472,9 @@ function RequestPublications() {
                     e.target.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.3)';
                   }}
                 >
-                  📤 Send Request{selectedPublications.length > 1 ? 's' : ''}
+                  Send Request{selectedPublications.length > 1 ? 's' : ''}
                 </button>
-                
+
                 <button
                   onClick={() => setSelectedPublications([])}
                   style={{

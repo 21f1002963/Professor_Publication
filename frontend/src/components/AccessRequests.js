@@ -385,7 +385,7 @@ function AccessRequests() {
                                                                 {request.message || 'No message'}
                                                             </div>
                                                         </td>
-                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', fontSize: '12px' }}>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
                                                             {formatDate(request.request_date)}
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
@@ -394,17 +394,17 @@ function AccessRequests() {
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
                                                             {request.response_date ? (
                                                                 <div>
-                                                                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                    <div style={{ color: '#6b7280' }}>
                                                                         {formatDate(request.response_date)}
                                                                     </div>
                                                                     {request.response_message && (
-                                                                        <div style={{ fontSize: '12px', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.response_message}>
+                                                                        <div style={{ marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.response_message}>
                                                                             {request.response_message}
                                                                         </div>
                                                                     )}
                                                                 </div>
                                                             ) : (
-                                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>Pending</span>
+                                                                <span style={{ color: 'red' }}>Pending</span>
                                                             )}
                                                         </td>
                                                     </tr>

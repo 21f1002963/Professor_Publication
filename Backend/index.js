@@ -215,6 +215,47 @@ app.get('/api/professor/profile/:professorId', authenticateToken, async (req, re
     }
 });
 
+// Get faculty publications for access requests (available to all authenticated users)
+app.get('/api/faculty/:facultyId/publications', authenticateToken, async (req, res) => {
+    try {
+        console.log('Faculty publications request received');
+        console.log('Requesting user ID:', req.user.id);
+        console.log('Target faculty ID:', req.params.facultyId);
+
+        const facultyId = req.params.facultyId;
+        const faculty = await Professor.findById(facultyId).select('-password -access_requests -outgoing_access_requests');
+
+        console.log('Target faculty found:', faculty ? 'Yes' : 'No');
+
+        if (!faculty) {
+            console.log('Faculty not found');
+            return res.status(404).json({ message: 'Faculty not found' });
+        }
+
+        // Return faculty basic info and publications only (no sensitive data)
+        const publicData = {
+            _id: faculty._id,
+            name: faculty.name,
+            designation: faculty.designation,
+            department: faculty.department,
+            profileImage: faculty.profileImage,
+            // Publications
+            seie_journals: faculty.seie_journals || [],
+            ugc_approved_journals: faculty.ugc_approved_journals || [],
+            non_ugc_journals: faculty.non_ugc_journals || [],
+            conference_papers: faculty.conference_papers || [],
+            book_chapters: faculty.book_chapters || [],
+            books_published: faculty.books_published || []
+        };
+
+        console.log('Successfully returning faculty publications');
+        res.status(200).json(publicData);
+    } catch (error) {
+        console.error('Error fetching faculty publications:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Temporary endpoint to promote user to HOD (for testing only - remove in production)
 app.post('/api/promote-to-hod', authenticateToken, async (req, res) => {
     try {
@@ -322,7 +363,7 @@ app.get('/api/professor/publications', authenticateToken, async (req, res) => {
         const { facultyId } = req.query;
         const requesterId = req.user.id;
         let targetFacultyId = facultyId || requesterId;
-        
+
         const professor = await Professor.findById(targetFacultyId).select('-password');
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
@@ -330,7 +371,7 @@ app.get('/api/professor/publications', authenticateToken, async (req, res) => {
 
         // Check if requesting own data or others'
         const isOwnProfile = targetFacultyId === requesterId;
-        
+
         // Function to sanitize sensitive publication data
         const sanitizePublications = (publications) => {
             return publications.map(pub => ({
@@ -1618,7 +1659,7 @@ app.get('/api/professor/project-consultancy/:professorId', authenticateToken, as
 app.post('/api/access-request', authenticateToken, async (req, res) => {
     try {
         const { target_faculty_id, publication_type, publication_index, publication_title, message } = req.body;
-        
+
         // Get requester info
         const requester = await Professor.findById(req.user.id);
         if (!requester) {
@@ -1682,8 +1723,8 @@ app.get('/api/access-requests/incoming', authenticateToken, async (req, res) => 
             return res.status(404).json({ message: 'Professor not found' });
         }
 
-        res.status(200).json({ 
-            access_requests: professor.access_requests || [] 
+        res.status(200).json({
+            access_requests: professor.access_requests || []
         });
     } catch (error) {
         console.error('Error fetching incoming access requests:', error);
@@ -1699,8 +1740,8 @@ app.get('/api/access-requests/outgoing', authenticateToken, async (req, res) => 
             return res.status(404).json({ message: 'Professor not found' });
         }
 
-        res.status(200).json({ 
-            outgoing_access_requests: professor.outgoing_access_requests || [] 
+        res.status(200).json({
+            outgoing_access_requests: professor.outgoing_access_requests || []
         });
     } catch (error) {
         console.error('Error fetching outgoing access requests:', error);
@@ -1737,13 +1778,13 @@ app.put('/api/access-request/:requestId/respond', authenticateToken, async (req,
         // Also update the corresponding outgoing request in the requester's record
         const requester = await Professor.findById(accessRequest.requester_id);
         if (requester) {
-            const outgoingRequest = requester.outgoing_access_requests.find(req => 
+            const outgoingRequest = requester.outgoing_access_requests.find(req =>
                 req.target_faculty_id.toString() === professor._id.toString() &&
                 req.publication_type === accessRequest.publication_type &&
                 req.publication_index === accessRequest.publication_index &&
                 req.status === 'pending'
             );
-            
+
             if (outgoingRequest) {
                 outgoingRequest.status = status;
                 outgoingRequest.response_date = new Date();
@@ -1777,16 +1818,16 @@ app.get('/api/publication-access/:facultyId/:publicationType/:publicationIndex',
         if (facultyId === requesterId) {
             const publicationArray = targetFaculty[publicationType];
             if (publicationArray && publicationArray[publicationIndex]) {
-                return res.status(200).json({ 
+                return res.status(200).json({
                     publication: publicationArray[publicationIndex],
-                    hasAccess: true 
+                    hasAccess: true
                 });
             }
             return res.status(404).json({ message: 'Publication not found' });
         }
 
         // Check if there's an approved access request
-        const approvedRequest = targetFaculty.access_requests.find(req => 
+        const approvedRequest = targetFaculty.access_requests.find(req =>
             req.requester_id.toString() === requesterId &&
             req.publication_type === publicationType &&
             req.publication_index == publicationIndex &&
@@ -1796,9 +1837,9 @@ app.get('/api/publication-access/:facultyId/:publicationType/:publicationIndex',
         if (approvedRequest) {
             const publicationArray = targetFaculty[publicationType];
             if (publicationArray && publicationArray[publicationIndex]) {
-                return res.status(200).json({ 
+                return res.status(200).json({
                     publication: publicationArray[publicationIndex],
-                    hasAccess: true 
+                    hasAccess: true
                 });
             }
         }
