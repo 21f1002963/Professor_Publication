@@ -23,6 +23,7 @@ import Training from './components/Training';
 import MOU from './components/MOU';
 import AccessRequests from './components/AccessRequests';
 import RequestPublications from './components/RequestPublications';
+import Report from './components/Report';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -126,6 +127,11 @@ root.render(
         <Route path='/request-publications/:facultyId'  element={
           <ProtectedRoute>
             <RequestPublications />
+          </ProtectedRoute>
+        } />
+        <Route path='/report'  element={
+          <ProtectedRoute>
+            <Report />
           </ProtectedRoute>
         } />
 

@@ -24,7 +24,7 @@ function Dashboard() {
   useEffect(() => {
     const initializeDashboard = async () => {
       setLoading(true);
-      
+
       const token = localStorage.getItem('token');
       const user = localStorage.getItem('user');
 
@@ -51,7 +51,7 @@ function Dashboard() {
           console.error('Error decoding token:', error);
         }
       }
-      
+
       setLoading(false);
     };
 
@@ -821,6 +821,35 @@ function Dashboard() {
               }}
             >
               🔐 Access Requests
+            </button>
+
+            <button
+              onClick={() => navigate('/report')}
+              style={{
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '15px 20px',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.3)';
+              }}
+            >
+              📊 Generate Report
             </button>
           </div>
         </div>

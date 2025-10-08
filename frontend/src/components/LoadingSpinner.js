@@ -1,11 +1,11 @@
 import React from 'react';
 
-function LoadingSpinner({ 
-  size = '40px', 
-  color = '#667eea', 
+function LoadingSpinner({
+  size = '40px',
+  color = '#667eea',
   backgroundColor = 'rgba(255, 255, 255, 0.9)',
   message = 'Loading...',
-  overlay = true 
+  overlay = true
 }) {
   const spinnerStyle = {
     width: size,
@@ -56,11 +56,11 @@ function LoadingSpinner({
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
           }
-          
+
           .loading-pulse {
             animation: pulse 2s infinite;
           }
-          
+
           @keyframes pulse {
             0% { opacity: 0.6; }
             50% { opacity: 1; }
@@ -68,7 +68,7 @@ function LoadingSpinner({
           }
         `
       }} />
-      
+
       {overlay ? (
         <div style={overlayStyle}>
           <div style={containerStyle}>
