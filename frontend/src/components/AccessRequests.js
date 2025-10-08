@@ -98,9 +98,9 @@ function AccessRequests() {
 
     const getStatusBadge = (status) => {
         const styles = {
-            pending: { backgroundColor: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
-            approved: { backgroundColor: '#d1fae5', color: '#065f46', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
-            rejected: { backgroundColor: '#fee2e2', color: '#991b1b', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }
+            pending: { backgroundColor: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px' },
+            approved: { backgroundColor: '#d1fae5', color: '#065f46', padding: '4px 8px', borderRadius: '4px' },
+            rejected: { backgroundColor: '#fee2e2', color: '#991b1b', padding: '4px 8px', borderRadius: '4px' }
         };
         return <span style={styles[status]}>{status.toUpperCase()}</span>;
     };
@@ -260,18 +260,17 @@ function AccessRequests() {
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
                                                             <span style={{
-                                                                backgroundColor: request.requester_role === 'hod' ? '#dbeafe' : '#f3f4f6',
+                                                                backgroundColor: request.requester_role === 'hod' ? '#dc8317ff' : '#1bec87ff',
                                                                 color: request.requester_role === 'hod' ? '#1e40af' : '#374151',
                                                                 padding: '2px 6px',
                                                                 borderRadius: '4px',
-                                                                fontSize: '12px',
-                                                                textTransform: 'uppercase'
+
                                                             }}>
-                                                                {request.requester_role}
+                                                                {request.requester_role[0].toUpperCase() + request.requester_role.slice(1)}
                                                             </span>
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '200px' }}>
-                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.publication_title}>
+                                                            <div style={{  }} title={request.publication_title}>
                                                                 {request.publication_title || 'N/A'}
                                                             </div>
                                                         </td>
@@ -279,11 +278,11 @@ function AccessRequests() {
                                                             {request.publication_type.replace(/_/g, ' ').toUpperCase()}
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
-                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.message}>
+                                                            <div style={{ whiteSpace: 'nowrap' }} title={request.message}>
                                                                 {request.message || 'No message'}
                                                             </div>
                                                         </td>
-                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', fontSize: '12px' }}>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb'}}>
                                                             {formatDate(request.request_date)}
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
@@ -291,7 +290,7 @@ function AccessRequests() {
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
                                                             {request.status === 'pending' ? (
-                                                                <div style={{ display: 'flex', gap: '5px' }}>
+                                                                <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'center' }}>
                                                                     <button
                                                                         onClick={() => handleRequestResponse(request._id, 'approved')}
                                                                         style={{
@@ -301,7 +300,6 @@ function AccessRequests() {
                                                                             border: 'none',
                                                                             borderRadius: '4px',
                                                                             cursor: 'pointer',
-                                                                            fontSize: '12px'
                                                                         }}
                                                                     >
                                                                         Approve
@@ -309,20 +307,19 @@ function AccessRequests() {
                                                                     <button
                                                                         onClick={() => handleRequestResponse(request._id, 'rejected')}
                                                                         style={{
-                                                                            padding: '4px 8px',
+                                                                            padding: '4px 14px',
                                                                             backgroundColor: '#ef4444',
                                                                             color: 'white',
                                                                             border: 'none',
                                                                             borderRadius: '4px',
                                                                             cursor: 'pointer',
-                                                                            fontSize: '12px'
                                                                         }}
                                                                     >
                                                                         Reject
                                                                     </button>
                                                                 </div>
                                                             ) : (
-                                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                <span style={{ color: '#6b7280' }}>
                                                                     {request.status === 'approved' ? 'Approved' : 'Rejected'}
                                                                     {request.response_date && (
                                                                         <div>{formatDate(request.response_date)}</div>
@@ -361,6 +358,7 @@ function AccessRequests() {
                                                     <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Request Date</th>
                                                     <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Status</th>
                                                     <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Response</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Access</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -373,7 +371,7 @@ function AccessRequests() {
                                                             </div>
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '200px' }}>
-                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.publication_title}>
+                                                            <div style={{  }} title={request.publication_title}>
                                                                 {request.publication_title || 'N/A'}
                                                             </div>
                                                         </td>
@@ -381,30 +379,121 @@ function AccessRequests() {
                                                             {request.publication_type.replace(/_/g, ' ').toUpperCase()}
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
-                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.message}>
+                                                            <div style={{  }} title={request.message}>
                                                                 {request.message || 'No message'}
                                                             </div>
                                                         </td>
-                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                        <td style={{ color: 'red', padding: '12px', border: '1px solid #e5e7eb' }}>
                                                             {formatDate(request.request_date)}
                                                         </td>
                                                         <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
                                                             {getStatusBadge(request.status)}
                                                         </td>
-                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
+                                                        <td style={{ color: '#34f343ff', padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
                                                             {request.response_date ? (
                                                                 <div>
-                                                                    <div style={{ color: '#6b7280' }}>
+                                                                    <div style={{  }}>
                                                                         {formatDate(request.response_date)}
                                                                     </div>
                                                                     {request.response_message && (
-                                                                        <div style={{ marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.response_message}>
+                                                                        <div style={{ marginTop: '2px'}} title={request.response_message}>
                                                                             {request.response_message}
                                                                         </div>
                                                                     )}
                                                                 </div>
                                                             ) : (
                                                                 <span style={{ color: 'red' }}>Pending</span>
+                                                            )}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {request.status === 'approved' ? (
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                                    {/* Paper File Link */}
+                                                                    {request.publication_file && (
+                                                                        <a
+                                                                            href={request.publication_file}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{
+                                                                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                                                                color: '#fff',
+                                                                                padding: '4px 8px',
+                                                                                borderRadius: '4px',
+                                                                                textDecoration: 'none',
+                                                                                fontWeight: '500',
+                                                                                display: 'inline-flex',
+                                                                                alignItems: 'center',
+                                                                                gap: '3px',
+                                                                                transition: 'all 0.2s ease'
+                                                                            }}
+                                                                            onMouseEnter={(e) => {
+                                                                                e.target.style.transform = 'translateY(-1px)';
+                                                                                e.target.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.3)';
+                                                                            }}
+                                                                            onMouseLeave={(e) => {
+                                                                                e.target.style.transform = 'translateY(0)';
+                                                                                e.target.style.boxShadow = 'none';
+                                                                            }}
+                                                                        >
+                                                                            📄 View Paper
+                                                                        </a>
+                                                                    )}
+
+                                                                    {/* Publication Link */}
+                                                                    {request.publication_link && (
+                                                                        <a
+                                                                            href={request.publication_link}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{
+                                                                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                                                                                color: '#fff',
+                                                                                padding: '4px 8px',
+                                                                                borderRadius: '4px',
+                                                                                textDecoration: 'none',
+                                                                                fontWeight: '500',
+                                                                                display: 'inline-flex',
+                                                                                alignItems: 'center',
+                                                                                gap: '3px',
+                                                                                transition: 'all 0.2s ease'
+                                                                            }}
+                                                                            onMouseEnter={(e) => {
+                                                                                e.target.style.transform = 'translateY(-1px)';
+                                                                                e.target.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.3)';
+                                                                            }}
+                                                                            onMouseLeave={(e) => {
+                                                                                e.target.style.transform = 'translateY(0)';
+                                                                                e.target.style.boxShadow = 'none';
+                                                                            }}
+                                                                        >
+                                                                            🔗 External Link
+                                                                        </a>
+                                                                    )}
+
+                                                                    {/* If no file or link available */}
+                                                                    {!request.publication_file && !request.publication_link && (
+                                                                        <span style={{
+                                                                            color: '#6b7280',
+                                                                            fontStyle: 'italic'
+                                                                        }}>
+                                                                            No file or link available
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            ) : request.status === 'pending' ? (
+                                                                <span style={{
+                                                                    color: '#f59e0b',
+                                                                    fontWeight: '500'
+                                                                }}>
+                                                                    ⏳ Awaiting Approval
+                                                                </span>
+                                                            ) : (
+                                                                <span style={{
+                                                                    color: '#ef4444',
+                                                                    fontWeight: '500'
+                                                                }}>
+                                                                    ❌ Access Denied
+                                                                </span>
                                                             )}
                                                         </td>
                                                     </tr>

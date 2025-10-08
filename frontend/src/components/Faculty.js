@@ -12,6 +12,7 @@ function Faculty() {
   const [filterRole, setFilterRole] = useState('');
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('faculty'); // Track user role
+  const [currentUserId, setCurrentUserId] = useState(null); // Track current user ID
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,11 +25,15 @@ function Faculty() {
         const userInfo = JSON.parse(user);
         const decoded = jwtDecode(token);
         const role = userInfo.role || decoded.role || 'faculty';
+        const userId = userInfo.id || decoded.id;
         console.log('User role detected:', role);
+        console.log('Current user ID:', userId);
         setUserRole(role);
+        setCurrentUserId(userId);
       } catch (error) {
         console.error('Error decoding token:', error);
         setUserRole('faculty'); // Default to faculty if error
+        setCurrentUserId(null);
       }
     }
 
@@ -110,6 +115,11 @@ function Faculty() {
   };
 
   const filteredProfessors = professors.filter(prof => {
+    // First, exclude the current user from the list
+    if (currentUserId && prof._id === currentUserId) {
+      return false;
+    }
+
     const expertiseText = Array.isArray(prof.area_of_expertise)
       ? prof.area_of_expertise.join(', ')
       : (prof.area_of_expertise || '');

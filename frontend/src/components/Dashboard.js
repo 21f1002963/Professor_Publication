@@ -425,9 +425,9 @@ function Dashboard() {
               margin: '0 0 0 20px'
             }}>
               {userRole === 'hod' ? 'Head of Department Dashboard' :
-               userRole === 'dean' ? 'Dean Dashboard' :
-               userRole === 'guest_faculty' ? 'Guest Faculty Dashboard' :
-               'Faculty Dashboard'}
+                userRole === 'dean' ? 'Dean Dashboard' :
+                  userRole === 'guest_faculty' ? 'Guest Faculty Dashboard' :
+                    'Faculty Dashboard'}
             </p>
             <p style={{
               fontSize: '0.9rem',
@@ -507,15 +507,15 @@ function Dashboard() {
               transition: 'all 0.3s ease',
               cursor: 'pointer'
             }}
-            onClick={() => navigate('/faculty')}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-              e.currentTarget.style.boxShadow = '0 15px 50px rgba(102, 126, 234, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 40px rgba(102, 126, 234, 0.3)';
-            }}>
+              onClick={() => navigate('/faculty')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 15px 50px rgba(102, 126, 234, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 10px 40px rgba(102, 126, 234, 0.3)';
+              }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -582,14 +582,14 @@ function Dashboard() {
               justifyContent: 'center',
               minHeight: '200px'
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-              e.currentTarget.style.boxShadow = '0 15px 50px rgba(79, 172, 254, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 40px rgba(79, 172, 254, 0.3)';
-            }}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 15px 50px rgba(79, 172, 254, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 10px 40px rgba(79, 172, 254, 0.3)';
+              }}>
               <div style={{
                 textAlign: 'center',
                 opacity: 0.7
@@ -614,14 +614,14 @@ function Dashboard() {
               justifyContent: 'center',
               minHeight: '200px'
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-              e.currentTarget.style.boxShadow = '0 15px 50px rgba(250, 112, 154, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 40px rgba(250, 112, 154, 0.3)';
-            }}>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 15px 50px rgba(250, 112, 154, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 10px 40px rgba(250, 112, 154, 0.3)';
+              }}>
               <div style={{
                 textAlign: 'center',
                 opacity: 0.7
@@ -635,14 +635,13 @@ function Dashboard() {
         )}
 
         {/* Access Request Notifications */}
-        {(accessRequestsCount.incoming > 0 || accessRequestsCount.outgoing > 0) && (
+        {(accessRequestsCount.incoming > 0) && (
           <div style={{
             background: '#fff',
             borderRadius: '20px',
             padding: '30px',
-            marginBottom: '30px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-            border: '2px solid #f59e0b'
+            marginBottom: '30px'
           }}>
             <h2 style={{
               fontSize: '1.5rem',
@@ -651,11 +650,11 @@ function Dashboard() {
               marginBottom: '20px',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px'
+              gap: '10px',
+              marginTop: '0px',
             }}>
-              🔔 Access Request Notifications
+              Access Request Notifications
             </h2>
-
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -671,7 +670,8 @@ function Dashboard() {
                     borderRadius: '15px',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)'
+                    boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
+                    width: 'fit-content'
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.transform = 'translateY(-3px)';
@@ -682,7 +682,6 @@ function Dashboard() {
                     e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
                   }}
                 >
-                  <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📥</div>
                   <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>
                     Incoming Requests
                   </h3>
@@ -745,7 +744,6 @@ function Dashboard() {
             color: '#2d3748',
             marginBottom: '20px',
             marginTop: '0px',
-            height: '40px',
           }}>
             Quick Actions
           </h2>
