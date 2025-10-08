@@ -68,6 +68,7 @@ function Signup() {
                         <label style={{ fontWeight: 500 }}>Role</label>
                         <select name="role" value={form.role} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', backgroundColor: '#fff' }}>
                             <option value="faculty">Faculty Member</option>
+                            <option value="guest_faculty">Guest Faculty</option>
                             <option value="dean">Dean of Department</option>
                             <option value="hod">Head of Department (HOD)</option>
                         </select>

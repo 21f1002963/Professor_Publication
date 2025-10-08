@@ -76,7 +76,7 @@ app.post('/signup', async (req, res) => {
         }
 
         // Validate role
-        const validRoles = ['faculty', 'hod', 'dean'];
+        const validRoles = ['faculty', 'hod', 'dean', 'guest_faculty'];
         const userRole = role || 'faculty'; // Default to faculty if role is undefined
         if (!validRoles.includes(userRole)) {
             return res.status(400).json({ message: 'Invalid role selected' });
@@ -95,7 +95,7 @@ app.post('/signup', async (req, res) => {
         console.log('Saved professor:', savedProfessor.role);
 
         res.status(201).json({
-            message: `${userRole === 'hod' ? 'HOD' : userRole === 'dean' ? 'Dean' : 'Faculty member'} registered successfully`,
+            message: `${userRole === 'hod' ? 'HOD' : userRole === 'dean' ? 'Dean' : userRole === 'guest_faculty' ? 'Guest Faculty' : 'Faculty member'} registered successfully`,
             role: savedProfessor.role
         });
     } catch (error) {
@@ -1383,7 +1383,7 @@ app.put('/api/professor/programme/:id', authenticateToken, async (req, res) => {
 app.get('/api/faculty', authenticateToken, async (req, res) => {
     try {
         const professors = await Professor.find({
-            role: { $in: ['faculty', 'hod', 'dean'] }  // Show all academic staff
+            role: { $in: ['faculty', 'guest_faculty', 'hod', 'dean'] }  // Show all academic staff
         }).select('-password -__v').sort({ name: 1 });
 
         res.status(200).json(professors);
@@ -1413,7 +1413,7 @@ app.get('/api/hod/faculty-list', authenticateToken, async (req, res) => {
         }
 
         const faculty = await Professor.find({
-            role: 'faculty'
+            role: { $in: ['faculty', 'guest_faculty'] }
         }).select('-password -__v').sort({ createdAt: -1 });
 
         res.status(200).json({

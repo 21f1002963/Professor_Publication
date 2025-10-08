@@ -9,6 +9,7 @@ function Faculty() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('');
   const [filterDesignation, setFilterDesignation] = useState('');
+  const [filterRole, setFilterRole] = useState('');
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState('faculty'); // Track user role
   const navigate = useNavigate();
@@ -117,8 +118,9 @@ function Faculty() {
       expertiseText.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = !filterDepartment || prof.department === filterDepartment;
     const matchesDesignation = !filterDesignation || prof.designation === filterDesignation;
+    const matchesRole = !filterRole || prof.role === filterRole;
 
-    return matchesSearch && matchesDepartment && matchesDesignation;
+    return matchesSearch && matchesDepartment && matchesDesignation && matchesRole;
   });
 
   const departments = [...new Set(professors.map(prof => prof.department).filter(Boolean))];
@@ -166,7 +168,7 @@ function Faculty() {
               margin: 0,
               opacity: 0.8
             }}>
-              Discover our distinguished faculty members and their expertise
+              Discover our distinguished faculty members and guest faculty expertise
             </p>
           </div>
 
@@ -239,11 +241,40 @@ function Faculty() {
                 </select>
               </div>
 
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.95rem'
+                }}>
+                  🎭 Role
+                </label>
+                <select
+                  value={filterRole}
+                  onChange={(e) => setFilterRole(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 20px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    background: '#fff'
+                  }}
+                >
+                  <option value="">All Roles</option>
+                  <option value="faculty">Faculty</option>
+                  <option value="guest_faculty">Guest Faculty</option>
+                  <option value="hod">HOD</option>
+                  <option value="dean">Dean</option>
+                </select>
+              </div>
+
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setFilterDepartment('');
                   setFilterDesignation('');
+                  setFilterRole('');
                 }}
                 style={{
                   padding: '14px 20px',
@@ -275,7 +306,7 @@ function Faculty() {
             color: '#4a5568',
             fontWeight: 500
           }}>
-            {filteredProfessors.length} faculty member{filteredProfessors.length !== 1 ? 's' : ''} found
+            {filteredProfessors.length} member{filteredProfessors.length !== 1 ? 's' : ''} found
           </div>
 
           {/* Faculty Table */}
@@ -411,6 +442,29 @@ function Faculty() {
                           }}>
                             {professor.name || 'N/A'}
                           </div>
+                          {/* Role Badge */}
+                          <span style={{
+                            background: professor.role === 'hod' ? 
+                              'linear-gradient(135deg, #e11d48 0%, #be185d 100%)' :
+                              professor.role === 'dean' ? 
+                              'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)' :
+                              professor.role === 'guest_faculty' ?
+                              'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)' :
+                              'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                            color: '#fff',
+                            padding: '2px 8px',
+                            borderRadius: '10px',
+                            fontSize: '0.7rem',
+                            fontWeight: 500,
+                            display: 'inline-block',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
+                          }}>
+                            {professor.role === 'hod' ? 'HOD' :
+                             professor.role === 'dean' ? 'DEAN' :
+                             professor.role === 'guest_faculty' ? 'GUEST' :
+                             'FACULTY'}
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -536,7 +590,7 @@ function Faculty() {
                 color: '#2d3748',
                 marginBottom: '10px'
               }}>
-                No faculty members found
+                No members found
               </h3>
               <p style={{
                 color: '#718096',

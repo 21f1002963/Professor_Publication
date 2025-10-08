@@ -17,7 +17,7 @@ const ProfessorSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['faculty', 'hod', 'dean'],
+        enum: ['faculty', 'hod', 'dean', 'guest_faculty'],
         default: 'faculty'
     },
 
