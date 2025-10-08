@@ -361,8 +361,9 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
-    conferences_seminars_organized: [{
+    conferences_seminars_workshops_organized: [{
         title_of_programme: { type: String, default: '' },
+        type: { type: String, default: '' }, // Conference, Seminar, or Workshop
         sponsors: { type: String, default: '' },
         venue_duration: { type: String, default: '' },
         level: { type: String, default: '' },
@@ -371,9 +372,10 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' }
     }],
 
-    workshops_organized: [{
+    conferences_seminars_workshops_participated: [{
         title_of_programme: { type: String, default: '' },
-        sponsors: { type: String, default: '' },
+        type: { type: String, default: '' }, // Conference, Seminar, or Workshop
+        organized_by: { type: String, default: '' },
         venue_duration: { type: String, default: '' },
         level: { type: String, default: '' },
         from_date: { type: String, default: '' },

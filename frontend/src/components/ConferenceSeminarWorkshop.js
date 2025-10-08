@@ -15,9 +15,10 @@ function ConferenceSeminarWorkshop() {
         year: "",
       },
     ],
-    conferences_seminars_organized: [
+    conferences_seminars_workshops_organized: [
       {
         title_of_programme: "",
+        type: "",
         sponsors: "",
         venue_duration: "",
         level: "",
@@ -26,10 +27,11 @@ function ConferenceSeminarWorkshop() {
         year: "",
       },
     ],
-    workshops_organized: [
+    conferences_seminars_workshops_participated: [
       {
         title_of_programme: "",
-        sponsors: "",
+        type: "",
+        organized_by: "",
         venue_duration: "",
         level: "",
         from_date: "",
@@ -95,8 +97,9 @@ function ConferenceSeminarWorkshop() {
         to_date: "",
         year: "",
       },
-      conferences_seminars_organized: {
+      conferences_seminars_workshops_organized: {
         title_of_programme: "",
+        type: "",
         sponsors: "",
         venue_duration: "",
         level: "",
@@ -104,9 +107,10 @@ function ConferenceSeminarWorkshop() {
         to_date: "",
         year: "",
       },
-      workshops_organized: {
+      conferences_seminars_workshops_participated: {
         title_of_programme: "",
-        sponsors: "",
+        type: "",
+        organized_by: "",
         venue_duration: "",
         level: "",
         from_date: "",
@@ -163,9 +167,10 @@ function ConferenceSeminarWorkshop() {
                 year: "",
               },
             ],
-            conferences_seminars_organized: data.conferences_seminars_organized || [
+            conferences_seminars_workshops_organized: data.conferences_seminars_workshops_organized || data.conferences_seminars_organized || [
               {
                 title_of_programme: "",
+                type: "",
                 sponsors: "",
                 venue_duration: "",
                 level: "",
@@ -174,10 +179,11 @@ function ConferenceSeminarWorkshop() {
                 year: "",
               },
             ],
-            workshops_organized: data.workshops_organized || [
+            conferences_seminars_workshops_participated: data.conferences_seminars_workshops_participated || [
               {
                 title_of_programme: "",
-                sponsors: "",
+                type: "",
+                organized_by: "",
                 venue_duration: "",
                 level: "",
                 from_date: "",
@@ -410,7 +416,7 @@ function ConferenceSeminarWorkshop() {
               {/* Conferences/Seminars Organized Section */}
               <div style={{ marginTop: "60px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  Conferences/Seminars Organized
+                  Conferences/Seminars/Workshop Organized
                 </h2>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1200px" }}>
@@ -418,6 +424,7 @@ function ConferenceSeminarWorkshop() {
                       <tr style={{ background: "#f1f5f9" }}>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Title of the Programme</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Type</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Sponsors</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Venue & Duration</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Level</th>
@@ -428,13 +435,13 @@ function ConferenceSeminarWorkshop() {
                       </tr>
                     </thead>
                     <tbody>
-                      {conferenceData.conferences_seminars_organized.map((conference, idx) => (
+                      {conferenceData.conferences_seminars_workshops_organized.map((conference, idx) => (
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <textarea
                               value={conference.title_of_programme}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "title_of_programme", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "title_of_programme", e.target.value)}
                               style={{
                                 width: "90%",
                                 height: "60px",
@@ -449,9 +456,27 @@ function ConferenceSeminarWorkshop() {
                             />
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <textarea
+                            <select
+                              value={conference.type}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "type", e.target.value)}
+                              style={{
+                                width: "90%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            >
+                              <option value="">Select Type</option>
+                              <option value="Conference">Conference</option>
+                              <option value="Seminar">Seminar</option>
+                              <option value="Workshop">Workshop</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
                               value={conference.sponsors}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "sponsors", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "sponsors", e.target.value)}
                               style={{
                                 width: "90%",
                                 height: "60px",
@@ -468,7 +493,7 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <textarea
                               value={conference.venue_duration}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "venue_duration", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "venue_duration", e.target.value)}
                               style={{
                                 width: "90%",
                                 height: "60px",
@@ -485,7 +510,7 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <select
                               value={conference.level}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "level", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "level", e.target.value)}
                               style={{
                                 width: "100%",
                                 padding: "8px",
@@ -503,7 +528,7 @@ function ConferenceSeminarWorkshop() {
                             <input
                               type="date"
                               value={conference.from_date}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "from_date", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "from_date", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -516,7 +541,7 @@ function ConferenceSeminarWorkshop() {
                             <input
                               type="date"
                               value={conference.to_date}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "to_date", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "to_date", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -529,7 +554,7 @@ function ConferenceSeminarWorkshop() {
                             <input
                               type="number"
                               value={conference.year}
-                              onChange={(e) => handleArrayChange("conferences_seminars_organized", idx, "year", e.target.value)}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_organized", idx, "year", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -541,7 +566,7 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                             <button
                               type="button"
-                              onClick={() => removeArrayItem("conferences_seminars_organized", idx)}
+                              onClick={() => removeArrayItem("conferences_seminars_workshops_organized", idx)}
                               style={{
                                 background: "#ef4444",
                                 color: "#fff",
@@ -562,7 +587,7 @@ function ConferenceSeminarWorkshop() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => addArrayItem("conferences_seminars_organized")}
+                  onClick={() => addArrayItem("conferences_seminars_workshops_organized")}
                   style={{
                     background: "#3b82f6",
                     color: "#fff",
@@ -581,15 +606,16 @@ function ConferenceSeminarWorkshop() {
               {/* Workshop Organized Section */}
               <div style={{ marginTop: "60px" }}>
                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                  Workshop Organized
+                  Conferences/Seminars/Workshop Participated
                 </h2>
                 <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1200px" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1300px" }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>S.No</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Title of the Programme</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Sponsors</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Type</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Organized By</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Venue & Duration</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>Level</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600" }}>From</th>
@@ -599,47 +625,13 @@ function ConferenceSeminarWorkshop() {
                       </tr>
                     </thead>
                     <tbody>
-                      {conferenceData.workshops_organized.map((workshop, idx) => (
+                      {conferenceData.conferences_seminars_workshops_participated.map((conference, idx) => (
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <textarea
-                              value={workshop.title_of_programme}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "title_of_programme", e.target.value)}
-                              style={{
-                                width: "90%",
-                                height: "60px",
-                                padding: "8px",
-                                border: "1px solid #d1d5db",
-                                borderRadius: "6px",
-                                resize: "vertical",
-                                overflow: "auto",
-                                fontFamily: "inherit",
-                                fontSize: "1rem"
-                              }}
-                            />
-                          </td>
-                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <textarea
-                              value={workshop.sponsors}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "sponsors", e.target.value)}
-                              style={{
-                                width: "90%",
-                                height: "60px",
-                                padding: "8px",
-                                border: "1px solid #d1d5db",
-                                borderRadius: "6px",
-                                resize: "vertical",
-                                overflow: "auto",
-                                fontFamily: "inherit",
-                                fontSize: "1rem"
-                              }}
-                            />
-                          </td>
-                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
-                            <textarea
-                              value={workshop.venue_duration}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "venue_duration", e.target.value)}
+                              value={conference.title_of_programme}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "title_of_programme", e.target.value)}
                               style={{
                                 width: "90%",
                                 height: "60px",
@@ -655,8 +647,51 @@ function ConferenceSeminarWorkshop() {
                           </td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <select
-                              value={workshop.level}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "level", e.target.value)}
+                              value={conference.type}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "type", e.target.value)}
+                              style={{
+                                width: "90%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            >
+                              <option value="">Select Type</option>
+                              <option value="Conference">Conference</option>
+                              <option value="Seminar">Seminar</option>
+                              <option value="Workshop">Workshop</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={conference.organized_by}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "organized_by", e.target.value)}
+                              style={{
+                                width: "90%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <input
+                              type="text"
+                              value={conference.venue_duration}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "venue_duration", e.target.value)}
+                              style={{
+                                width: "90%",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px"
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <select
+                              value={conference.level}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "level", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -673,8 +708,8 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <input
                               type="date"
-                              value={workshop.from_date}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "from_date", e.target.value)}
+                              value={conference.from_date}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "from_date", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -686,8 +721,8 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <input
                               type="date"
-                              value={workshop.to_date}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "to_date", e.target.value)}
+                              value={conference.to_date}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "to_date", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -699,8 +734,8 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <input
                               type="number"
-                              value={workshop.year}
-                              onChange={(e) => handleArrayChange("workshops_organized", idx, "year", e.target.value)}
+                              value={conference.year}
+                              onChange={(e) => handleArrayChange("conferences_seminars_workshops_participated", idx, "year", e.target.value)}
                               style={{
                                 width: "90%",
                                 padding: "8px",
@@ -712,7 +747,7 @@ function ConferenceSeminarWorkshop() {
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                             <button
                               type="button"
-                              onClick={() => removeArrayItem("workshops_organized", idx)}
+                              onClick={() => removeArrayItem("conferences_seminars_workshops_participated", idx)}
                               style={{
                                 background: "#ef4444",
                                 color: "#fff",
@@ -733,7 +768,7 @@ function ConferenceSeminarWorkshop() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => addArrayItem("workshops_organized")}
+                  onClick={() => addArrayItem("conferences_seminars_workshops_participated")}
                   style={{
                     background: "#8b5cf6",
                     color: "#fff",
@@ -745,7 +780,7 @@ function ConferenceSeminarWorkshop() {
                     fontSize: "14px"
                   }}
                 >
-                  + Add Workshop Entry
+                  + Add Participated Entry
                 </button>
               </div>
 
