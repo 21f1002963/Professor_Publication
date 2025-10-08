@@ -444,9 +444,9 @@ function Faculty() {
                           </div>
                           {/* Role Badge */}
                           <span style={{
-                            background: professor.role === 'hod' ? 
+                            background: professor.role === 'hod' ?
                               'linear-gradient(135deg, #e11d48 0%, #be185d 100%)' :
-                              professor.role === 'dean' ? 
+                              professor.role === 'dean' ?
                               'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)' :
                               professor.role === 'guest_faculty' ?
                               'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)' :

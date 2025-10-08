@@ -9,6 +9,8 @@ function ResearchGuidanceStudents() {
         year: "",
         degree: "",
         students_awarded: "",
+        student_names: "",
+        student_roll_no: "",
         department_centre: "",
       },
     ],
@@ -78,6 +80,8 @@ function ResearchGuidanceStudents() {
         year: "",
         degree: "",
         students_awarded: "",
+        student_names: "",
+        student_roll_no: "",
         department_centre: "",
       },
       phd_guidance: {
@@ -197,14 +201,16 @@ function ResearchGuidanceStudents() {
                   Research Guidance - PG
                 </h2>
                 <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1200px" }}>
                     <thead>
                       <tr style={{ background: "#f1f5f9" }}>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "8%" }}>S.No</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Year</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "35%" }}>Degree</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "17%" }}>No. of Students Awarded</th>
-                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Department/Centre</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>S.No</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>Year</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Degree</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "10%" }}>No. of Students Awarded</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "20%" }}>Student Names</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Student Roll No.</th>
+                        <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "15%" }}>Department/Centre</th>
                         <th style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "600", width: "5%" }}>Action</th>
                       </tr>
                     </thead>
@@ -252,6 +258,42 @@ function ResearchGuidanceStudents() {
                                 padding: "8px",
                                 border: "1px solid #d1d5db",
                                 borderRadius: "6px"
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <textarea
+                              value={pg.student_names}
+                              onChange={(e) => handleArrayChange("pg_guidance", idx, "student_names", e.target.value)}
+                              placeholder="Enter student names (comma separated)"
+                              style={{
+                                width: "90%",
+                                height: "60px",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
+                            <textarea
+                              value={pg.student_roll_no}
+                              onChange={(e) => handleArrayChange("pg_guidance", idx, "student_roll_no", e.target.value)}
+                              placeholder="Enter roll numbers (comma separated)"
+                              style={{
+                                width: "90%",
+                                height: "60px",
+                                padding: "8px",
+                                border: "1px solid #d1d5db",
+                                borderRadius: "6px",
+                                resize: "vertical",
+                                overflow: "auto",
+                                fontFamily: "inherit",
+                                fontSize: "1rem"
                               }}
                             />
                           </td>

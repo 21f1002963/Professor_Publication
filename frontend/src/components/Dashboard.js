@@ -373,9 +373,9 @@ function Dashboard() {
               marginLeft: 20,
               margin: '0 0 0 20px'
             }}>
-              {userRole === 'hod' ? 'Head of Department Dashboard' : 
-               userRole === 'dean' ? 'Dean Dashboard' : 
-               userRole === 'guest_faculty' ? 'Guest Faculty Dashboard' : 
+              {userRole === 'hod' ? 'Head of Department Dashboard' :
+               userRole === 'dean' ? 'Dean Dashboard' :
+               userRole === 'guest_faculty' ? 'Guest Faculty Dashboard' :
                'Faculty Dashboard'}
             </p>
             <p style={{

@@ -239,6 +239,8 @@ const ProfessorSchema = new mongoose.Schema({
         year: { type: String, default: '' },
         degree: { type: String, default: '' },
         students_awarded: { type: String, default: '' },
+        student_names: { type: String, default: '' },
+        student_roll_no: { type: String, default: '' },
         department_centre: { type: String, default: '' }
     }],
 
