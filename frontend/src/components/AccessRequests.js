@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
+import LoadingSpinner from './LoadingSpinner';
+import { useApiLoading } from '../hooks/useApiLoading';
 
 function AccessRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [outgoingRequests, setOutgoingRequests] = useState([]);
     const [activeTab, setActiveTab] = useState('incoming');
     const [loading, setLoading] = useState(true);
+    const { isLoading: apiLoading, executeWithLoading } = useApiLoading();
 
     useEffect(() => {
         fetchAccessRequests();
@@ -54,10 +57,10 @@ function AccessRequests() {
     };
 
     const handleRequestResponse = async (requestId, status, responseMessage = '') => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+        await executeWithLoading(async () => {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('No authentication token found');
 
-        try {
             const response = await fetch(
                 `https://professorpublication-production.up.railway.app/api/access-request/${requestId}/respond`,
                 {
@@ -78,12 +81,12 @@ function AccessRequests() {
                 fetchAccessRequests(); // Refresh the list
             } else {
                 const errorData = await response.json();
-                alert(errorData.message || 'Error processing request');
+                throw new Error(errorData.message || 'Error processing request');
             }
-        } catch (error) {
-            console.error('Error responding to request:', error);
-            alert('Error processing request');
-        }
+        }, {
+            successMessage: `Request ${status} successfully!`,
+            errorMessage: 'Error processing request'
+        });
     };
 
     const formatDate = (dateString) => {
@@ -106,38 +109,27 @@ function AccessRequests() {
     };
 
     if (loading) {
-        return (
-            <Layout>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '50vh',
-                    fontSize: '1.2rem',
-                    color: '#667eea'
-                }}>
-                    Loading access requests...
-                </div>
-            </Layout>
-        );
+        return <LoadingSpinner message="Loading access requests..." />;
     }
 
     return (
-        <Layout>
-            <div style={{
-                minHeight: '100vh',
-                padding: '40px 20px'
-            }}>
+        <>
+            {apiLoading && <LoadingSpinner message="Processing request..." />}
+            <Layout>
                 <div style={{
-                    padding: '10px 30px 30px'
+                    minHeight: '100vh',
+                    padding: '40px 20px'
                 }}>
-                    <h1 style={{
-                        fontSize: '2.5rem',
-                        fontWeight: 800,
-                        marginBottom: '10px',
-                        marginTop: '0px'
+                    <div style={{
+                        padding: '10px 30px 30px'
                     }}>
-                        Publication Access Requests
+                        <h1 style={{
+                            fontSize: '2.5rem',
+                            fontWeight: 800,
+                            marginBottom: '10px',
+                            marginTop: '0px'
+                        }}>
+                            Publication Access Requests
                     </h1>
                     <p style={{
                         fontSize: '1.1rem',
@@ -508,6 +500,7 @@ function AccessRequests() {
                 </div>
             </div>
         </Layout>
+        </>
     );
 }
 

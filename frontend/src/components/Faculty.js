@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
+import LoadingSpinner from './LoadingSpinner';
 import { API_BASE_URL } from '../config/api';
 
 function Faculty() {
@@ -137,20 +138,7 @@ function Faculty() {
   const designations = [...new Set(professors.map(prof => prof.designation).filter(Boolean))];
 
   if (loading) {
-    return (
-      <Layout>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '400px',
-          fontSize: '1.2rem',
-          color: '#666'
-        }}>
-          Loading faculty directory...
-        </div>
-      </Layout>
-    );
+    return <LoadingSpinner message="Loading faculty directory..." />;
   }
 
   return (

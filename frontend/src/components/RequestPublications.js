@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
+import LoadingSpinner from './LoadingSpinner';
 
 function RequestPublications() {
   const { facultyId } = useParams();
@@ -231,24 +232,7 @@ function RequestPublications() {
   };
 
   if (loading) {
-    return (
-      <Layout>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '50vh',
-          fontSize: '1.2rem',
-          color: '#667eea'
-        }}>
-          <div>Loading faculty publications...</div>
-          <div style={{ fontSize: '0.9rem', marginTop: '10px', opacity: 0.7 }}>
-            Faculty ID: {facultyId}
-          </div>
-        </div>
-      </Layout>
-    );
+    return <LoadingSpinner message={`Loading publications for Faculty ID: ${facultyId}`} />;
   }
 
   if (!faculty) {

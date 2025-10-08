@@ -98,8 +98,8 @@ function Signup() {
                         <input name="confirmPassword" type="password" placeholder="Confirm Password" value={form.confirmPassword} onChange={handleChange} required style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem' }} />
                         <button type="submit" style={{ background: 'linear-gradient(90deg, #6366f1 60%, #818cf8 100%)', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px', fontWeight: 600, fontSize: '1.1rem', marginTop: '10px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(99,102,241,0.10)' }}>Signup</button>
                     </form>
-                    <p style={{ color: '#ef4444', marginTop: '8px', fontWeight: 500 }}>{message}</p>
-                    <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                    <p style={{ color: '#ef4444', fontWeight: 500 }}>{message}</p>
+                    <div style={{ textAlign: 'center' }}>
                         Already have an account? <Link to="/login" style={{ color: '#6366f1', fontWeight: 600, textDecoration: 'none' }}>Login</Link>
                     </div>
                 </div>

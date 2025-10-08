@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
+import LoadingSpinner from "./LoadingSpinner";
 
 function Publications() {
   const [currentUser, setCurrentUser] = useState({});
   const [targetFacultyId, setTargetFacultyId] = useState(null); // When viewing someone else's publications
   const [isOwnProfile, setIsOwnProfile] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [publications, setPublications] = useState({
     // Papers Published in SEIE Journals
     seie_journals: [
@@ -231,9 +233,13 @@ function Publications() {
 
   const fetchPublications = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     try {
+      setLoading(true);
       let url = "https://professorpublication-production.up.railway.app/api/professor/publications";
 
       // If viewing someone else's profile, fetch their publications
@@ -261,6 +267,8 @@ function Publications() {
       }
     } catch (error) {
       console.error("Error fetching publications:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -389,6 +397,10 @@ function Publications() {
       [arrayName]: prev[arrayName].filter((_, i) => i !== index),
     }));
   };
+
+  if (loading) {
+    return <LoadingSpinner message="Loading publications..." />;
+  }
 
   return (
     <Layout>

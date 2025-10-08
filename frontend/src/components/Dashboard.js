@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import LoadingSpinner from './LoadingSpinner';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -9,6 +10,7 @@ function Dashboard() {
   const [userRole, setUserRole] = useState('faculty'); // 'faculty' or 'hod'
   const [profileImage, setProfileImage] = useState('');
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [loading, setLoading] = useState(true);
   const [facultyStats, setFacultyStats] = useState({
     totalProfessors: 0,
     designationCounts: {}
@@ -20,30 +22,40 @@ function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+    const initializeDashboard = async () => {
+      setLoading(true);
+      
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
 
-    if (token && user) {
-      try {
-        const userInfo = JSON.parse(user);
-        const decoded = jwtDecode(token);
-        setUserName(userInfo.name || decoded.name || 'Professor');
-        setUserRole(userInfo.role || decoded.role || 'faculty');
+      if (token && user) {
+        try {
+          const userInfo = JSON.parse(user);
+          const decoded = jwtDecode(token);
+          setUserName(userInfo.name || decoded.name || 'Professor');
+          setUserRole(userInfo.role || decoded.role || 'faculty');
 
-        // Fetch profile data to get the latest profile image
-        fetchProfileData();
+          // Fetch all data in parallel
+          const promises = [
+            fetchProfileData(),
+            fetchAccessRequestsCount()
+          ];
 
-        // Fetch access requests count
-        fetchAccessRequestsCount();
+          // If user is HOD, also fetch faculty statistics
+          if ((userInfo.role || decoded.role || 'faculty') === 'hod') {
+            promises.push(fetchFacultyStats());
+          }
 
-        // If user is HOD, also fetch faculty statistics
-        if ((userInfo.role || decoded.role || 'faculty') === 'hod') {
-          fetchFacultyStats();
+          await Promise.all(promises);
+        } catch (error) {
+          console.error('Error decoding token:', error);
         }
-      } catch (error) {
-        console.error('Error decoding token:', error);
       }
-    }
+      
+      setLoading(false);
+    };
+
+    initializeDashboard();
   }, []);
 
   const fetchProfileData = async () => {
@@ -182,6 +194,10 @@ function Dashboard() {
   ];
 
   const menuItems = userRole === 'hod' ? hodMenuItems : baseMenuItems;
+
+  if (loading) {
+    return <LoadingSpinner message="Loading dashboard..." />;
+  }
 
   return (
     <div style={{
