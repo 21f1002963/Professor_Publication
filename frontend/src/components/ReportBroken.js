@@ -94,11 +94,11 @@ function Report() {
     const filterByYear = (items) => {
       if (!items || !Array.isArray(items)) return [];
       return items.filter(item => {
-        const year = item.year || item.publicationYear || item.dateOfPatent || 
-                    item.admissionYear || item.joiningDate || item.startDate || 
+        const year = item.year || item.publicationYear || item.dateOfPatent ||
+                    item.admissionYear || item.joiningDate || item.startDate ||
                     item.dateOfConference || item.trainingYear || item.signingDate ||
                     item.launchDate || item.participationYear || item.yearOfProgramme;
-        
+
         if (!year) return true;
         const itemYear = parseInt(year);
         const start = startYear ? parseInt(startYear) : 0;
@@ -209,7 +209,7 @@ function Report() {
     if (facultyData && Object.keys(facultyData).length > 0) {
       return true;
     }
-    
+
     // If no faculty data, return false
     return false;
   };
@@ -217,11 +217,11 @@ function Report() {
   const exportToPDF = () => {
     const printWindow = window.open('', '_blank');
     const htmlContent = generatePDFContent();
-    
+
     printWindow.document.write(htmlContent);
     printWindow.document.close();
     printWindow.focus();
-    
+
     setTimeout(() => {
       printWindow.print();
       printWindow.close();
@@ -230,7 +230,7 @@ function Report() {
 
   const generatePDFContent = () => {
     const data = filteredData;
-    
+
     return `
       <!DOCTYPE html>
       <html>
@@ -856,7 +856,7 @@ function Report() {
           <h2 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '1.5rem' }}>
             🎛️ Report Filters
           </h2>
-          
+
           {/* Year Filters */}
           <div style={{ marginBottom: '20px' }}>
             <h3 style={{ color: '#475569', fontSize: '1.1rem', marginBottom: '10px' }}>
@@ -1037,7 +1037,7 @@ function Report() {
             <h2 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '1.5rem' }}>
               📋 Report Preview
             </h2>
-            
+
             {hasDisplayableData() ? (
               <div>
                 {/* Profile Section */}

@@ -241,6 +241,22 @@ function Profile() {
     fellowships: true
   });
 
+  // Section visibility states for hide/show functionality
+  const [sectionVisibility, setSectionVisibility] = useState({
+    experience: true,
+    publications: true,
+    patents: true,
+    books: true,
+    fellowship: true,
+    research: true,
+    projects: true,
+    education: true,
+    conference: true,
+    participation: true,
+    programme: true,
+    awards: true
+  });
+
   // Timeline filter states
   const [enableTimelineFilter, setEnableTimelineFilter] = useState(false);
   const [timelineRange, setTimelineRange] = useState({
@@ -255,6 +271,20 @@ function Profile() {
   // Toggle section selection for report
   const toggleSection = (sectionKey) => {
     setSelectedSections(prev => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey]
+    }));
+  };
+
+  // Toggle section visibility for hide/show functionality
+  const toggleSectionVisibility = (sectionKey, event) => {
+    // Prevent form submission and event bubbling
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    setSectionVisibility(prev => ({
       ...prev,
       [sectionKey]: !prev[sectionKey]
     }));
@@ -2459,28 +2489,50 @@ function Profile() {
 
               {/* Awards / Prizes Conferred Section */}
               <div style={{ marginTop: "40px" }}>
-                <h2
-                  style={{
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    color: "#2d3748",
-                    marginBottom: "25px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    fontFamily: "Segoe UI, Arial, sans-serif",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Awards / Prizes Conferred
-                </h2>
-                <table
-                  style={{
-                    width: "100%",
-                    borderCollapse: "collapse",
-                    marginBottom: "10px",
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
+                  <h2
+                    style={{
+                      fontSize: "1.8rem",
+                      fontWeight: 700,
+                      color: "#2d3748",
+                      marginBottom: "0px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      fontFamily: "Segoe UI, Arial, sans-serif",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    Awards / Prizes Conferred
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={(e) => toggleSectionVisibility('awards', e)}
+                    style={{
+                      background: sectionVisibility.awards ? "#ef4444" : "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "8px 16px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "0.9rem",
+                      transition: "all 0.2s ease"
+                    }}
+                  >
+                    {sectionVisibility.awards ? "Hide" : "Show"}
+                  </button>
+                </div>
+
+                {sectionVisibility.awards && (
+                  <>
+                    <table
+                      style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        marginBottom: "10px",
+                      }}
+                    >
                   <thead>
                     <tr style={{ background: "#f1f5f9" }}>
                       <th
@@ -2806,6 +2858,8 @@ function Profile() {
                     Add Award / Prize
                   </button>
                 )}
+                  </>
+                )}
               </div>
             </div>
 
@@ -2815,12 +2869,33 @@ function Profile() {
                 {/* Experience Section */}
                 {experienceData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Professional Experience
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Professional Experience
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('experience', e)}
+                        style={{
+                          background: sectionVisibility.experience ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.experience ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {/* Teaching Experience Table */}
-                    {experienceData.teaching_experience?.length > 0 && (
+                    {sectionVisibility.experience && (
+                      <>
+                        {/* Teaching Experience Table */}
+                        {experienceData.teaching_experience?.length > 0 && (
                       <div style={{ marginBottom: "30px" }}>
                         <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Teaching Experience</h3>
                         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
@@ -2878,18 +2953,41 @@ function Profile() {
                         </table>
                       </div>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Publications Section */}
                 {publicationsData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Publications
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Publications
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('publications', e)}
+                        style={{
+                          background: sectionVisibility.publications ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.publications ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {/* SEIE Journals Table */}
-                    {publicationsData.seie_journals?.length > 0 && (
+                    {sectionVisibility.publications && (
+                      <>
+                        {/* SEIE Journals Table */}
+                        {publicationsData.seie_journals?.length > 0 && (
                       <div style={{ marginBottom: "30px" }}>
                         <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>SEIE Journals</h3>
                         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
@@ -3205,17 +3303,40 @@ function Profile() {
                         </table>
                       </div>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Patents Section */}
                 {patentsData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Patents
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Patents
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('patents', e)}
+                        style={{
+                          background: sectionVisibility.patents ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.patents ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {patentsData.patents?.length > 0 && (
+                    {sectionVisibility.patents && (
+                      <>
+                        {patentsData.patents?.length > 0 && (
                       <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
                         <thead>
                           <tr style={{ background: "#f1f5f9" }}>
@@ -3243,17 +3364,40 @@ function Profile() {
                         </tbody>
                       </table>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Fellowship Section */}
                 {fellowshipData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Fellowship
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Fellowship
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('fellowship', e)}
+                        style={{
+                          background: sectionVisibility.fellowship ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.fellowship ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {fellowshipData.fellowship_details?.length > 0 && (
+                    {sectionVisibility.fellowship && (
+                      <>
+                        {fellowshipData.fellowship_details?.length > 0 && (
                       <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
                         <thead>
                           <tr style={{ background: "#f1f5f9" }}>
@@ -3293,18 +3437,41 @@ function Profile() {
                         </tbody>
                       </table>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Books Section */}
                 {booksData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Books & Publications
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Books & Publications
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('books', e)}
+                        style={{
+                          background: sectionVisibility.books ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.books ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {/* Books Authored Table */}
-                    {booksData.books?.length > 0 && (
+                    {sectionVisibility.books && (
+                      <>
+                        {/* Books Authored Table */}
+                        {booksData.books?.length > 0 && (
                       <div style={{ marginBottom: "30px" }}>
                         <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>Books Authored</h3>
                         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
@@ -3399,18 +3566,41 @@ function Profile() {
                         </table>
                       </div>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Research Guidance Section */}
                 {researchData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Research Guidance
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Research Guidance
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('research', e)}
+                        style={{
+                          background: sectionVisibility.research ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.research ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {/* PhD Students Table */}
-                    {researchData.phd_students?.length > 0 && (
+                    {sectionVisibility.research && (
+                      <>
+                        {/* PhD Students Table */}
+                        {researchData.phd_students?.length > 0 && (
                       <div style={{ marginBottom: "30px" }}>
                         <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: "#4a5568", marginBottom: "15px" }}>PhD Students</h3>
                         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "10px" }}>
@@ -3462,18 +3652,41 @@ function Profile() {
                         </table>
                       </div>
                     )}
+                      </>
+                    )}
                   </div>
                 )}
 
                 {/* Project Consultancy Section */}
                 {projectData && (
                   <div style={{ marginTop: "0px", padding: "30px", paddingTop: '0px', borderRadius: "15px" }}>
-                    <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginBottom: "20px", marginTop: '0px', display: "flex", alignItems: "center", gap: "10px" }}>
-                      Project & Consultancy
-                    </h2>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                      <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#2d3748", marginTop: '0px', marginBottom: "0px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        Project & Consultancy
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSectionVisibility('projects', e)}
+                        style={{
+                          background: sectionVisibility.projects ? "#ef4444" : "#10b981",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          transition: "all 0.2s ease"
+                        }}
+                      >
+                        {sectionVisibility.projects ? "Hide" : "Show"}
+                      </button>
+                    </div>
 
-                    {/* Research Projects Funded Table */}
-                    {projectData.research_projects_funded?.length > 0 && (
+                    {sectionVisibility.projects && (
+                      <>
+                        {/* Research Projects Funded Table */}
+                        {projectData.research_projects_funded?.length > 0 && (
                       <div style={{ marginBottom: "30px" }}>
                         <h3 style={{ fontSize: "1.2rem", fontWeight: 600, marginBottom: "15px" }}>
                           Research Projects funded by Government, Non-Government, Industry, Corporate Houses, International Bodies
@@ -3629,6 +3842,8 @@ function Profile() {
                           </tbody>
                         </table>
                       </div>
+                    )}
+                      </>
                     )}
                   </div>
                 )}
