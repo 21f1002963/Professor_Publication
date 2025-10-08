@@ -3,6 +3,9 @@ import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
 function Publications() {
+  const [currentUser, setCurrentUser] = useState({});
+  const [targetFacultyId, setTargetFacultyId] = useState(null); // When viewing someone else's publications
+  const [isOwnProfile, setIsOwnProfile] = useState(true);
   const [publications, setPublications] = useState({
     // Papers Published in SEIE Journals
     seie_journals: [
@@ -72,6 +75,25 @@ function Publications() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        setCurrentUser({
+          id: decoded.id,
+          name: decoded.name || "",
+          email: decoded.email || "",
+          role: decoded.role || "faculty"
+        });
+        
+        // Check if viewing someone else's profile via URL params or route
+        const urlParams = new URLSearchParams(window.location.search);
+        const facultyId = urlParams.get('facultyId');
+        
+        if (facultyId && facultyId !== decoded.id) {
+          setTargetFacultyId(facultyId);
+          setIsOwnProfile(false);
+        } else {
+          setIsOwnProfile(true);
+          setTargetFacultyId(null);
+        }
+
         setPublications((prev) => ({
           ...prev,
           name: decoded.name || "",
@@ -85,19 +107,145 @@ function Publications() {
     fetchPublications();
   }, []);
 
+  const requestAccess = async (publicationType, publicationIndex, publicationTitle) => {
+    const token = localStorage.getItem("token");
+    if (!token || isOwnProfile) return;
+
+    const message = prompt("Please enter a message explaining why you need access to this publication (optional):");
+    if (message === null) return; // User cancelled
+
+    try {
+      const response = await fetch(
+        "https://professorpublication-production.up.railway.app/api/access-request",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            target_faculty_id: targetFacultyId,
+            publication_type: publicationType,
+            publication_index: publicationIndex,
+            publication_title: publicationTitle,
+            message: message || ""
+          }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Access request sent successfully! The faculty will be notified.");
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Error sending access request");
+      }
+    } catch (error) {
+      console.error("Error sending access request:", error);
+      alert("Error sending access request. Please try again.");
+    }
+  };
+
+  // Helper function to render paper upload cell
+  const renderPaperUploadCell = (pub, arrayName, idx) => {
+    if (isOwnProfile) {
+      return (
+        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={(e) => {
+              if (e.target.files[0]) {
+                handleFileUpload(arrayName, idx, e.target.files[0]);
+              }
+            }}
+            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
+          />
+          {pub.paper_upload_filename && (
+            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
+              {pub.paper_upload_filename}
+            </div>
+          )}
+        </td>
+      );
+    } else {
+      return (
+        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+          <button
+            onClick={() => requestAccess(arrayName, idx, pub.title)}
+            style={{
+              background: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "6px 12px",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              fontWeight: "500"
+            }}
+            title="Request access to view paper upload"
+          >
+            Request Access
+          </button>
+        </td>
+      );
+    }
+  };
+
+  // Helper function to render paper link cell
+  const renderPaperLinkCell = (pub, arrayName, idx) => {
+    if (isOwnProfile) {
+      return (
+        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+          <input
+            type="url"
+            value={pub.paper_link}
+            onChange={(e) => handleArrayChange(arrayName, idx, "paper_link", e.target.value)}
+            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
+            placeholder="Paper Link"
+          />
+        </td>
+      );
+    } else {
+      return (
+        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+          <button
+            onClick={() => requestAccess(arrayName, idx, pub.title)}
+            style={{
+              background: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "6px 12px",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              fontWeight: "500"
+            }}
+            title="Request access to view paper link"
+          >
+            Request Access
+          </button>
+        </td>
+      );
+    }
+  };
+
   const fetchPublications = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
-      const response = await fetch(
-        "https://professorpublication-production.up.railway.app/api/professor/publications",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      let url = "https://professorpublication-production.up.railway.app/api/professor/publications";
+      
+      // If viewing someone else's profile, fetch their publications
+      if (targetFacultyId && !isOwnProfile) {
+        url += `?facultyId=${targetFacultyId}`;
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -429,61 +577,40 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
-                              if (e.target.files[0]) {
-                                handleFileUpload("seie_journals", idx, e.target.files[0]);
-                              }
-                            }}
-                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
-                          />
-                          {pub.paper_upload_filename && (
-                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
-                              {pub.paper_upload_filename}
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="url"
-                            value={pub.paper_link}
-                            onChange={(e) => handleArrayChange("seie_journals", idx, "paper_link", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
-                            placeholder="Paper Link"
-                          />
-                        </td>
+                        {renderPaperUploadCell(pub, "seie_journals", idx)}
+                        {renderPaperLinkCell(pub, "seie_journals", idx)}
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("seie_journals", idx)}
-                            style={{
-                              background: "#ef4444",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "4px",
-                              padding: "4px 8px",
-                              fontSize: "0.7rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Remove
-                          </button>
+                          {isOwnProfile && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("seie_journals", idx)}
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                fontSize: "0.7rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("seie_journals")}
-                  style={{
-                    background: "#10b981",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("seie_journals")}
+                    style={{
+                      background: "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
                     padding: "10px 20px",
                     fontSize: "1rem",
                     cursor: "pointer",
@@ -492,6 +619,7 @@ function Publications() {
                 >
                   + Add SEIE Journal Paper
                 </button>
+                )}
               </div>
 
               {/* UGC Approved Journals Section */}
@@ -638,72 +766,50 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
-                              if (e.target.files[0]) {
-                                handleFileUpload("ugc_approved_journals", idx, e.target.files[0]);
-                              }
-                            }}
-                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
-                          />
-                          {pub.paper_upload_filename && (
-                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
-                              {pub.paper_upload_filename}
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="url"
-                            value={pub.paper_link}
-                            onChange={(e) => handleArrayChange("ugc_approved_journals", idx, "paper_link", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
-                            placeholder="Paper Link"
-                          />
-                        </td>
+                        {renderPaperUploadCell(pub, "ugc_approved_journals", idx)}
+                        {renderPaperLinkCell(pub, "ugc_approved_journals", idx)}
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("ugc_approved_journals", idx)}
-                            style={{
-                              background: "#ef4444",
+                          {isOwnProfile && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("ugc_approved_journals", idx)}
+                              style={{
+                                background: "#ef4444",
                               color: "#fff",
                               border: "none",
                               borderRadius: "4px",
                               padding: "4px 8px",
                               fontSize: "0.7rem",
                               cursor: "pointer",
-                            }}
-                          >
-                            Remove
-                          </button>
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("ugc_approved_journals")}
-                  style={{
-                    background: "#10b981",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "10px 20px",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    marginTop: "10px",
-                  }}
-                >
-                  + Add UGC Approved Journal Paper
-                </button>
-              </div>
-
-              {/* Non UGC Approved Journals Section */}
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("ugc_approved_journals")}
+                    style={{
+                      background: "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "10px 20px",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      marginTop: "10px",
+                    }}
+                  >
+                    + Add UGC Approved Journal Paper
+                  </button>
+                )}
+              </div>              {/* Non UGC Approved Journals Section */}
               <div style={{ marginTop: "40px" }}>
                 <h2
                   style={{
@@ -846,69 +952,49 @@ function Publications() {
                             placeholder="IF"
                           />
                         </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
-                              if (e.target.files[0]) {
-                                handleFileUpload("non_ugc_journals", idx, e.target.files[0]);
-                              }
-                            }}
-                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
-                          />
-                          {pub.paper_upload_filename && (
-                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
-                              {pub.paper_upload_filename}
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="url"
-                            value={pub.paper_link}
-                            onChange={(e) => handleArrayChange("non_ugc_journals", idx, "paper_link", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
-                            placeholder="Paper Link"
-                          />
-                        </td>
+                        {renderPaperUploadCell(pub, "non_ugc_journals", idx)}
+                        {renderPaperLinkCell(pub, "non_ugc_journals", idx)}
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("non_ugc_journals", idx)}
-                            style={{
-                              background: "#ef4444",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "4px",
-                              padding: "4px 8px",
-                              fontSize: "0.7rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Remove
-                          </button>
+                          {isOwnProfile && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("non_ugc_journals", idx)}
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                fontSize: "0.7rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("non_ugc_journals")}
-                  style={{
-                    background: "#10b981",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "10px 20px",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    marginTop: "10px",
-                  }}
-                >
-                  + Add Non UGC Journal Paper
-                </button>
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("non_ugc_journals")}
+                    style={{
+                      background: "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "10px 20px",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      marginTop: "10px",
+                    }}
+                  >
+                    + Add Non UGC Journal Paper
+                  </button>
+                )}
               </div>
 
               {/* Conference Proceedings Section */}
@@ -1024,62 +1110,41 @@ function Publications() {
                             placeholder="Year"
                           />
                         </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
-                              if (e.target.files[0]) {
-                                handleFileUpload("conference_proceedings", idx, e.target.files[0]);
-                              }
-                            }}
-                            style={{ width: "100%", padding: "4px", fontSize: "0.8rem" }}
-                          />
-                          {pub.paper_upload_filename && (
-                            <div style={{ fontSize: "0.7rem", color: "#666", marginTop: "2px" }}>
-                              {pub.paper_upload_filename}
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          <input
-                            type="url"
-                            value={pub.paper_link}
-                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "paper_link", e.target.value)}
-                            style={{ width: "90%", padding: "8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontSize: "0.9rem" }}
-                            placeholder="Paper Link"
-                          />
-                        </td>
+                        {renderPaperUploadCell(pub, "conference_proceedings", idx)}
+                        {renderPaperLinkCell(pub, "conference_proceedings", idx)}
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem("conference_proceedings", idx)}
-                            style={{
-                              background: "#ef4444",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "4px",
-                              padding: "4px 8px",
-                              fontSize: "0.7rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Remove
-                          </button>
+                          {isOwnProfile && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("conference_proceedings", idx)}
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "4px",
+                                padding: "4px 8px",
+                                fontSize: "0.7rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addArrayItem("conference_proceedings")}
-                  style={{
-                    background: "#10b981",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "10px 20px",
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("conference_proceedings")}
+                    style={{
+                      background: "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "10px 20px",
                     fontSize: "1rem",
                     cursor: "pointer",
                     marginTop: "10px",
@@ -1087,45 +1152,48 @@ function Publications() {
                 >
                   + Add Conference Paper
                 </button>
+                )}
               </div>
 
               {/* Submit Button */}
-              <div
-                style={{
-                  marginTop: "50px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <button
-                  type="submit"
+              {isOwnProfile && (
+                <div
                   style={{
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "12px",
-                    padding: "16px 40px",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.3)",
-                    transition: "all 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 12px 35px rgba(102, 126, 234, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 8px 25px rgba(102, 126, 234, 0.3)";
+                    marginTop: "50px",
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
-                  Update
-                </button>
-              </div>
+                  <button
+                    type="submit"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "12px",
+                      padding: "16px 40px",
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      boxShadow: "0 8px 25px rgba(102, 126, 234, 0.3)",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow =
+                        "0 12px 35px rgba(102, 126, 234, 0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow =
+                        "0 8px 25px rgba(102, 126, 234, 0.3)";
+                    }}
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
             </div>
           </form>
         </div>

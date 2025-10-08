@@ -42,6 +42,7 @@ function Layout({ children }) {
     { label: 'Experience', path: '/experience', icon: '💼' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
+    { label: 'Access Requests', path: '/access-requests', icon: '🔐' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Fellowship', path: '/fellowship', icon: '🏆' },
     { label: 'Training & Consultancy', path: '/training', icon: '💰' },

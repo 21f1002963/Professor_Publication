@@ -370,17 +370,15 @@ function Faculty() {
                   }}>
                     🔬 Expertise
                   </th>
-                  {userRole === 'hod' && (
-                    <th style={{
-                      padding: '20px',
-                      textAlign: 'center',
-                      fontSize: '1rem',
-                      fontWeight: 600,
-                      borderBottom: 'none'
-                    }}>
-                      Actions
-                    </th>
-                  )}
+                  <th style={{
+                    padding: '20px',
+                    textAlign: 'center',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    borderBottom: 'none'
+                  }}>
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -530,12 +528,12 @@ function Faculty() {
                         : professor.area_of_expertise || 'Not specified'
                       }
                     </td>
-                    {userRole === 'hod' && (
-                      <td style={{
-                        padding: '20px',
-                        verticalAlign: 'top',
-                        textAlign: 'center'
-                      }}>
+                    <td style={{
+                      padding: '20px',
+                      verticalAlign: 'top',
+                      textAlign: 'center'
+                    }}>
+                      {userRole === 'hod' ? (
                         <button
                           onClick={() => viewProfessorProfile(professor._id)}
                           style={{
@@ -567,8 +565,40 @@ function Faculty() {
                         >
                           View
                         </button>
-                      </td>
-                    )}
+                      ) : (
+                        <button
+                          onClick={() => navigate(`/request-publications/${professor._id}`)}
+                          style={{
+                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                            color: '#fff',
+                            border: 'none',
+                            padding: '10px 16px',
+                            borderRadius: '10px',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            minWidth: '120px',
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+                          }}
+                          title="Request access to publications"
+                        >
+                          🔐 Request Access
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

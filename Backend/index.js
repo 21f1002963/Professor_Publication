@@ -319,41 +319,41 @@ app.put('/api/professor/experience', authenticateToken, async (req, res) => {
 // Get professor publications
 app.get('/api/professor/publications', authenticateToken, async (req, res) => {
     try {
-        const professor = await Professor.findById(req.user.id).select('-password');
+        const { facultyId } = req.query;
+        const requesterId = req.user.id;
+        let targetFacultyId = facultyId || requesterId;
+        
+        const professor = await Professor.findById(targetFacultyId).select('-password');
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
         }
 
-        // Return publications data or default structure
-        const publicationsData = {
-            ugc_approved_journals: professor.ugc_approved_journals || [{
-                title: "",
-                authors: "",
-                journal_name: "",
-                volume: "",
-                issue: "",
-                page_nos: "",
-                year: "",
-                impact_factor: "",
-            }],
-            non_ugc_journals: professor.non_ugc_journals || [{
-                title: "",
-                authors: "",
-                journal_name: "",
-                volume: "",
-                issue: "",
-                page_nos: "",
-                year: "",
-                impact_factor: "",
-            }],
-            conference_proceedings: professor.conference_proceedings || [{
-                title: "",
-                authors: "",
-                conference_details: "",
-                page_nos: "",
-                year: "",
-            }]
+        // Check if requesting own data or others'
+        const isOwnProfile = targetFacultyId === requesterId;
+        
+        // Function to sanitize sensitive publication data
+        const sanitizePublications = (publications) => {
+            return publications.map(pub => ({
+                ...pub,
+                paper_upload: !isOwnProfile ? "" : pub.paper_upload,
+                paper_upload_filename: !isOwnProfile ? "" : pub.paper_upload_filename,
+                paper_link: !isOwnProfile ? "" : pub.paper_link
+            }));
         };
+
+        // Return publications data with conditional sensitive data
+        const publicationsData = {
+            name: professor.name,
+            email: professor.email,
+            seie_journals: sanitizePublications(professor.seie_journals || []),
+            ugc_approved_journals: sanitizePublications(professor.ugc_approved_journals || []),
+            non_ugc_journals: sanitizePublications(professor.non_ugc_journals || []),
+            conference_proceedings: sanitizePublications(professor.conference_proceedings || [])
+        };
+
+        // Add a flag to indicate if this is viewing someone else's profile
+        publicationsData.isOwnProfile = isOwnProfile;
+        publicationsData.targetFacultyId = targetFacultyId;
 
         res.status(200).json(publicationsData);
     } catch (error) {
@@ -1608,6 +1608,204 @@ app.get('/api/professor/project-consultancy/:professorId', authenticateToken, as
         res.status(200).json(projectConsultancyData);
     } catch (error) {
         console.error('Error fetching professor project consultancy:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// ===== ACCESS REQUEST ENDPOINTS =====
+
+// Request access to a faculty's publication
+app.post('/api/access-request', authenticateToken, async (req, res) => {
+    try {
+        const { target_faculty_id, publication_type, publication_index, publication_title, message } = req.body;
+        
+        // Get requester info
+        const requester = await Professor.findById(req.user.id);
+        if (!requester) {
+            return res.status(404).json({ message: 'Requester not found' });
+        }
+
+        // Get target faculty
+        const targetFaculty = await Professor.findById(target_faculty_id);
+        if (!targetFaculty) {
+            return res.status(404).json({ message: 'Target faculty not found' });
+        }
+
+        // Create access request for target faculty (incoming request)
+        const accessRequest = {
+            requester_id: req.user.id,
+            requester_name: requester.name,
+            requester_email: requester.email,
+            requester_role: requester.role,
+            publication_type,
+            publication_index,
+            publication_title,
+            request_date: new Date(),
+            status: 'pending',
+            message: message || ''
+        };
+
+        // Add to target faculty's access_requests
+        targetFaculty.access_requests.push(accessRequest);
+
+        // Create outgoing request for requester
+        const outgoingRequest = {
+            target_faculty_id,
+            target_faculty_name: targetFaculty.name,
+            target_faculty_email: targetFaculty.email,
+            publication_type,
+            publication_index,
+            publication_title,
+            request_date: new Date(),
+            status: 'pending',
+            message: message || ''
+        };
+
+        // Add to requester's outgoing_access_requests
+        requester.outgoing_access_requests.push(outgoingRequest);
+
+        await targetFaculty.save();
+        await requester.save();
+
+        res.status(201).json({ message: 'Access request sent successfully' });
+    } catch (error) {
+        console.error('Error creating access request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get incoming access requests for a faculty
+app.get('/api/access-requests/incoming', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id);
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        res.status(200).json({ 
+            access_requests: professor.access_requests || [] 
+        });
+    } catch (error) {
+        console.error('Error fetching incoming access requests:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get outgoing access requests for a faculty
+app.get('/api/access-requests/outgoing', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id);
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        res.status(200).json({ 
+            outgoing_access_requests: professor.outgoing_access_requests || [] 
+        });
+    } catch (error) {
+        console.error('Error fetching outgoing access requests:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Respond to an access request (approve/reject)
+app.put('/api/access-request/:requestId/respond', authenticateToken, async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const { status, response_message } = req.body; // status: 'approved' or 'rejected'
+
+        if (!['approved', 'rejected'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status. Must be approved or rejected' });
+        }
+
+        const professor = await Professor.findById(req.user.id);
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        // Find the access request
+        const accessRequest = professor.access_requests.id(requestId);
+        if (!accessRequest) {
+            return res.status(404).json({ message: 'Access request not found' });
+        }
+
+        // Update the request
+        accessRequest.status = status;
+        accessRequest.response_date = new Date();
+        accessRequest.response_message = response_message || '';
+
+        // Also update the corresponding outgoing request in the requester's record
+        const requester = await Professor.findById(accessRequest.requester_id);
+        if (requester) {
+            const outgoingRequest = requester.outgoing_access_requests.find(req => 
+                req.target_faculty_id.toString() === professor._id.toString() &&
+                req.publication_type === accessRequest.publication_type &&
+                req.publication_index === accessRequest.publication_index &&
+                req.status === 'pending'
+            );
+            
+            if (outgoingRequest) {
+                outgoingRequest.status = status;
+                outgoingRequest.response_date = new Date();
+                outgoingRequest.response_message = response_message || '';
+                await requester.save();
+            }
+        }
+
+        await professor.save();
+
+        res.status(200).json({ message: `Access request ${status} successfully` });
+    } catch (error) {
+        console.error('Error responding to access request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get publication data with access control
+app.get('/api/publication-access/:facultyId/:publicationType/:publicationIndex', authenticateToken, async (req, res) => {
+    try {
+        const { facultyId, publicationType, publicationIndex } = req.params;
+        const requesterId = req.user.id;
+
+        // Check if requester is the owner or has approved access
+        const targetFaculty = await Professor.findById(facultyId);
+        if (!targetFaculty) {
+            return res.status(404).json({ message: 'Faculty not found' });
+        }
+
+        // If requester is the owner, allow access
+        if (facultyId === requesterId) {
+            const publicationArray = targetFaculty[publicationType];
+            if (publicationArray && publicationArray[publicationIndex]) {
+                return res.status(200).json({ 
+                    publication: publicationArray[publicationIndex],
+                    hasAccess: true 
+                });
+            }
+            return res.status(404).json({ message: 'Publication not found' });
+        }
+
+        // Check if there's an approved access request
+        const approvedRequest = targetFaculty.access_requests.find(req => 
+            req.requester_id.toString() === requesterId &&
+            req.publication_type === publicationType &&
+            req.publication_index == publicationIndex &&
+            req.status === 'approved'
+        );
+
+        if (approvedRequest) {
+            const publicationArray = targetFaculty[publicationType];
+            if (publicationArray && publicationArray[publicationIndex]) {
+                return res.status(200).json({ 
+                    publication: publicationArray[publicationIndex],
+                    hasAccess: true 
+                });
+            }
+        }
+
+        res.status(403).json({ message: 'Access denied', hasAccess: false });
+    } catch (error) {
+        console.error('Error checking publication access:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

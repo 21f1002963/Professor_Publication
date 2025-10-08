@@ -1,0 +1,425 @@
+import React, { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import Layout from './Layout';
+
+function AccessRequests() {
+    const [incomingRequests, setIncomingRequests] = useState([]);
+    const [outgoingRequests, setOutgoingRequests] = useState([]);
+    const [activeTab, setActiveTab] = useState('incoming');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchAccessRequests();
+    }, []);
+
+    const fetchAccessRequests = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            setLoading(true);
+
+            // Fetch incoming requests
+            const incomingResponse = await fetch(
+                'https://professorpublication-production.up.railway.app/api/access-requests/incoming',
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
+
+            if (incomingResponse.ok) {
+                const incomingData = await incomingResponse.json();
+                setIncomingRequests(incomingData.access_requests || []);
+            }
+
+            // Fetch outgoing requests
+            const outgoingResponse = await fetch(
+                'https://professorpublication-production.up.railway.app/api/access-requests/outgoing',
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
+
+            if (outgoingResponse.ok) {
+                const outgoingData = await outgoingResponse.json();
+                setOutgoingRequests(outgoingData.outgoing_access_requests || []);
+            }
+
+        } catch (error) {
+            console.error('Error fetching access requests:', error);
+            alert('Error fetching access requests');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRequestResponse = async (requestId, status, responseMessage = '') => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            const response = await fetch(
+                `https://professorpublication-production.up.railway.app/api/access-request/${requestId}/respond`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        status,
+                        response_message: responseMessage
+                    })
+                }
+            );
+
+            if (response.ok) {
+                alert(`Request ${status} successfully!`);
+                fetchAccessRequests(); // Refresh the list
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message || 'Error processing request');
+            }
+        } catch (error) {
+            console.error('Error responding to request:', error);
+            alert('Error processing request');
+        }
+    };
+
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const getStatusBadge = (status) => {
+        const styles = {
+            pending: { backgroundColor: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
+            approved: { backgroundColor: '#d1fae5', color: '#065f46', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
+            rejected: { backgroundColor: '#fee2e2', color: '#991b1b', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }
+        };
+        return <span style={styles[status]}>{status.toUpperCase()}</span>;
+    };
+
+    if (loading) {
+        return (
+            <Layout>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '50vh',
+                    fontSize: '1.2rem',
+                    color: '#667eea'
+                }}>
+                    Loading access requests...
+                </div>
+            </Layout>
+        );
+    }
+
+    return (
+        <Layout>
+            <div style={{
+                minHeight: '100vh',
+                padding: '40px 20px'
+            }}>
+                <div style={{
+                    padding: '10px 30px 30px'
+                }}>
+                    <h1 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: 800,
+                        marginBottom: '10px',
+                        marginTop: '0px'
+                    }}>
+                        Publication Access Requests
+                    </h1>
+                    <p style={{
+                        fontSize: '1.1rem',
+                        marginBottom: '40px',
+                        opacity: 0.8,
+                        marginTop: '0px'
+                    }}>
+                        Manage incoming requests for your publications and track your outgoing requests to other faculty members.
+                    </p>
+
+                    {/* Tab Navigation */}
+                    <div style={{
+                        background: '#fff',
+                        borderRadius: '20px',
+                        padding: '40px',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
+                        marginBottom: '30px'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            marginBottom: '30px',
+                            borderBottom: '3px solid #f1f5f9'
+                        }}>
+                            <button
+                                onClick={() => setActiveTab('incoming')}
+                                style={{
+                                    padding: '15px 30px',
+                                    border: 'none',
+                                    background: activeTab === 'incoming' ?
+                                        'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' :
+                                        'transparent',
+                                    color: activeTab === 'incoming' ? '#fff' : '#6b7280',
+                                    borderRadius: '12px 12px 0 0',
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    fontWeight: 600,
+                                    marginRight: '5px',
+                                    transition: 'all 0.2s ease',
+                                    position: 'relative',
+                                    marginBottom: '-3px'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (activeTab !== 'incoming') {
+                                        e.target.style.background = '#f8f9fa';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (activeTab !== 'incoming') {
+                                        e.target.style.background = 'transparent';
+                                    }
+                                }}
+                            >
+                                📥 Incoming Requests ({incomingRequests.filter(req => req.status === 'pending').length} pending)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('outgoing')}
+                                style={{
+                                    padding: '15px 30px',
+                                    border: 'none',
+                                    background: activeTab === 'outgoing' ?
+                                        'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' :
+                                        'transparent',
+                                    color: activeTab === 'outgoing' ? '#fff' : '#6b7280',
+                                    borderRadius: '12px 12px 0 0',
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                    position: 'relative',
+                                    marginBottom: '-3px'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (activeTab !== 'outgoing') {
+                                        e.target.style.background = '#f8f9fa';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (activeTab !== 'outgoing') {
+                                        e.target.style.background = 'transparent';
+                                    }
+                                }}
+                            >
+                                📤 My Requests ({outgoingRequests.length} total)
+                            </button>
+                        </div>
+
+                        {/* Incoming Requests Tab */}
+                        {activeTab === 'incoming' && (
+                            <div>
+                                <h3 style={{ marginBottom: '15px', color: '#374151' }}>
+                                    Requests for Your Publications
+                                </h3>
+                                {incomingRequests.length === 0 ? (
+                                    <p style={{ textAlign: 'center', color: '#6b7280', padding: '20px' }}>
+                                        No access requests received yet.
+                                    </p>
+                                ) : (
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+                                            <thead>
+                                                <tr style={{ backgroundColor: '#f9fafb' }}>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Requester</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Role</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Publication</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Type</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Message</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Date</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Status</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {incomingRequests.map((request, index) => (
+                                                    <tr key={index} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            <div>
+                                                                <div style={{ fontWeight: '500' }}>{request.requester_name}</div>
+                                                                <div style={{ fontSize: '12px', color: '#6b7280' }}>{request.requester_email}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            <span style={{
+                                                                backgroundColor: request.requester_role === 'hod' ? '#dbeafe' : '#f3f4f6',
+                                                                color: request.requester_role === 'hod' ? '#1e40af' : '#374151',
+                                                                padding: '2px 6px',
+                                                                borderRadius: '4px',
+                                                                fontSize: '12px',
+                                                                textTransform: 'uppercase'
+                                                            }}>
+                                                                {request.requester_role}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '200px' }}>
+                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.publication_title}>
+                                                                {request.publication_title || 'N/A'}
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {request.publication_type.replace(/_/g, ' ').toUpperCase()}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
+                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.message}>
+                                                                {request.message || 'No message'}
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', fontSize: '12px' }}>
+                                                            {formatDate(request.request_date)}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {getStatusBadge(request.status)}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {request.status === 'pending' ? (
+                                                                <div style={{ display: 'flex', gap: '5px' }}>
+                                                                    <button
+                                                                        onClick={() => handleRequestResponse(request._id, 'approved')}
+                                                                        style={{
+                                                                            padding: '4px 8px',
+                                                                            backgroundColor: '#10b981',
+                                                                            color: 'white',
+                                                                            border: 'none',
+                                                                            borderRadius: '4px',
+                                                                            cursor: 'pointer',
+                                                                            fontSize: '12px'
+                                                                        }}
+                                                                    >
+                                                                        Approve
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleRequestResponse(request._id, 'rejected')}
+                                                                        style={{
+                                                                            padding: '4px 8px',
+                                                                            backgroundColor: '#ef4444',
+                                                                            color: 'white',
+                                                                            border: 'none',
+                                                                            borderRadius: '4px',
+                                                                            cursor: 'pointer',
+                                                                            fontSize: '12px'
+                                                                        }}
+                                                                    >
+                                                                        Reject
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                    {request.status === 'approved' ? 'Approved' : 'Rejected'}
+                                                                    {request.response_date && (
+                                                                        <div>{formatDate(request.response_date)}</div>
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Outgoing Requests Tab */}
+                        {activeTab === 'outgoing' && (
+                            <div>
+                                <h3 style={{ marginBottom: '15px', color: '#374151' }}>
+                                    Your Publication Access Requests
+                                </h3>
+                                {outgoingRequests.length === 0 ? (
+                                    <p style={{ textAlign: 'center', color: '#6b7280', padding: '20px' }}>
+                                        You haven't made any access requests yet.
+                                    </p>
+                                ) : (
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+                                            <thead>
+                                                <tr style={{ backgroundColor: '#f9fafb' }}>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Faculty</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Publication</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Type</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Message</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Request Date</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Status</th>
+                                                    <th style={{ padding: '12px', border: '1px solid #e5e7eb', textAlign: 'left', fontWeight: '600' }}>Response</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {outgoingRequests.map((request, index) => (
+                                                    <tr key={index} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            <div>
+                                                                <div style={{ fontWeight: '500' }}>{request.target_faculty_name}</div>
+                                                                <div style={{ fontSize: '12px', color: '#6b7280' }}>{request.target_faculty_email}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '200px' }}>
+                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.publication_title}>
+                                                                {request.publication_title || 'N/A'}
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {request.publication_type.replace(/_/g, ' ').toUpperCase()}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
+                                                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.message}>
+                                                                {request.message || 'No message'}
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', fontSize: '12px' }}>
+                                                            {formatDate(request.request_date)}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb' }}>
+                                                            {getStatusBadge(request.status)}
+                                                        </td>
+                                                        <td style={{ padding: '12px', border: '1px solid #e5e7eb', maxWidth: '150px' }}>
+                                                            {request.response_date ? (
+                                                                <div>
+                                                                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                        {formatDate(request.response_date)}
+                                                                    </div>
+                                                                    {request.response_message && (
+                                                                        <div style={{ fontSize: '12px', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={request.response_message}>
+                                                                            {request.response_message}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ) : (
+                                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>Pending</span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    );
+}
+
+export default AccessRequests;

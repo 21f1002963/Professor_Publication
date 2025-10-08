@@ -485,6 +485,37 @@ const ProfessorSchema = new mongoose.Schema({
         purpose: { type: String, default: '' },
         activities: { type: String, default: '' },
         date: { type: String, default: '' }
+    }],
+
+    // Access Requests for Publications
+    access_requests: [{
+        requester_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Professor' },
+        requester_name: { type: String, default: '' },
+        requester_email: { type: String, default: '' },
+        requester_role: { type: String, default: '' },
+        publication_type: { type: String, default: '' }, // 'seie_journals', 'ugc_approved_journals', etc.
+        publication_index: { type: Number, default: 0 },
+        publication_title: { type: String, default: '' },
+        request_date: { type: Date, default: Date.now },
+        status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+        message: { type: String, default: '' },
+        response_date: { type: Date },
+        response_message: { type: String, default: '' }
+    }],
+
+    // Outgoing access requests (requests this user has made)
+    outgoing_access_requests: [{
+        target_faculty_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Professor' },
+        target_faculty_name: { type: String, default: '' },
+        target_faculty_email: { type: String, default: '' },
+        publication_type: { type: String, default: '' },
+        publication_index: { type: Number, default: 0 },
+        publication_title: { type: String, default: '' },
+        request_date: { type: Date, default: Date.now },
+        status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+        message: { type: String, default: '' },
+        response_date: { type: Date },
+        response_message: { type: String, default: '' }
     }]
 }, { timestamps: true });
 

@@ -13,6 +13,10 @@ function Dashboard() {
     totalProfessors: 0,
     designationCounts: {}
   });
+  const [accessRequestsCount, setAccessRequestsCount] = useState({
+    incoming: 0,
+    outgoing: 0
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +32,9 @@ function Dashboard() {
 
         // Fetch profile data to get the latest profile image
         fetchProfileData();
+
+        // Fetch access requests count
+        fetchAccessRequestsCount();
 
         // If user is HOD, also fetch faculty statistics
         if ((userInfo.role || decoded.role || 'faculty') === 'hod') {
@@ -100,6 +107,49 @@ function Dashboard() {
     }
   };
 
+  const fetchAccessRequestsCount = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      // Fetch incoming requests count
+      const incomingResponse = await fetch(
+        'https://professorpublication-production.up.railway.app/api/access-requests/incoming',
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      let incomingCount = 0;
+      if (incomingResponse.ok) {
+        const incomingData = await incomingResponse.json();
+        incomingCount = (incomingData.access_requests || []).filter(req => req.status === 'pending').length;
+      }
+
+      // Fetch outgoing requests count
+      const outgoingResponse = await fetch(
+        'https://professorpublication-production.up.railway.app/api/access-requests/outgoing',
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      let outgoingCount = 0;
+      if (outgoingResponse.ok) {
+        const outgoingData = await outgoingResponse.json();
+        outgoingCount = (outgoingData.outgoing_access_requests || []).filter(req => req.status === 'pending').length;
+      }
+
+      setAccessRequestsCount({
+        incoming: incomingCount,
+        outgoing: outgoingCount
+      });
+
+    } catch (error) {
+      console.error('Error fetching access requests count:', error);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -112,6 +162,7 @@ function Dashboard() {
     { label: 'Experience', path: '/experience', icon: '💼' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
+    { label: 'Access Requests', path: '/access-requests', icon: '🔐' },
     { label: 'Patents', path: '/patents', icon: '💡' },
     { label: 'Fellowship', path: '/fellowship', icon: '🏆' },
     { label: 'Training & Consultancy', path: '/training', icon: '💰' },
@@ -582,6 +633,183 @@ function Dashboard() {
             </div>
           </div>
         )}
+
+        {/* Access Request Notifications */}
+        {(accessRequestsCount.incoming > 0 || accessRequestsCount.outgoing > 0) && (
+          <div style={{
+            background: '#fff',
+            borderRadius: '20px',
+            padding: '30px',
+            marginBottom: '30px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            border: '2px solid #f59e0b'
+          }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              color: '#2d3748',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              🔔 Access Request Notifications
+            </h2>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '20px'
+            }}>
+              {accessRequestsCount.incoming > 0 && (
+                <div
+                  onClick={() => navigate('/access-requests')}
+                  style={{
+                    background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                    color: '#fff',
+                    padding: '20px',
+                    borderRadius: '15px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-3px)';
+                    e.target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
+                  }}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📥</div>
+                  <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>
+                    Incoming Requests
+                  </h3>
+                  <p style={{ margin: '5px 0 0 0', fontSize: '2rem', fontWeight: 700 }}>
+                    {accessRequestsCount.incoming}
+                  </p>
+                  <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem', opacity: 0.9 }}>
+                    Click to review
+                  </p>
+                </div>
+              )}
+
+              {accessRequestsCount.outgoing > 0 && (
+                <div
+                  onClick={() => navigate('/access-requests')}
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                    color: '#fff',
+                    padding: '20px',
+                    borderRadius: '15px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-3px)';
+                    e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+                  }}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📤</div>
+                  <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>
+                    Pending Requests
+                  </h3>
+                  <p style={{ margin: '5px 0 0 0', fontSize: '2rem', fontWeight: 700 }}>
+                    {accessRequestsCount.outgoing}
+                  </p>
+                  <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem', opacity: 0.9 }}>
+                    Waiting for response
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Quick Actions */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '20px',
+          padding: '30px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
+        }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 700,
+            color: '#2d3748',
+            marginBottom: '20px',
+            marginTop: '0px',
+            height: '40px',
+          }}>
+            Quick Actions
+          </h2>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '15px',
+          }}>
+            <button
+              onClick={() => navigate('/faculty')}
+              style={{
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '15px 20px',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              👥 Faculty Directory
+            </button>
+
+            <button
+              onClick={() => navigate('/access-requests')}
+              style={{
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '15px 20px',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              🔐 Access Requests
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

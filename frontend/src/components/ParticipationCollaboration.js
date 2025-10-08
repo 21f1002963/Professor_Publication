@@ -407,7 +407,7 @@ function ParticipationCollaboration() {
                             {/* Collaboration with Institution/Industry Section */}
                             <div style={{ marginTop: "60px" }}>
                                 <h2 style={{ color: "#2d3748", marginBottom: "20px", fontSize: "1.8rem" }}>
-                                    Collaboration with Institution/Industry
+                                    Collaboration with Institution/Industry/Organization
                                 </h2>
                                 <div style={{ overflowX: "auto" }}>
                                     <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1600px" }}>
