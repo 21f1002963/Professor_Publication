@@ -141,7 +141,7 @@ class FacultyDataScraper {
       /Dept\. of ([^\n\r,]+)/i,
       /Department:\s*([^\n\r,]+)/i
     ];
-    
+
     for (const pattern of patterns) {
       const match = text.match(pattern);
       if (match) {
@@ -160,7 +160,7 @@ class FacultyDataScraper {
       /School of ([^\n\r,]+)/i,
       /Faculty of ([^\n\r,]+)/i
     ];
-    
+
     for (const pattern of patterns) {
       const match = text.match(pattern);
       if (match) {
@@ -204,21 +204,21 @@ class FacultyDataScraper {
       // Find tables with headers that indicate education data
       educationTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-        
+
         // Check if this is an education table by looking for degree-related headers
-        const isEducationTable = headers.some(h => 
-          h.includes('degree') || h.includes('qualification') || h.includes('university') || 
+        const isEducationTable = headers.some(h =>
+          h.includes('degree') || h.includes('qualification') || h.includes('university') ||
           h.includes('college') || h.includes('institution')
         );
-        
+
         if (isEducationTable || tableIndex === 0) { // Try first table in education tab
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
-            
+
             if (cells.length >= 3) {
               // Check different possible column arrangements
               let degree = '', title = '', university = '', year = '';
-              
+
               if (cells.length >= 4) {
                 // Possible formats: [S.No, Degree, Title, University, Year] or [Degree, Title, University, Year]
                 const firstCol = $(cells[0]).text().trim();
@@ -241,8 +241,8 @@ class FacultyDataScraper {
               }
 
               // Validate that this looks like education data
-              if (degree && university && 
-                  (degree.toLowerCase().includes('phd') || degree.toLowerCase().includes('m.') || 
+              if (degree && university &&
+                  (degree.toLowerCase().includes('phd') || degree.toLowerCase().includes('m.') ||
                    degree.toLowerCase().includes('b.') || degree.toLowerCase().includes('master') ||
                    degree.toLowerCase().includes('bachelor') || degree.toLowerCase().includes('diploma'))) {
                 education.push({
@@ -286,20 +286,20 @@ class FacultyDataScraper {
     if (educationTab.length) {
       educationTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-        
+
         // Check if this is an awards table
-        const isAwardsTable = headers.some(h => 
-          h.includes('award') || h.includes('recognition') || h.includes('honour') || 
+        const isAwardsTable = headers.some(h =>
+          h.includes('award') || h.includes('recognition') || h.includes('honour') ||
           h.includes('achievement') || h.includes('agency')
         );
-        
+
         if (isAwardsTable) {
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
-            
+
             if (cells.length >= 3) {
               let title = '', type = '', agency = '', year = '', amount = '';
-              
+
               // Try to map columns based on headers or content
               if (cells.length >= 4) {
                 const firstCol = $(cells[0]).text().trim();
@@ -365,26 +365,26 @@ class FacultyDataScraper {
   // Experience Section Methods
   extractTeachingExperience($) {
     const data = [];
-    
+
     // Look for Teaching Experience in tab_content2
     const teachingTab = $('#tab_content2');
     if (teachingTab.length) {
       teachingTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-        
+
         // Check if this is teaching experience table
-        const isTeachingTable = headers.some(h => 
+        const isTeachingTable = headers.some(h =>
           h.includes('designation') || h.includes('department') || h.includes('institution')
         ) || tableIndex === 0; // First table in teaching tab
-        
+
         if (isTeachingTable) {
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
-            
+
             if (cells.length >= 3) {
               const firstCol = $(cells[0]).text().trim();
               let designation = '', department = '', institution = '', duration = '';
-              
+
               if (isNaN(firstCol)) { // Not S.No
                 designation = $(cells[0]).text().trim();
                 department = $(cells[1]).text().trim();
@@ -396,7 +396,7 @@ class FacultyDataScraper {
                 institution = $(cells[3]).text().trim();
                 duration = cells.length > 4 ? $(cells[4]).text().trim() : '';
               }
-              
+
               if (designation && institution) {
                 data.push({
                   designation,
@@ -410,7 +410,7 @@ class FacultyDataScraper {
         }
       });
     }
-    
+
     return data;
   }
 
@@ -451,26 +451,26 @@ class FacultyDataScraper {
 
   extractUGCApprovedPapers($) {
     const data = [];
-    
+
     // Look for UGC papers in tab_content3 (Innovation tab)
     const innovationTab = $('#tab_content3');
     if (innovationTab.length) {
       innovationTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-        
+
         // Check if this is UGC papers table - typically table 8 based on our analysis
-        const isUGCTable = headers.some(h => 
+        const isUGCTable = headers.some(h =>
           h.includes('title') && h.includes('authors') && h.includes('journal') && h.includes('impact factor')
         );
-        
+
         if (isUGCTable) {
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
-            
+
             if (cells.length >= 5) {
               const firstCol = $(cells[0]).text().trim();
               let title = '', authors = '', journal = '', volume = '', year = '', impact = '';
-              
+
               if (isNaN(firstCol)) { // Not S.No
                 title = $(cells[0]).text().trim();
                 authors = $(cells[1]).text().trim();
@@ -486,7 +486,7 @@ class FacultyDataScraper {
                 year = $(cells[5]).text().trim();
                 impact = cells.length > 6 ? $(cells[6]).text().trim() : '';
               }
-              
+
               if (title && authors && journal) {
                 data.push({
                   title,
@@ -502,7 +502,7 @@ class FacultyDataScraper {
         }
       });
     }
-    
+
     return data;
   }
 
@@ -584,27 +584,27 @@ class FacultyDataScraper {
 
   extractPhDGuidance($) {
     const data = [];
-    
+
     // Look for PhD guidance in tab_content6 (Research Guidance tab)
     const guidanceTab = $('#tab_content6');
     if (guidanceTab.length) {
       guidanceTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-        
+
         // Check if this is PhD guidance table
-        const isPhdTable = headers.some(h => 
-          (h.includes('student') && h.includes('name')) || 
+        const isPhdTable = headers.some(h =>
+          (h.includes('student') && h.includes('name')) ||
           h.includes('thesis') || h.includes('registration')
         );
-        
+
         if (isPhdTable) {
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
-            
+
             if (cells.length >= 4) {
               const firstCol = $(cells[0]).text().trim();
               let studentName = '', regDate = '', regNo = '', thesisTitle = '', status = '', dateAwarded = '';
-              
+
               if (isNaN(firstCol)) { // Not S.No
                 studentName = $(cells[0]).text().trim();
                 regDate = $(cells[1]).text().trim();
@@ -620,7 +620,7 @@ class FacultyDataScraper {
                 status = cells.length > 5 ? $(cells[5]).text().trim() : '';
                 dateAwarded = cells.length > 8 ? $(cells[8]).text().trim() : '';
               }
-              
+
               if (studentName && thesisTitle) {
                 data.push({
                   studentName,
@@ -636,7 +636,7 @@ class FacultyDataScraper {
         }
       });
     }
-    
+
     return data;
   }
 
@@ -744,14 +744,14 @@ class FacultyDataScraper {
    */
   extractSectionData($, headings) {
     const data = [];
-    
+
     for (const heading of headings) {
       // Find H2 headings that match our target
       $('h2').each((index, element) => {
         const headingText = $(element).text().trim();
         if (headingText.toLowerCase().includes(heading.toLowerCase())) {
           console.log(`Found section: ${headingText}`);
-          
+
           // Look for the next table after this heading
           let nextElement = $(element).next();
           while (nextElement.length && !nextElement.is('table') && !nextElement.is('h2')) {
@@ -761,7 +761,7 @@ class FacultyDataScraper {
             }
             nextElement = nextElement.next();
           }
-          
+
           if (nextElement.is('table')) {
             // Extract table data
             const tableData = this.extractTableData($, nextElement);
@@ -774,7 +774,7 @@ class FacultyDataScraper {
         }
       });
     }
-    
+
     return data;
   }
 
@@ -783,7 +783,7 @@ class FacultyDataScraper {
    */
   extractTableData($, table) {
     const data = [];
-    
+
     $(table).find('tr').slice(1).each((rowIndex, row) => {
       const cells = [];
       $(row).find('td').each((cellIndex, cell) => {
@@ -792,13 +792,13 @@ class FacultyDataScraper {
           cells.push(cellText);
         }
       });
-      
+
       if (cells.length > 0) {
         // Join cells with ' - ' to create a readable entry
         data.push(cells.join(' - '));
       }
     });
-    
+
     return data;
   }
 
@@ -808,24 +808,24 @@ class FacultyDataScraper {
   extractTextAfterHeading($, headingElement) {
     const data = [];
     let currentElement = headingElement.next();
-    
+
     // Look at the next several elements after the heading
     for (let i = 0; i < 5 && currentElement.length; i++) {
       // Stop if we hit another H2 heading
       if (currentElement.is('h2')) {
         break;
       }
-      
+
       const text = currentElement.text().trim();
       if (text && text.length > 10) {
         // Split by common delimiters and clean up
         const items = text.split(/\n|\r/).map(item => item.trim()).filter(item => item.length > 5);
         data.push(...items);
       }
-      
+
       currentElement = currentElement.next();
     }
-    
+
     return data;
   }
 
@@ -834,7 +834,7 @@ class FacultyDataScraper {
    */
   findHeadingElement($, headingText) {
     const selectors = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'b', '.heading', '.section-title'];
-    
+
     for (const selector of selectors) {
       const elements = $(selector);
       for (let i = 0; i < elements.length; i++) {
@@ -844,7 +844,7 @@ class FacultyDataScraper {
         }
       }
     }
-    
+
     return $();
   }
 
@@ -854,23 +854,23 @@ class FacultyDataScraper {
   extractDataAfterHeading($, headingElement) {
     const data = [];
     let currentElement = headingElement.next();
-    
+
     // Look at the next several elements after the heading
     for (let i = 0; i < 10 && currentElement.length; i++) {
       const text = currentElement.text().trim();
-      
+
       // Stop if we hit another heading
       if (this.isHeadingElement(currentElement)) {
         break;
       }
-      
+
       // Add non-empty text content
       if (text && text.length > 3) {
         // Split by common delimiters and clean up
         const items = text.split(/\n|\r|\•|•|→|▪/).map(item => item.trim()).filter(item => item.length > 3);
         data.push(...items);
       }
-      
+
       // Also check for list items
       currentElement.find('li').each((index, li) => {
         const liText = $(li).text().trim();
@@ -878,7 +878,7 @@ class FacultyDataScraper {
           data.push(liText);
         }
       });
-      
+
       // Check for table rows
       currentElement.find('tr').each((index, tr) => {
         if (index > 0) { // Skip header row
@@ -897,10 +897,10 @@ class FacultyDataScraper {
           }
         }
       });
-      
+
       currentElement = currentElement.next();
     }
-    
+
     return data;
   }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
+import { getApiUrl } from '../config/api';
 
 const FacultyImporter = () => {
   const [nodeId, setNodeId] = useState('');
@@ -11,7 +12,7 @@ const FacultyImporter = () => {
   useEffect(() => {
     const checkBackendStatus = async () => {
       try {
-        const response = await fetch('/');
+        const response = await fetch(getApiUrl('/'));
         if (response.ok) {
           setBackendStatus('connected');
         } else {
@@ -28,15 +29,16 @@ const FacultyImporter = () => {
 
   const handleSingleImport = async () => {
     if (!nodeId) return;
-    
+
     setLoading(true);
     setResult(null);
-    
+
     try {
-      console.log('Sending request to:', '/api/scraper/faculty');
+      const apiUrl = getApiUrl('/api/scraper/faculty');
+      console.log('Sending request to:', apiUrl);
       console.log('Request body:', { nodeId });
-      
-      const response = await fetch('/api/scraper/faculty', {
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,14 +48,14 @@ const FacultyImporter = () => {
 
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log('Response data:', data);
-      
+
       if (data.success) {
         setResult({
           success: true,
@@ -102,7 +104,7 @@ const FacultyImporter = () => {
           >
             Faculty Data Importer
           </h1>
-          
+
           {/* Backend Status Indicator */}
           <div style={{
             display: 'flex',
@@ -111,13 +113,13 @@ const FacultyImporter = () => {
             marginBottom: '20px',
             padding: '10px',
             borderRadius: '10px',
-            backgroundColor: backendStatus === 'connected' ? '#4CAF50' : 
+            backgroundColor: backendStatus === 'connected' ? '#4CAF50' :
                             backendStatus === 'disconnected' ? '#f44336' : '#ff9800',
             color: 'white',
             fontWeight: 'bold'
           }}>
             <span style={{ marginRight: '10px' }}>
-              {backendStatus === 'connected' ? '🟢' : 
+              {backendStatus === 'connected' ? '🟢' :
                backendStatus === 'disconnected' ? '🔴' : '🟡'}
             </span>
             Backend Status: {
@@ -126,7 +128,7 @@ const FacultyImporter = () => {
               'Checking...'
             }
           </div>
-          
+
           <p style={{ margin: '0 0 30px 0', color: '#7f8c8d', fontSize: '1.3rem' }}>
             Import faculty profile data from Pondicherry University
           </p>
@@ -145,19 +147,19 @@ const FacultyImporter = () => {
             border: '1px solid #e9ecef',
             boxShadow: '0 8px 16px rgba(0, 0, 0, 0.05)'
           }}>
-            <h3 style={{ 
-              color: '#2c3e50', 
+            <h3 style={{
+              color: '#2c3e50',
               marginBottom: '25px',
               fontSize: '1.5rem',
               fontWeight: '700'
             }}>
               Import Faculty Data
             </h3>
-            <div style={{ 
-              display: 'flex', 
-              gap: '20px', 
-              alignItems: 'center', 
-              flexWrap: 'wrap' 
+            <div style={{
+              display: 'flex',
+              gap: '20px',
+              alignItems: 'center',
+              flexWrap: 'wrap'
             }}>
               <input
                 type="text"
@@ -236,103 +238,156 @@ const FacultyImporter = () => {
                 <p style={{ margin: '5px 0' }}><strong>Node ID:</strong> {result.nodeId}</p>
                 {result.success ? (
                   <div>
-                    <p style={{ margin: '5px 0' }}>Faculty data imported and saved successfully!</p>
                     {result.data && (
                       <div style={{ marginTop: '20px' }}>
-                        <h5 style={{ color: '#2c3e50', marginBottom: '15px', fontSize: '1.2rem' }}>
-                          Faculty Data Preview
-                        </h5>
-                        
-                        {/* Basic Information */}
-                        <div style={{ 
-                          marginBottom: '20px', 
-                          padding: '15px', 
-                          backgroundColor: 'white', 
-                          borderRadius: '12px',
-                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' 
-                        }}>
-                          <h6 style={{ color: '#2c3e50', marginBottom: '10px' }}>Basic Information</h6>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', fontSize: '14px' }}>
-                            <div><strong>Name:</strong> {result.data.name || 'N/A'}</div>
-                            <div><strong>Department:</strong> {result.data.department || 'N/A'}</div>
-                            <div><strong>Designation:</strong> {result.data.designation || 'N/A'}</div>
-                            <div><strong>Email:</strong> {result.data.email || 'N/A'}</div>
-                          </div>
-                        </div>
 
-                        {/* Data Sections Grid */}
-                        <div style={{ 
-                          display: 'grid', 
-                          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                          gap: '15px' 
-                        }}>
-                          {result.data.education && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#007bff', marginBottom: '8px' }}>Education</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                {result.data.education.length} qualification(s)
+
+
+
+
+
+                        {/* Detailed Tables Section */}
+                        <div style={{ marginTop: '30px' }}>
+
+                          {/* Education Table */}
+                          {result.data.home?.education && result.data.home.education.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#007bff', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🎓 Education Details
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Degree</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>University</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Year</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.home.education.map((edu, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{edu.degree || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edu.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edu.university || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edu.graduationYear || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                           )}
 
-                          {result.data.experience && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#28a745', marginBottom: '8px' }}>Experience</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                {result.data.experience.length} position(s)
+                          {/* Teaching Experience Table */}
+                          {result.data.experience?.teaching && result.data.experience.teaching.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#28a745', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                👨‍🏫 Teaching Experience
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Designation</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Department</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Institution</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Duration/Notes</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.experience.teaching.map((exp, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{exp.designation || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.department || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.institution || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.duration || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                           )}
 
-                          {result.data.research_guidance && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#dc3545', marginBottom: '8px' }}>Research Guidance</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                <div>PhD: {result.data.research_guidance.phd_completed?.length || 0} completed</div>
-                                <div>MPhil: {result.data.research_guidance.mphil_completed?.length || 0} completed</div>
+                          {/* Research Guidance Table */}
+                          {result.data.research_guidance?.phd_guidance && result.data.research_guidance.phd_guidance.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#dc3545', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🔬 PhD Research Guidance
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#dc3545', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Student Name</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Registration No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Registration Date</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Thesis Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.research_guidance.phd_guidance.map((guidance, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{guidance.studentName || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationNo || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationDate || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '300px', wordWrap: 'break-word' }}>{guidance.thesisTitle || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
+                                          <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: guidance.status === 'YES' ? '#d4edda' : '#f8d7da',
+                                            color: guidance.status === 'YES' ? '#155724' : '#721c24',
+                                            fontSize: '12px',
+                                            fontWeight: '500'
+                                          }}>
+                                            {guidance.status === 'YES' ? 'Completed' : 'In Progress'}
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                           )}
 
-                          {result.data.awards && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#fd7e14', marginBottom: '8px' }}>Awards</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                {result.data.awards.length} award(s)
+                          {/* Awards Table */}
+                          {result.data.home?.awards && result.data.home.awards.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#fd7e14', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🏆 Awards & Recognition
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Type</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Agency</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Year</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Amount</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.home.awards.map((award, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{award.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{award.type || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{award.agency || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{award.year || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', color: '#28a745' }}>{award.amount || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                           )}
 
-                          {result.data.publications && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#20c997', marginBottom: '8px' }}>Publications</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                <div>Journal Articles: {result.data.publications.journal_articles?.length || 0} entries</div>
-                                <div>Conference Papers: {result.data.publications.conference_papers?.length || 0} entries</div>
-                              </div>
-                            </div>
-                          )}
-
-                          {result.data.innovation && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#ffc107', marginBottom: '8px' }}>Innovation</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                <div>UGC Papers: {result.data.innovation.ugc_papers?.length || 0} entries</div>
-                                <div>Patents: {result.data.innovation.patents?.length || 0} entries</div>
-                                <div>Contributions: {result.data.innovation.contributions?.length || 0} entries</div>
-                              </div>
-                            </div>
-                          )}
-
-                          {result.data.books && (
-                            <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                              <h6 style={{ color: '#6f42c1', marginBottom: '8px' }}>Books</h6>
-                              <div style={{ fontSize: '14px' }}>
-                                <div>Authored Books: {result.data.books.authored_books?.length || 0} entries</div>
-                                <div>Book Chapters: {result.data.books.book_chapters?.length || 0} entries</div>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}
@@ -344,7 +399,7 @@ const FacultyImporter = () => {
             </div>
           )}
           </div>
-          
+
           <style>
             {`
               @keyframes spin {

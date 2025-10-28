@@ -5,9 +5,9 @@ async function analyzeHTMLStructure() {
   try {
     const nodeId = '941'; // Example faculty node ID
     const url = `https://backup.pondiuni.edu.in/PU_Establishment/profile_view/?node=${nodeId}`;
-    
+
     console.log('Fetching URL:', url);
-    
+
     const response = await axios.get(url, {
       timeout: 15000,
       headers: {
@@ -16,9 +16,9 @@ async function analyzeHTMLStructure() {
     });
 
     const $ = cheerio.load(response.data);
-    
+
     console.log('\n=== ANALYZING HTML STRUCTURE ===\n');
-    
+
     // Find all headings
     console.log('=== ALL HEADINGS ===');
     $('h1, h2, h3, h4, h5, h6').each((index, element) => {
@@ -28,7 +28,7 @@ async function analyzeHTMLStructure() {
         console.log(`${tagName.toUpperCase()}: ${text}`);
       }
     });
-    
+
     console.log('\n=== ALL TABLES ===');
     $('table').each((index, table) => {
       console.log(`\nTable ${index + 1}:`);
@@ -42,7 +42,7 @@ async function analyzeHTMLStructure() {
         }
       });
     });
-    
+
     console.log('\n=== NAVIGATION TABS ===');
     $('a[href*="tab"]').each((index, link) => {
       const text = $(link).text().trim();
@@ -51,27 +51,27 @@ async function analyzeHTMLStructure() {
         console.log(`Tab: ${text} - ${href}`);
       }
     });
-    
+
     console.log('\n=== SPECIFIC SECTION ANALYSIS ===');
-    
+
     // Check for different tab content
     const tabs = ['Home', 'Experience', 'Patents/Papers', 'Books', 'Projects/Consultancy', 'Research Guidance', 'Conference/Seminars/Workshops', 'Affiliation/Collaboration', 'Programme'];
-    
+
     tabs.forEach(tabName => {
       console.log(`\n--- Checking for ${tabName} content ---`);
-      
+
       // Look for tab content divs
       const tabContent = $(`div[id*="${tabName.toLowerCase()}"], div[class*="${tabName.toLowerCase()}"]`);
       if (tabContent.length > 0) {
         console.log(`Found ${tabName} content div`);
         console.log('Sample content:', tabContent.text().substring(0, 200) + '...');
       }
-      
+
       // Look for headings with this text
       const headings = $(`h1, h2, h3, h4, h5, h6`).filter((i, el) => {
         return $(el).text().toLowerCase().includes(tabName.toLowerCase());
       });
-      
+
       if (headings.length > 0) {
         console.log(`Found ${tabName} heading`);
         headings.each((i, heading) => {
@@ -79,7 +79,7 @@ async function analyzeHTMLStructure() {
         });
       }
     });
-    
+
   } catch (error) {
     console.error('Error analyzing HTML:', error.message);
   }

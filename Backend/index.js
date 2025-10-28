@@ -70,7 +70,7 @@ app.get('/', (req, res) => {
 app.post('/api/scraper/faculty', async (req, res) => {
     try {
         const { nodeId } = req.body;
-        
+
         if (!nodeId) {
             return res.status(400).json({
                 success: false,

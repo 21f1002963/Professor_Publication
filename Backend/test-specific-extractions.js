@@ -4,17 +4,17 @@ async function testSpecificExtractions() {
   try {
     const scraper = new FacultyDataScraper();
     const nodeId = '941'; // Test faculty
-    
+
     console.log('Testing specific extraction methods...\n');
-    
+
     const data = await scraper.scrapeFacultyData(nodeId);
-    
+
     console.log('=== BASIC INFO ===');
     console.log('Name:', data.name);
     console.log('Department:', data.department);
     console.log('School:', data.school);
     console.log('Email:', data.email);
-    
+
     console.log('\n=== EDUCATION ===');
     if (data.education && data.education.length > 0) {
       data.education.forEach((edu, index) => {
@@ -23,7 +23,7 @@ async function testSpecificExtractions() {
     } else {
       console.log('No education data found');
     }
-    
+
     console.log('\n=== AWARDS ===');
     if (data.awards && data.awards.length > 0) {
       data.awards.forEach((award, index) => {
@@ -32,7 +32,7 @@ async function testSpecificExtractions() {
     } else {
       console.log('No awards data found');
     }
-    
+
     console.log('\n=== TEACHING EXPERIENCE ===');
     if (data.experience.teaching && data.experience.teaching.length > 0) {
       data.experience.teaching.forEach((exp, index) => {
@@ -45,7 +45,7 @@ async function testSpecificExtractions() {
     } else {
       console.log('No teaching experience found');
     }
-    
+
     console.log('\n=== UGC PAPERS ===');
     if (data.innovation && data.innovation.ugc_papers && data.innovation.ugc_papers.length > 0) {
       data.innovation.ugc_papers.slice(0, 3).forEach((paper, index) => {
@@ -58,7 +58,7 @@ async function testSpecificExtractions() {
     } else {
       console.log('No UGC papers found');
     }
-    
+
     console.log('\n=== PHD GUIDANCE ===');
     if (data.research_guidance && data.research_guidance.phd_guidance && data.research_guidance.phd_guidance.length > 0) {
       data.research_guidance.phd_guidance.forEach((student, index) => {
@@ -71,7 +71,7 @@ async function testSpecificExtractions() {
     } else {
       console.log('No PhD guidance found');
     }
-    
+
   } catch (error) {
     console.error('Test failed:', error.message);
   }
