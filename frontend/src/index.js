@@ -24,6 +24,7 @@ import MOU from './components/MOU';
 import AccessRequests from './components/AccessRequests';
 import RequestPublications from './components/RequestPublications';
 import Report from './components/Report';
+import FacultyImporter from './components/FacultyImporter';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -132,6 +133,11 @@ root.render(
         <Route path='/report'  element={
           <ProtectedRoute>
             <Report />
+          </ProtectedRoute>
+        } />
+        <Route path='/faculty-importer'  element={
+          <ProtectedRoute>
+            <FacultyImporter />
           </ProtectedRoute>
         } />
 

@@ -283,7 +283,7 @@ function Profile() {
       event.preventDefault();
       event.stopPropagation();
     }
-    
+
     setSectionVisibility(prev => ({
       ...prev,
       [sectionKey]: !prev[sectionKey]

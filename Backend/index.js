@@ -4,6 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Professor = require('./Professor');
+const scraperRoutes = require('./routes/scraperRoutes');
 require('dotenv').config();
 const { TOKEN } = process.env;
 const { MONGO_URI } = process.env;
@@ -42,11 +43,19 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).json({
+            success: false,
+            message: 'Access token is required'
+        });
     }
 
     jwt.verify(token, TOKEN, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+            return res.status(403).json({
+                success: false,
+                message: 'Invalid or expired token'
+            });
+        }
         req.user = user;
         next();
     });
@@ -56,6 +65,62 @@ const authenticateToken = (req, res, next) => {
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
+
+// Public Faculty Data Scraper route (no authentication required)
+app.post('/api/scraper/faculty', async (req, res) => {
+    try {
+        const { nodeId } = req.body;
+        
+        if (!nodeId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Node ID is required'
+            });
+        }
+
+        // Try to load the faculty data scraper
+        let scraper = null;
+        try {
+            const FacultyDataScraper = require('./scrapers/facultyDataScraper');
+            scraper = new FacultyDataScraper();
+        } catch (error) {
+            console.error('Error loading FacultyDataScraper:', error.message);
+            return res.status(500).json({
+                success: false,
+                message: 'Faculty data scraper not available',
+                error: error.message
+            });
+        }
+
+        // Scrape faculty data
+        const scrapedData = await scraper.scrapeFacultyData(nodeId);
+
+        if (!scrapedData.name) {
+            return res.status(404).json({
+                success: false,
+                message: 'No faculty data found for the provided Node ID'
+            });
+        }
+
+        // Return the scraped data (without saving to database for this public route)
+        res.status(200).json({
+            success: true,
+            message: 'Faculty data scraped successfully',
+            data: scrapedData
+        });
+
+    } catch (error) {
+        console.error('Faculty scraper error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to scrape faculty data',
+            error: error.message
+        });
+    }
+});
+
+// Scraper routes (authentication required)
+app.use('/api/scraper', authenticateToken, scraperRoutes);
 
 // Register Professor/HOD
 app.post('/signup', async (req, res) => {

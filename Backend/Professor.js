@@ -516,7 +516,14 @@ const ProfessorSchema = new mongoose.Schema({
         message: { type: String, default: '' },
         response_date: { type: Date },
         response_message: { type: String, default: '' }
-    }]
+    }],
+
+    // Web Scraping Metadata
+    school: { type: String, default: '' }, // School/Faculty name
+    node_id: { type: String, default: '' }, // University website node ID
+    source_url: { type: String, default: '' }, // Original profile URL
+    scraped_date: { type: Date }, // When data was scraped
+    data_source: { type: String, enum: ['manual', 'web_scraping'], default: 'manual' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Professor', ProfessorSchema, 'Professors');
