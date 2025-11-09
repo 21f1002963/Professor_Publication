@@ -13,7 +13,8 @@ function Publications() {
     papers_published: [
       {
         title: "",
-        authors: "",
+        coauthors_within_org: "",
+        coauthors_outside_org: "",
         journal_name: "",
         volume: "",
         issue: "",
@@ -217,27 +218,71 @@ function Publications() {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Convert legacy data to new format if needed
         let papersPublished = data.papers_published || [];
-        
+
         // If legacy arrays exist, convert them to new format
         if (!papersPublished.length && (data.seie_journals?.length || data.ugc_approved_journals?.length || data.non_ugc_journals?.length)) {
-          const seie = (data.seie_journals || []).map(p => ({ ...p, paper_type: 'SCIE' }));
-          const ugc = (data.ugc_approved_journals || []).map(p => ({ ...p, paper_type: 'UGC' }));
-          const scopus = (data.non_ugc_journals || []).map(p => ({ ...p, paper_type: 'Scopus' }));
+          const seie = (data.seie_journals || []).map(p => ({ 
+            ...p, 
+            paper_type: 'SCIE',
+            coauthors_within_org: p.authors || "",
+            coauthors_outside_org: ""
+          }));
+          const ugc = (data.ugc_approved_journals || []).map(p => ({ 
+            ...p, 
+            paper_type: 'UGC',
+            coauthors_within_org: p.authors || "",
+            coauthors_outside_org: ""
+          }));
+          const scopus = (data.non_ugc_journals || []).map(p => ({ 
+            ...p, 
+            paper_type: 'Scopus',
+            coauthors_within_org: p.authors || "",
+            coauthors_outside_org: ""
+          }));
           papersPublished = [...seie, ...ugc, ...scopus];
+        } else if (papersPublished.length > 0) {
+          // Migrate existing papers_published to new format if they still use old 'authors' field
+          papersPublished = papersPublished.map(p => {
+            if (!p.coauthors_within_org && !p.coauthors_outside_org && p.authors) {
+              return {
+                ...p,
+                coauthors_within_org: p.authors || "",
+                coauthors_outside_org: "",
+                authors: undefined // Remove old field
+              };
+            }
+            return p;
+          });
         }
-        
-        setPublications(prevState => ({
-          ...prevState,
-          papers_published: papersPublished.length > 0 ? papersPublished : prevState.papers_published,
-          // Keep legacy arrays for now
-          seie_journals: data.seie_journals || [],
-          ugc_approved_journals: data.ugc_approved_journals || [],
-          non_ugc_journals: data.non_ugc_journals || [],
-          conference_proceedings: data.conference_proceedings || []
-        }));
+
+        setPublications(prevState => {
+          // Migrate conference_proceedings if needed
+          let conferenceProceedings = data.conference_proceedings || [];
+          conferenceProceedings = conferenceProceedings.map(p => {
+            if (!p.coauthors_within_org && !p.coauthors_outside_org && p.authors) {
+              return {
+                ...p,
+                coauthors_within_org: p.authors || "",
+                coauthors_outside_org: "",
+                authors: undefined // Remove old field
+              };
+            }
+            return p;
+          });
+
+          return {
+            ...prevState,
+            papers_published: papersPublished.length > 0 ? papersPublished : prevState.papers_published,
+            // Keep legacy arrays for now
+            seie_journals: data.seie_journals || [],
+            ugc_approved_journals: data.ugc_approved_journals || [],
+            non_ugc_journals: data.non_ugc_journals || [],
+            conference_proceedings: conferenceProceedings
+          };
+        });
       }
     } catch (error) {
       console.error("Error fetching publications:", error);
@@ -310,7 +355,8 @@ function Publications() {
     const defaultItems = {
       papers_published: {
         title: "",
-        authors: "",
+        coauthors_within_org: "",
+        coauthors_outside_org: "",
         journal_name: "",
         volume: "",
         issue: "",
@@ -364,9 +410,10 @@ function Publications() {
       },
       conference_proceedings: {
         title: "",
-        authors: "",
+        coauthors_within_org: "",
+        coauthors_outside_org: "",
+        conference_name: "",
         conference_details: "",
-        page_nos: "",
         year: "",
         paper_upload: "",
         paper_upload_filename: "",
@@ -464,14 +511,15 @@ function Publications() {
                       <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
                       <th style={{ width: "120px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Type</th>
                       <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
-                      <th style={{ width: "150px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Authors</th>
+                      <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Co-authors (Within Org)</th>
+                      <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Co-authors (Outside Org)</th>
                       <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Journal Name</th>
                       <th style={{ width: "70px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Volume</th>
                       <th style={{ width: "70px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Issue</th>
                       <th style={{ width: "90px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Page Nos.</th>
                       <th style={{ width: "70px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
                       <th style={{ width: "90px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Impact Factor</th>
-                      <th style={{ width: "110px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Upload</th>
+                      <th style={{ width: "110px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>First Page Updation</th>
                       <th style={{ width: "110px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
                       <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
                     </tr>
@@ -522,8 +570,8 @@ function Publications() {
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
                           <textarea
-                            value={pub.authors}
-                            onChange={(e) => handleArrayChange("papers_published", idx, "authors", e.target.value)}
+                            value={pub.coauthors_within_org}
+                            onChange={(e) => handleArrayChange("papers_published", idx, "coauthors_within_org", e.target.value)}
                             style={{
                               width: "90%",
                               height: "60px",
@@ -535,7 +583,25 @@ function Publications() {
                               overflow: "auto",
                               fontFamily: "inherit"
                             }}
-                            placeholder="Authors"
+                            placeholder="Co-authors (Within Org)"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={pub.coauthors_outside_org}
+                            onChange={(e) => handleArrayChange("papers_published", idx, "coauthors_outside_org", e.target.value)}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit"
+                            }}
+                            placeholder="Co-authors (Outside Org)"
                           />
                         </td>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
@@ -643,6 +709,217 @@ function Publications() {
                 >
                   + Add Paper
                 </button>
+                )}
+              </div>
+
+              {/* Conference Proceedings Section */}
+              <div style={{ marginTop: "40px" }}>
+                <h2
+                  style={{
+                    color: "#1e293b",
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    marginBottom: "20px",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Conference Proceedings
+                </h2>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <thead>
+                    <tr style={{ background: "#f1f5f9" }}>
+                      <th style={{ width: "40px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>S.No</th>
+                      <th style={{ width: "200px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Title</th>
+                      <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Co-authors (Within Org)</th>
+                      <th style={{ width: "130px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Co-authors (Outside Org)</th>
+                      <th style={{ width: "160px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference Name</th>
+                      <th style={{ width: "90px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Year</th>
+                      <th style={{ width: "140px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Conference Details</th>
+                      <th style={{ width: "110px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>First Page Updation</th>
+                      <th style={{ width: "110px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}>Paper Link</th>
+                      <th style={{ width: "80px", padding: "10px", border: "1px solid #e2e8f0", fontWeight: 600 }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(publications.conference_proceedings || []).map((proc, idx) => (
+                      <tr key={idx}>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={proc.title}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "title", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Conference Paper Title"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={proc.coauthors_within_org}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "coauthors_within_org", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Co-authors (Within Org)"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={proc.coauthors_outside_org}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "coauthors_outside_org", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Co-authors (Outside Org)"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={proc.conference_name}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "conference_name", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Conference Name"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <input
+                            type="number"
+                            value={proc.year}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "year", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Year"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          <textarea
+                            value={proc.conference_details}
+                            onChange={(e) => handleArrayChange("conference_proceedings", idx, "conference_details", e.target.value)}
+                            disabled={!isOwnProfile}
+                            style={{
+                              width: "90%",
+                              height: "60px",
+                              padding: "8px",
+                              borderRadius: "6px",
+                              border: "1px solid #e2e8f0",
+                              fontSize: "0.9rem",
+                              resize: "vertical",
+                              overflow: "auto",
+                              fontFamily: "inherit",
+                              backgroundColor: isOwnProfile ? "#fff" : "#f5f5f5",
+                              cursor: isOwnProfile ? "text" : "default"
+                            }}
+                            placeholder="Details (venue, date, etc.)"
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          {renderPaperUploadCell("conference_proceedings", idx, proc)}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
+                          {renderPaperLinkCell("conference_proceedings", idx, proc)}
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
+                          {isOwnProfile && (
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem("conference_proceedings", idx)}
+                              style={{
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "6px",
+                                padding: "6px 12px",
+                                cursor: "pointer",
+                                fontSize: "0.85rem",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem("conference_proceedings")}
+                    style={{
+                      background: "#10b981",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "10px 20px",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      marginTop: "10px",
+                    }}
+                  >
+                    + Add Conference Paper
+                  </button>
                 )}
               </div>
 

@@ -371,7 +371,7 @@ class AwardController {
   async createAward(req, res) {
     try {
       const { title, awardingInstitution, year, category, description } = req.body;
-      
+
       // Validation
       if (!title || !awardingInstitution || !year) {
         return res.status(400).json({
@@ -379,7 +379,7 @@ class AwardController {
           message: 'Missing required fields'
         });
       }
-      
+
       const award = new Award({
         professorId: req.user.id,
         title,
@@ -388,9 +388,9 @@ class AwardController {
         category,
         description
       });
-      
+
       await award.save();
-      
+
       res.status(201).json({
         success: true,
         data: award,
@@ -404,13 +404,13 @@ class AwardController {
       });
     }
   }
-  
+
   // Get all awards for a professor
   async getAwards(req, res) {
     try {
       const awards = await Award.find({ professorId: req.user.id })
         .sort({ year: -1 });
-      
+
       res.json({
         success: true,
         data: awards,
@@ -424,26 +424,26 @@ class AwardController {
       });
     }
   }
-  
+
   // Update award
   async updateAward(req, res) {
     try {
       const { id } = req.params;
       const updateData = req.body;
-      
+
       const award = await Award.findOneAndUpdate(
         { _id: id, professorId: req.user.id },
         updateData,
         { new: true, runValidators: true }
       );
-      
+
       if (!award) {
         return res.status(404).json({
           success: false,
           message: 'Award not found'
         });
       }
-      
+
       res.json({
         success: true,
         data: award,
@@ -457,24 +457,24 @@ class AwardController {
       });
     }
   }
-  
+
   // Delete award
   async deleteAward(req, res) {
     try {
       const { id } = req.params;
-      
+
       const award = await Award.findOneAndDelete({
         _id: id,
         professorId: req.user.id
       });
-      
+
       if (!award) {
         return res.status(404).json({
           success: false,
           message: 'Award not found'
         });
       }
-      
+
       res.json({
         success: true,
         message: 'Award deleted successfully'
@@ -502,26 +502,26 @@ class FacultyImportService {
   constructor() {
     this.browser = null;
   }
-  
+
   async initializeBrowser() {
     this.browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
   }
-  
+
   async scrapeUniversityFaculty(url) {
     try {
       if (!this.browser) {
         await this.initializeBrowser();
       }
-      
+
       const page = await this.browser.newPage();
       await page.goto(url, { waitUntil: 'networkidle2' });
-      
+
       const content = await page.content();
       const $ = cheerio.load(content);
-      
+
       const facultyData = {
         personalInfo: this.extractPersonalInfo($),
         education: this.extractEducation($),
@@ -530,7 +530,7 @@ class FacultyImportService {
         publications: this.extractPublications($),
         research: this.extractResearchInterests($)
       };
-      
+
       await page.close();
       return facultyData;
     } catch (error) {
@@ -538,7 +538,7 @@ class FacultyImportService {
       throw new Error(`Failed to scrape faculty data: ${error.message}`);
     }
   }
-  
+
   extractPersonalInfo($) {
     return {
       name: $('h1, .faculty-name, .name').first().text().trim(),
@@ -548,7 +548,7 @@ class FacultyImportService {
       phone: $('.phone, .contact').text().match(/[\d\-\+\(\)\s]+/)?.[0]?.trim()
     };
   }
-  
+
   extractEducation($) {
     const education = [];
     $('.education li, .qualification li, .degree').each((i, elem) => {
@@ -563,7 +563,7 @@ class FacultyImportService {
     });
     return education;
   }
-  
+
   extractExperience($) {
     const experience = [];
     $('.experience li, .employment li, .position').each((i, elem) => {
@@ -578,7 +578,7 @@ class FacultyImportService {
     });
     return experience;
   }
-  
+
   extractAwards($) {
     const awards = [];
     $('.awards li, .honors li, .recognition li').each((i, elem) => {
@@ -593,7 +593,7 @@ class FacultyImportService {
     });
     return awards;
   }
-  
+
   extractPublications($) {
     const publications = [];
     $('.publications li, .papers li, .research-output li').each((i, elem) => {
@@ -608,7 +608,7 @@ class FacultyImportService {
     });
     return publications;
   }
-  
+
   extractResearchInterests($) {
     const interests = [];
     $('.research-interests, .research-areas, .specialization').find('li').each((i, elem) => {
@@ -619,7 +619,7 @@ class FacultyImportService {
     });
     return interests;
   }
-  
+
   identifyPublicationType(text) {
     const lowerText = text.toLowerCase();
     if (lowerText.includes('journal')) return 'Journal Article';
@@ -628,7 +628,7 @@ class FacultyImportService {
     if (lowerText.includes('chapter')) return 'Book Chapter';
     return 'Publication';
   }
-  
+
   async closeBrowser() {
     if (this.browser) {
       await this.browser.close();
@@ -690,7 +690,7 @@ const Awards = () => {
         // Create new award
         await api.post('/awards', formData);
       }
-      
+
       resetForm();
       fetchAwards();
     } catch (error) {
@@ -740,7 +740,7 @@ const Awards = () => {
       <div className="awards-container">
         <div className="header">
           <h2>Awards & Recognition</h2>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => setShowForm(!showForm)}
           >
@@ -761,7 +761,7 @@ const Awards = () => {
                   required
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Awarding Institution</label>
                 <input
@@ -771,7 +771,7 @@ const Awards = () => {
                   required
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Year</label>
                 <input
@@ -783,7 +783,7 @@ const Awards = () => {
                   required
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Category</label>
                 <select
@@ -796,7 +796,7 @@ const Awards = () => {
                   <option value="International">International</option>
                 </select>
               </div>
-              
+
               <div className="form-group">
                 <label>Description</label>
                 <textarea
@@ -805,7 +805,7 @@ const Awards = () => {
                   rows="3"
                 />
               </div>
-              
+
               <div className="form-actions">
                 <button type="submit" className="btn btn-primary">
                   {editingId ? 'Update Award' : 'Save Award'}
@@ -845,13 +845,13 @@ const Awards = () => {
                         </span>
                       </td>
                       <td>
-                        <button 
+                        <button
                           onClick={() => handleEdit(award)}
                           className="btn btn-sm btn-outline"
                         >
                           Edit
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleDelete(award._id)}
                           className="btn btn-sm btn-danger"
                         >
@@ -1054,7 +1054,7 @@ describe('Award Controller', () => {
       password: 'testpass123'
     });
     professorId = professor._id;
-    
+
     // Generate auth token
     authToken = generateAuthToken(professor);
   });
@@ -1273,7 +1273,7 @@ describe('Faculty Import Integration', () => {
   describe('POST /api/scraper/faculty', () => {
     it('should import faculty data from university website', async () => {
       const testUrl = 'https://example-university.edu/faculty/john-doe';
-      
+
       const response = await request(app)
         .post('/api/scraper/faculty')
         .set('Authorization', `Bearer ${authToken}`)
@@ -1289,7 +1289,7 @@ describe('Faculty Import Integration', () => {
 
     it('should handle invalid URLs gracefully', async () => {
       const invalidUrl = 'not-a-valid-url';
-      
+
       const response = await request(app)
         .post('/api/scraper/faculty')
         .set('Authorization', `Bearer ${authToken}`)
@@ -1325,7 +1325,7 @@ loadtest.loadTest(options, (error, results) => {
     console.error('Load test failed:', error);
     return;
   }
-  
+
   console.log('Load Test Results:');
   console.log('Total requests:', results.totalRequests);
   console.log('Total time:', results.totalTimeSeconds, 'seconds');

@@ -93,7 +93,7 @@ const papersPublished = [...seie, ...ugc, ...scopus];
   - "Papers Published in SCIE Journals" table
   - "Papers Published in UGC Approved Journals" table
   - "Papers Published in Scopus Journals" table (Non-UGC)
-  
+
 **Note**: Conference proceedings section was kept separate as it has a different data model
 
 ### 7. **Functional Features Preserved**
