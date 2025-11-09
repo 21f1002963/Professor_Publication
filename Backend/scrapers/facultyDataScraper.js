@@ -29,6 +29,7 @@ class FacultyDataScraper {
       const facultyData = {
         // Basic Information
         name: this.extractName($),
+        designation: this.extractDesignation($),
         department: this.extractDepartment($),
         school: this.extractSchool($),
         email: this.extractEmail($),
@@ -107,7 +108,7 @@ class FacultyDataScraper {
         node_id: nodeId
       };
 
-      console.log(`Successfully scraped data for ${facultyData.name}`);
+      console.log(`Successfully scraped data - ${facultyData.jsonData}`);
       return facultyData;
 
     } catch (error) {
@@ -118,16 +119,66 @@ class FacultyDataScraper {
 
   /**
    * Extract faculty name from the page
+   * Parses h2 tag which contains the name, with optional <small> tag for designation
+   * Example: <h2>JAYAKUMAR S.K.V <small>Professor</small></h2>
    */
   extractName($) {
-    // Try multiple selectors for name
-    const selectors = ['h2', 'h1', '.faculty-name', '.name', '.profile-name'];
+    // Try to get h2 tag (primary location for faculty name)
+    const h2Element = $('h2').eq(1);
+    if (h2Element.length) {
+      // Clone to work with, remove small tag, and get text
+      const nameOnly = h2Element.clone();
+      nameOnly.find('small').remove();
+      const name = nameOnly.text().trim();
+      if (name) {
+        return name;
+      }
+    }
+
+    // Fallback to other selectors if h2 doesn't work
+    const selectors = ['h1', '.faculty-name', '.name', '.profile-name'];
     for (const selector of selectors) {
       const element = $(selector).first();
       if (element.length && element.text().trim()) {
-        return element.text().trim();
+        // Remove small tags if present in other elements too
+        const nameText = element.clone();
+        nameText.find('small').remove();
+        const name = nameText.text().trim();
+        if (name) {
+          return name;
+        }
       }
     }
+    return '';
+  }
+
+  /**
+   * Extract faculty designation from the page
+   * Parses the <small> tag inside h2 which contains the designation
+   * Example: <h2>JAYAKUMAR S.K.V <small>Professor</small></h2>
+   * Returns: "Professor"
+   */
+  extractDesignation($) {
+    // Look for small tag inside h2 (primary location)
+    const smallInH2 = $('h2 small').eq(1);
+    if (smallInH2.length) {
+      const designation = smallInH2.text().trim();
+      if (designation) {
+        return designation;
+      }
+    }
+
+    // Fallback: Look for small tag anywhere on page
+    const smallElement = $('small').first();
+    if (smallElement.length) {
+      const designation = smallElement.text().trim();
+      // Common designation patterns to validate
+      const validDesignations = ['Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer', 'Senior Lecturer', 'Adjunct Professor', 'Visiting Professor', 'Research Scholar', 'Post Doc'];
+      if (validDesignations.some(d => designation.toLowerCase().includes(d.toLowerCase()))) {
+        return designation;
+      }
+    }
+
     return '';
   }
 

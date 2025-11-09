@@ -216,11 +216,19 @@ const FacultyImporter = () => {
                   <div>
                     {result.data && (
                       <div style={{ marginTop: '20px' }}>
-
-
-
-
-
+                        {/* Faculty Name and Designation */}
+                        {(result.data.name || result.data.designation) && (
+                          <div style={{ marginBottom: '25px', padding: '20px', backgroundColor: '#e8f4f8', borderRadius: '12px', borderLeft: '4px solid #007bff' }}>
+                            <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#2c3e50' }}>
+                              {result.data.name}
+                            </div>
+                            {result.data.designation && (
+                              <div style={{ fontSize: '1.2rem', color: '#555', marginTop: '8px', fontStyle: 'italic' }}>
+                                {result.data.designation}
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         {/* Detailed Tables Section */}
                         <div style={{ marginTop: '30px' }}>
