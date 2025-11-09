@@ -139,7 +139,7 @@ const [publications, setPublications] = useState({
 ```javascript
 // Owner's view (editable)
 {isOwnProfile ? (
-  <select 
+  <select
     value={pub.paper_type || "SCIE"}
     onChange={(e) => handleArrayChange("papers_published", idx, "paper_type", e.target.value)}
   >

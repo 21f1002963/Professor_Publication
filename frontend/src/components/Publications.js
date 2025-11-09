@@ -224,20 +224,20 @@ function Publications() {
 
         // If legacy arrays exist, convert them to new format
         if (!papersPublished.length && (data.seie_journals?.length || data.ugc_approved_journals?.length || data.non_ugc_journals?.length)) {
-          const seie = (data.seie_journals || []).map(p => ({ 
-            ...p, 
+          const seie = (data.seie_journals || []).map(p => ({
+            ...p,
             paper_type: 'SCIE',
             coauthors_within_org: p.authors || "",
             coauthors_outside_org: ""
           }));
-          const ugc = (data.ugc_approved_journals || []).map(p => ({ 
-            ...p, 
+          const ugc = (data.ugc_approved_journals || []).map(p => ({
+            ...p,
             paper_type: 'UGC',
             coauthors_within_org: p.authors || "",
             coauthors_outside_org: ""
           }));
-          const scopus = (data.non_ugc_journals || []).map(p => ({ 
-            ...p, 
+          const scopus = (data.non_ugc_journals || []).map(p => ({
+            ...p,
             paper_type: 'Scopus',
             coauthors_within_org: p.authors || "",
             coauthors_outside_org: ""

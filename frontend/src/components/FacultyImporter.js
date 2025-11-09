@@ -105,31 +105,9 @@ const FacultyImporter = () => {
             Faculty Data Importer
           </h1>
 
-          {/* Backend Status Indicator */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '20px',
-            padding: '10px',
-            borderRadius: '10px',
-            backgroundColor: backendStatus === 'connected' ? '#4CAF50' :
-                            backendStatus === 'disconnected' ? '#f44336' : '#ff9800',
-            color: 'white',
-            fontWeight: 'bold'
-          }}>
-            <span style={{ marginRight: '10px' }}>
-              {backendStatus === 'connected' ? '🟢' :
-               backendStatus === 'disconnected' ? '🔴' : '🟡'}
-            </span>
-            Backend Status: {
-              backendStatus === 'connected' ? 'Connected' :
-              backendStatus === 'disconnected' ? 'Disconnected - Make sure backend is running on port 5000' :
-              'Checking...'
-            }
-          </div>
 
-          <p style={{ margin: '0 0 30px 0', color: '#7f8c8d', fontSize: '1.3rem' }}>
+
+          <p style={{ margin: '0 0 30px 0', color: 'black', fontSize: '1.2rem', opacity: 0.8 }}>
             Import faculty profile data from Pondicherry University
           </p>
 
@@ -141,11 +119,9 @@ const FacultyImporter = () => {
           }}>
           {/* Faculty Import */}
           <div style={{
-            padding: '35px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '16px',
-            border: '1px solid #e9ecef',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.05)'
+            padding: '15px',
+            marginBottom: '20px',
+            paddingTop: '0px'
           }}>
             <h3 style={{
               color: '#2c3e50',

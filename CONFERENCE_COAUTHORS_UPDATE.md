@@ -96,7 +96,7 @@ Both tables now have identical structure:
 - **Papers Published** ✅
   - Column: Co-authors (Within Org)
   - Column: Co-authors (Outside Org)
-  
+
 - **Conference Proceedings** ✅
   - Column: Co-authors (Within Org)
   - Column: Co-authors (Outside Org)
