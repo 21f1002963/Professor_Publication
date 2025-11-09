@@ -194,7 +194,7 @@ extractDesignation($) {
   const smallElement = $('small').first();
   if (smallElement.length) {
     const designation = smallElement.text().trim();
-    
+
     // Step 3: Validate designation
     const validDesignations = [
       'Professor',
@@ -207,8 +207,8 @@ extractDesignation($) {
       'Research Scholar',
       'Post Doc'
     ];
-    
-    if (validDesignations.some(d => 
+
+    if (validDesignations.some(d =>
         designation.toLowerCase().includes(d.toLowerCase()))) {
       return designation;
     }
@@ -487,5 +487,5 @@ Status:      ✅ PASS
 
 ---
 
-**Updated:** November 9, 2025  
+**Updated:** November 9, 2025
 **Status:** ✅ Complete

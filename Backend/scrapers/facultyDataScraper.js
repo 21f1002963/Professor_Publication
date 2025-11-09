@@ -223,8 +223,25 @@ class FacultyDataScraper {
 
   /**
    * Extract email address
+   * Email is in the 3rd <li> element within <ul class="list-unstyled user_data">
+   * Structure: Department, School, Email
    */
   extractEmail($) {
+    // Primary method: Look for email in the 3rd li of user_data ul
+    const userDataList = $('ul.list-unstyled.user_data li');
+    if (userDataList.length >= 3) {
+      const thirdLi = userDataList.eq(2); // 0-based index, so 2 = 3rd element
+      const emailText = thirdLi.text().trim();
+
+      // Extract email from the text using regex
+      const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+      const match = emailText.match(emailPattern);
+      if (match) {
+        return match[0];
+      }
+    }
+
+    // Fallback method: Search for email pattern in entire body
     const text = $('body').text();
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
     const matches = text.match(emailPattern);
@@ -263,8 +280,11 @@ class FacultyDataScraper {
         );
 
         if (isEducationTable || tableIndex === 0) { // Try first table in education tab
+          console.log(`Processing education table ${tableIndex}, rows found: ${$(table).find('tr').length}`);
+          
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
+            console.log(`Processing row ${rowIndex}, cells: ${cells.length}`);
 
             if (cells.length >= 3) {
               // Check different possible column arrangements
@@ -291,18 +311,37 @@ class FacultyDataScraper {
                 year = $(cells[2]).text().trim();
               }
 
-              // Validate that this looks like education data
-              if (degree && university &&
-                  (degree.toLowerCase().includes('phd') || degree.toLowerCase().includes('m.') ||
-                   degree.toLowerCase().includes('b.') || degree.toLowerCase().includes('master') ||
-                   degree.toLowerCase().includes('bachelor') || degree.toLowerCase().includes('diploma'))) {
-                education.push({
+              console.log(`Extracted: degree="${degree}", university="${university}", title="${title}", year="${year}"`);
+
+              // More flexible validation - just need degree and university to be present
+              if (degree && university && 
+                  degree.length > 1 && university.length > 3) {
+                
+                // Optional: Additional validation for degree patterns (but don't require it)
+                const isLikelyDegree = degree.toLowerCase().includes('phd') || 
+                                     degree.toLowerCase().includes('m.') ||
+                                     degree.toLowerCase().includes('b.') || 
+                                     degree.toLowerCase().includes('master') ||
+                                     degree.toLowerCase().includes('bachelor') || 
+                                     degree.toLowerCase().includes('diploma') ||
+                                     degree.toLowerCase().includes('certificate') ||
+                                     degree.toLowerCase().includes('degree');
+
+                // Add the education entry (even if it doesn't match common degree patterns)
+                const educationEntry = {
                   degree,
                   title: title || '',
                   university,
                   graduationYear: year || ''
-                });
+                };
+                
+                education.push(educationEntry);
+                console.log(`Added education entry:`, educationEntry);
+              } else {
+                console.log(`Skipped row - missing degree or university: degree="${degree}", university="${university}"`);
               }
+            } else {
+              console.log(`Skipped row - insufficient cells (${cells.length})`);
             }
           });
         }

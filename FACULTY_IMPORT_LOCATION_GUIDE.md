@@ -256,16 +256,16 @@ const handleSingleImport = async () => {
   if (!nodeId) return;
   setLoading(true);
   setResult(null);
-  
+
   try {
     const response = await fetch('/api/scraper/faculty', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nodeId })
     });
-    
+
     const data = await response.json();
-    
+
     if (data.success) {
       setResult({ success: true, nodeId, data: data.data });
     } else {
@@ -287,15 +287,15 @@ app.post('/api/scraper/faculty', async (req, res) => {
     if (!nodeId) {
       return res.status(400).json({ success: false, message: 'Node ID is required' });
     }
-    
+
     const FacultyDataScraper = require('./scrapers/facultyDataScraper');
     const scraper = new FacultyDataScraper();
     const scrapedData = await scraper.scrapeFacultyData(nodeId);
-    
+
     if (!scrapedData.name) {
       return res.status(404).json({ success: false, message: 'No faculty data found' });
     }
-    
+
     res.status(200).json({ success: true, message: 'Faculty data scraped successfully', data: scrapedData });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to scrape faculty data', error: error.message });
@@ -312,9 +312,9 @@ async scrapeFacultyData(nodeId) {
       timeout: 15000,
       headers: { 'User-Agent': 'Mozilla/5.0...' }
     });
-    
+
     const $ = cheerio.load(response.data);
-    
+
     const facultyData = {
       name: this.extractName($),
       department: this.extractDepartment($),
@@ -341,7 +341,7 @@ async scrapeFacultyData(nodeId) {
       source_url: url,
       node_id: nodeId
     };
-    
+
     return facultyData;
   } catch (error) {
     throw new Error(`Failed to scrape faculty data: ${error.message}`);

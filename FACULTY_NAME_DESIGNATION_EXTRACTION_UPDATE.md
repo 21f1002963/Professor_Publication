@@ -109,8 +109,8 @@ extractDesignation($) {
   if (smallElement.length) {
     const designation = smallElement.text().trim();
     // Common designation patterns to validate
-    const validDesignations = ['Professor', 'Associate Professor', 'Assistant Professor', 
-                               'Lecturer', 'Senior Lecturer', 'Adjunct Professor', 
+    const validDesignations = ['Professor', 'Associate Professor', 'Assistant Professor',
+                               'Lecturer', 'Senior Lecturer', 'Adjunct Professor',
                                'Visiting Professor', 'Research Scholar', 'Post Doc'];
     if (validDesignations.some(d => designation.toLowerCase().includes(d.toLowerCase()))) {
       return designation;
@@ -139,26 +139,26 @@ extractDesignation($) {
 ```jsx
 {/* Faculty Name and Designation */}
 {(result.data.name || result.data.designation) && (
-  <div style={{ 
-    marginBottom: '25px', 
-    padding: '20px', 
-    backgroundColor: '#e8f4f8', 
-    borderRadius: '12px', 
-    borderLeft: '4px solid #007bff' 
+  <div style={{
+    marginBottom: '25px',
+    padding: '20px',
+    backgroundColor: '#e8f4f8',
+    borderRadius: '12px',
+    borderLeft: '4px solid #007bff'
   }}>
-    <div style={{ 
-      fontSize: '1.6rem', 
-      fontWeight: 'bold', 
-      color: '#2c3e50' 
+    <div style={{
+      fontSize: '1.6rem',
+      fontWeight: 'bold',
+      color: '#2c3e50'
     }}>
       {result.data.name}
     </div>
     {result.data.designation && (
-      <div style={{ 
-        fontSize: '1.2rem', 
-        color: '#555', 
-        marginTop: '8px', 
-        fontStyle: 'italic' 
+      <div style={{
+        fontSize: '1.2rem',
+        color: '#555',
+        marginTop: '8px',
+        fontStyle: 'italic'
       }}>
         {result.data.designation}
       </div>
@@ -349,6 +349,6 @@ Optional enhancements:
 
 ---
 
-**Updated:** November 9, 2025  
-**Status:** ✅ Implementation Complete  
+**Updated:** November 9, 2025
+**Status:** ✅ Implementation Complete
 **Testing:** Ready for integration testing

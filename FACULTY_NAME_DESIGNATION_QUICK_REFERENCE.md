@@ -31,8 +31,8 @@
 ## 🔧 Methods
 
 ### extractName($)
-**Returns:** Faculty name without designation  
-**Selectors:** h2, h1, .faculty-name, .name, .profile-name  
+**Returns:** Faculty name without designation
+**Selectors:** h2, h1, .faculty-name, .name, .profile-name
 **Logic:** Clone → Remove \<small\> → Extract text
 
 ```javascript
@@ -48,8 +48,8 @@ extractName($) {
 ```
 
 ### extractDesignation($)
-**Returns:** Designation if valid, empty string otherwise  
-**Selectors:** h2 small, small  
+**Returns:** Designation if valid, empty string otherwise
+**Selectors:** h2 small, small
 **Validation:** Against common academic titles
 
 ```javascript
@@ -248,5 +248,5 @@ const validDesignations = [
 
 ---
 
-**Last Updated:** November 9, 2025  
+**Last Updated:** November 9, 2025
 **Status:** ✅ Ready for Use
