@@ -394,9 +394,8 @@ const FacultyImporter = () => {
                                     <tr style={{ backgroundColor: '#e83e8c', color: 'white' }}>
                                       <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #dc1a6b', width: '60px' }}>S.No</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Designation</th>
-                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Department</th>
-                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Institution</th>
-                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Duration/Notes</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Company/Corporate</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Nature of Work</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -404,9 +403,8 @@ const FacultyImporter = () => {
                                       <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#e83e8c' }}>{index + 1}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{exp.designation || 'N/A'}</td>
-                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.department || 'N/A'}</td>
-                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.institution || 'N/A'}</td>
-                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.duration || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.company || exp.institution || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.natureOfWork || exp.duration || 'N/A'}</td>
                                       </tr>
                                     ))}
                                   </tbody>
