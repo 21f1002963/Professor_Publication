@@ -281,7 +281,7 @@ class FacultyDataScraper {
 
         if (isEducationTable || tableIndex === 0) { // Try first table in education tab
           console.log(`Processing education table ${tableIndex}, rows found: ${$(table).find('tr').length}`);
-          
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
             console.log(`Processing row ${rowIndex}, cells: ${cells.length}`);
@@ -314,15 +314,15 @@ class FacultyDataScraper {
               console.log(`Extracted: degree="${degree}", university="${university}", title="${title}", year="${year}"`);
 
               // More flexible validation - just need degree and university to be present
-              if (degree && university && 
+              if (degree && university &&
                   degree.length > 1 && university.length > 3) {
-                
+
                 // Optional: Additional validation for degree patterns (but don't require it)
-                const isLikelyDegree = degree.toLowerCase().includes('phd') || 
+                const isLikelyDegree = degree.toLowerCase().includes('phd') ||
                                      degree.toLowerCase().includes('m.') ||
-                                     degree.toLowerCase().includes('b.') || 
+                                     degree.toLowerCase().includes('b.') ||
                                      degree.toLowerCase().includes('master') ||
-                                     degree.toLowerCase().includes('bachelor') || 
+                                     degree.toLowerCase().includes('bachelor') ||
                                      degree.toLowerCase().includes('diploma') ||
                                      degree.toLowerCase().includes('certificate') ||
                                      degree.toLowerCase().includes('degree');
@@ -334,7 +334,7 @@ class FacultyDataScraper {
                   university,
                   graduationYear: year || ''
                 };
-                
+
                 education.push(educationEntry);
                 console.log(`Added education entry:`, educationEntry);
               } else {
@@ -353,15 +353,58 @@ class FacultyDataScraper {
 
   /**
    * Extract areas of specialization
+   * Looks for specialization in x_panel with "Area of Specializaion" heading
+   * Structure: <div class="x_panel"> -> <h2>Area of Specializaion</h2> -> <div class="x_content"> -> <p>content</p>
    */
   extractSpecialization($) {
+    console.log('Extracting specialization...');
+    
+    // Primary method: Look for the specific x_panel structure
+    const specializationPanel = $('.x_panel').filter((index, panel) => {
+      const h2Text = $(panel).find('h2').text().trim();
+      return h2Text.toLowerCase().includes('area of specializ') || 
+             h2Text.toLowerCase().includes('specialization') ||
+             h2Text.toLowerCase().includes('specializaion'); // Handle typo in original
+    });
+
+    if (specializationPanel.length > 0) {
+      const contentDiv = specializationPanel.find('.x_content .dashboard-widget-content p');
+      if (contentDiv.length > 0) {
+        const specializationText = contentDiv.text().trim();
+        console.log(`Found specialization in x_panel: "${specializationText}"`);
+        
+        if (specializationText) {
+          // Split by comma and clean up each area
+          const areas = specializationText.split(',').map(area => area.trim()).filter(area => area);
+          console.log(`Parsed specialization areas:`, areas);
+          return areas;
+        }
+      }
+    }
+
+    // Fallback method: Look for h2 headings (original method)
+    console.log('Trying fallback method for specialization...');
     const specializationSection = $('h2:contains("Area of Specializaion"), h2:contains("Area of Specialization")').next();
     const specializationText = specializationSection.text().trim();
 
     if (specializationText) {
-      return specializationText.split(',').map(area => area.trim()).filter(area => area);
+      console.log(`Found specialization via fallback: "${specializationText}"`);
+      const areas = specializationText.split(',').map(area => area.trim()).filter(area => area);
+      return areas;
     }
 
+    // Additional fallback: Search for any element containing specialization keywords
+    const specializationElements = $('*:contains("e-Learning"), *:contains("Cloud Computing"), *:contains("Data Design")').first();
+    if (specializationElements.length > 0) {
+      const text = specializationElements.text().trim();
+      if (text.includes(',')) {
+        console.log(`Found specialization via keyword search: "${text}"`);
+        const areas = text.split(',').map(area => area.trim()).filter(area => area);
+        return areas;
+      }
+    }
+
+    console.log('No specialization found');
     return [];
   }
 
@@ -454,6 +497,7 @@ class FacultyDataScraper {
 
   // Experience Section Methods
   extractTeachingExperience($) {
+    console.log('Extracting teaching experience...');
     const data = [];
 
     // Look for Teaching Experience in tab_content2
@@ -461,13 +505,19 @@ class FacultyDataScraper {
     if (teachingTab.length) {
       teachingTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
+        const tableText = $(table).text().toLowerCase();
 
-        // Check if this is teaching experience table
-        const isTeachingTable = headers.some(h =>
-          h.includes('designation') || h.includes('department') || h.includes('institution')
-        ) || tableIndex === 0; // First table in teaching tab
+        // Check if this is teaching experience table (usually first table or contains teaching keywords)
+        const isTeachingTable = 
+          tableIndex === 0 || // First table in teaching tab
+          tableText.includes('teaching') ||
+          headers.some(h => h.includes('teaching')) ||
+          $(table).prev('h3, h4, h5').text().toLowerCase().includes('teaching') ||
+          headers.some(h => h.includes('designation') && h.includes('department'));
 
         if (isTeachingTable) {
+          console.log(`Found teaching experience table (index: ${tableIndex})`);
+          
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
@@ -487,13 +537,25 @@ class FacultyDataScraper {
                 duration = cells.length > 4 ? $(cells[4]).text().trim() : '';
               }
 
-              if (designation && institution) {
+              // Filter to include only teaching-related positions
+              if (designation && institution && 
+                  (designation.toLowerCase().includes('professor') ||
+                   designation.toLowerCase().includes('lecturer') ||
+                   designation.toLowerCase().includes('teacher') ||
+                   designation.toLowerCase().includes('teaching') ||
+                   designation.toLowerCase().includes('faculty') ||
+                   designation.toLowerCase().includes('instructor') ||
+                   institution.toLowerCase().includes('university') ||
+                   institution.toLowerCase().includes('college') ||
+                   institution.toLowerCase().includes('school') ||
+                   institution.toLowerCase().includes('institute'))) {
                 data.push({
                   designation,
                   department: department || '',
                   institution,
                   duration: duration || ''
                 });
+                console.log(`Added teaching experience: ${designation} at ${institution}`);
               }
             }
           });
@@ -501,23 +563,159 @@ class FacultyDataScraper {
       });
     }
 
+    console.log(`Total teaching experience entries: ${data.length}`);
     return data;
   }
 
   extractResearchExperience($) {
-    return this.extractSectionData($, [
-      'Research Experience',
-      'Research',
-      'Research Background'
-    ]);
+    console.log('Extracting research experience...');
+    const data = [];
+
+    // Look for Research Experience in tab_content2 (Experience tab)
+    const experienceTab = $('#tab_content2');
+    if (experienceTab.length) {
+      experienceTab.find('table').each((tableIndex, table) => {
+        const tableText = $(table).text().toLowerCase();
+        const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
+
+        // Check if this is research experience table (usually second table or contains research keywords)
+        const isResearchTable = 
+          tableIndex === 1 || // Second table in experience tab
+          tableText.includes('research') ||
+          headers.some(h => h.includes('research')) ||
+          $(table).prev('h3, h4, h5').text().toLowerCase().includes('research');
+
+        if (isResearchTable && headers.some(h => h.includes('designation') || h.includes('institution'))) {
+          console.log(`Found research experience table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+
+            if (cells.length >= 3) {
+              const firstCol = $(cells[0]).text().trim();
+              let designation = '', department = '', institution = '', duration = '';
+
+              if (isNaN(firstCol)) { // Not S.No
+                designation = $(cells[0]).text().trim();
+                department = $(cells[1]).text().trim();
+                institution = $(cells[2]).text().trim();
+                duration = cells.length > 3 ? $(cells[3]).text().trim() : '';
+              } else { // Has S.No
+                designation = $(cells[1]).text().trim();
+                department = $(cells[2]).text().trim();
+                institution = $(cells[3]).text().trim();
+                duration = cells.length > 4 ? $(cells[4]).text().trim() : '';
+              }
+
+              if (designation && institution && 
+                  (designation.toLowerCase().includes('research') || 
+                   institution.toLowerCase().includes('research') ||
+                   department.toLowerCase().includes('research'))) {
+                data.push({
+                  designation,
+                  department: department || '',
+                  institution,
+                  duration: duration || ''
+                });
+                console.log(`Added research experience: ${designation} at ${institution}`);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // Fallback: Look for dedicated research experience sections
+    if (data.length === 0) {
+      const researchSections = this.extractSectionData($, [
+        'Research Experience',
+        'Research Background'
+      ]);
+      data.push(...researchSections);
+    }
+
+    console.log(`Total research experience entries: ${data.length}`);
+    return data;
   }
 
   extractIndustryExperience($) {
-    return this.extractSectionData($, [
-      'Industry Experience',
-      'Industrial Experience',
-      'Professional Experience'
-    ]);
+    console.log('Extracting industry experience...');
+    const data = [];
+
+    // Look for Industry Experience in tab_content2 (Experience tab)
+    const experienceTab = $('#tab_content2');
+    if (experienceTab.length) {
+      experienceTab.find('table').each((tableIndex, table) => {
+        const tableText = $(table).text().toLowerCase();
+        const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
+
+        // Check if this is industry experience table (usually third table or contains industry keywords)
+        const isIndustryTable = 
+          tableIndex === 2 || // Third table in experience tab
+          tableText.includes('industry') ||
+          tableText.includes('corporate') ||
+          headers.some(h => h.includes('industry') || h.includes('corporate')) ||
+          $(table).prev('h3, h4, h5').text().toLowerCase().includes('industry');
+
+        if (isIndustryTable && headers.some(h => h.includes('designation') || h.includes('institution'))) {
+          console.log(`Found industry experience table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+
+            if (cells.length >= 3) {
+              const firstCol = $(cells[0]).text().trim();
+              let designation = '', department = '', institution = '', duration = '';
+
+              if (isNaN(firstCol)) { // Not S.No
+                designation = $(cells[0]).text().trim();
+                department = $(cells[1]).text().trim();
+                institution = $(cells[2]).text().trim();
+                duration = cells.length > 3 ? $(cells[3]).text().trim() : '';
+              } else { // Has S.No
+                designation = $(cells[1]).text().trim();
+                department = $(cells[2]).text().trim();
+                institution = $(cells[3]).text().trim();
+                duration = cells.length > 4 ? $(cells[4]).text().trim() : '';
+              }
+
+              if (designation && institution && 
+                  !designation.toLowerCase().includes('teaching') && 
+                  !designation.toLowerCase().includes('research') && 
+                  (designation.toLowerCase().includes('manager') || 
+                   designation.toLowerCase().includes('engineer') ||
+                   designation.toLowerCase().includes('analyst') ||
+                   designation.toLowerCase().includes('consultant') ||
+                   institution.toLowerCase().includes('pvt') ||
+                   institution.toLowerCase().includes('ltd') ||
+                   institution.toLowerCase().includes('corp'))) {
+                data.push({
+                  designation,
+                  department: department || '',
+                  institution,
+                  duration: duration || ''
+                });
+                console.log(`Added industry experience: ${designation} at ${institution}`);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // Fallback: Look for dedicated industry experience sections
+    if (data.length === 0) {
+      const industrySections = this.extractSectionData($, [
+        'Industry Experience',
+        'Industrial Experience',
+        'Professional Experience',
+        'Corporate Experience'
+      ]);
+      data.push(...industrySections);
+    }
+
+    console.log(`Total industry experience entries: ${data.length}`);
+    return data;
   }
 
   // Innovation/Patents Section Methods

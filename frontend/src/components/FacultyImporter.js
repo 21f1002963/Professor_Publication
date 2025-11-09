@@ -236,11 +236,11 @@ const FacultyImporter = () => {
                             {result.data.email && (
                               <div style={{ fontSize: '1.1rem', color: '#007bff', marginTop: '10px', display: 'flex', alignItems: 'center' }}>
                                 <span style={{ marginRight: '8px' }}>📧</span>
-                                <a 
-                                  href={`mailto:${result.data.email}`} 
-                                  style={{ 
-                                    color: '#007bff', 
-                                    textDecoration: 'none', 
+                                <a
+                                  href={`mailto:${result.data.email}`}
+                                  style={{
+                                    color: '#007bff',
+                                    textDecoration: 'none',
                                     borderBottom: '1px solid transparent',
                                     transition: 'border-bottom 0.2s ease'
                                   }}
@@ -249,6 +249,34 @@ const FacultyImporter = () => {
                                 >
                                   {result.data.email}
                                 </a>
+                              </div>
+                            )}
+                            {result.data.home?.specialization && result.data.home.specialization.length > 0 && (
+                              <div style={{ fontSize: '1.1rem', color: '#28a745', marginTop: '15px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                                  <span style={{ marginRight: '8px' }}>🎯</span>
+                                  <span style={{ fontWeight: 'bold' }}>Areas of Specialization:</span>
+                                </div>
+                                <div style={{ marginLeft: '24px' }}>
+                                  {result.data.home.specialization.map((area, index) => (
+                                    <span
+                                      key={index}
+                                      style={{
+                                        display: 'inline-block',
+                                        backgroundColor: '#d4edda',
+                                        color: '#155724',
+                                        padding: '6px 12px',
+                                        margin: '4px 8px 4px 0',
+                                        borderRadius: '20px',
+                                        fontSize: '0.95rem',
+                                        fontWeight: '500',
+                                        border: '1px solid #c3e6cb'
+                                      }}
+                                    >
+                                      {area}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
                             )}
                           </div>
@@ -298,6 +326,7 @@ const FacultyImporter = () => {
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                   <thead>
                                     <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '60px' }}>S.No</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Designation</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Department</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Institution</th>
@@ -307,6 +336,73 @@ const FacultyImporter = () => {
                                   <tbody>
                                     {result.data.experience.teaching.map((exp, index) => (
                                       <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{exp.designation || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.department || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.institution || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.duration || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Research Experience Table */}
+                          {result.data.experience?.research && result.data.experience.research.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#6f42c1', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🧪 Research Experience
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#6f42c1', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #5a2d91', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Designation</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Department</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Institution</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Duration/Notes</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.experience.research.map((exp, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#6f42c1' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{exp.designation || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.department || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.institution || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.duration || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Industry Experience Table */}
+                          {result.data.experience?.industry && result.data.experience.industry.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#e83e8c', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🏭 Industry Experience
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#e83e8c', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #dc1a6b', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Designation</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Department</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Institution</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc1a6b' }}>Duration/Notes</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.experience.industry.map((exp, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#e83e8c' }}>{index + 1}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{exp.designation || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.department || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{exp.institution || 'N/A'}</td>
@@ -329,6 +425,7 @@ const FacultyImporter = () => {
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                   <thead>
                                     <tr style={{ backgroundColor: '#dc3545', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #c82333', width: '60px' }}>S.No</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Student Name</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Registration No</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Registration Date</th>
@@ -339,6 +436,7 @@ const FacultyImporter = () => {
                                   <tbody>
                                     {result.data.research_guidance.phd_guidance.map((guidance, index) => (
                                       <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#dc3545' }}>{index + 1}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{guidance.studentName || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationNo || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationDate || 'N/A'}</td>
@@ -373,6 +471,7 @@ const FacultyImporter = () => {
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                   <thead>
                                     <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #dc6900', width: '60px' }}>S.No</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Title</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Type</th>
                                       <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Agency</th>
@@ -383,6 +482,7 @@ const FacultyImporter = () => {
                                   <tbody>
                                     {result.data.home.awards.map((award, index) => (
                                       <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{award.title || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{award.type || 'N/A'}</td>
                                         <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{award.agency || 'N/A'}</td>
