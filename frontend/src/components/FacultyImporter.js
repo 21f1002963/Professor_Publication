@@ -38,7 +38,11 @@ const FacultyImporter = () => {
     organizedWorkshops: true,
     academicAdministration: true,
     coCurricular: true,
-    institutionalCollaboration: true
+    institutionalCollaboration: true,
+    facultyDevelopment: true,
+    executiveDevelopment: true,
+    specialProgrammes: true,
+    arpitProgrammes: true
   });
 
   // Check backend status on component mount
@@ -1429,6 +1433,158 @@ const FacultyImporter = () => {
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.visitFromDate || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.visitToDate || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{collab.collaborativeDetails || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Programme Tables */}
+                          {result.data.programmes && (
+                            <div style={{ marginTop: '40px' }}>
+                              <h3 style={{ color: '#495057', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #495057', paddingBottom: '10px' }}>
+                                📚 Programme Development & Participation
+                              </h3>
+                              
+                              {/* Table 1 - Faculty Development Programme */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🎓 Faculty Development Programme Attended', 'facultyDevelopment', '#007bff')}
+                                {tableVisibility.facultyDevelopment && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #0056b3', width: '50px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Title of the FDP</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Organiser</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Venue</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>From Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>To Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.programmes.faculty_development.map((fdp, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#007bff' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{fdp.title || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{fdp.organiser || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{fdp.venue || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{fdp.duration || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{fdp.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{fdp.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{fdp.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 2 - Executive Development Programme */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('💼 Executive Development Programme Conducted', 'executiveDevelopment', '#28a745')}
+                                {tableVisibility.executiveDevelopment && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '50px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Name of the Programme</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>No. of Participants</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Venue</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>From Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>To Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Year</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Revenue Generated</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.programmes.executive_development.map((edp, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '200px', wordWrap: 'break-word' }}>{edp.programName || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center' }}>{edp.participants || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{edp.venue || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edp.duration || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edp.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edp.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{edp.year || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', color: '#28a745' }}>{edp.revenue || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 3 - Special Programmes */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🏛️ IMPRESS/IMPRINT/SPARC/STARS/LEAP Programme Participation', 'specialProgrammes', '#fd7e14')}
+                                {tableVisibility.specialProgrammes && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #e55a00', width: '50px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>IMPRESS/IMPRINT/SPARC/STARS/LEAP/Others</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Place</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>From Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>To Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.programmes.special_programmes.map((special, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{special.programType || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{special.place || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{special.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{special.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{special.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 4 - ARPIT Programme */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🎯 Enrolment under ARPIT Programme', 'arpitProgrammes', '#6f42c1')}
+                                {tableVisibility.arpitProgrammes && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#6f42c1', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #5a2d91', width: '50px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Name of the Programme</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91', backgroundColor: '#f8f9fa', color: '#6f42c1' }} colSpan="2">Period of the Programme</th>
+                                        </tr>
+                                        <tr style={{ backgroundColor: '#f8f9fa', color: '#6f42c1' }}>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #5a2d91' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #5a2d91' }}></th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #5a2d91', fontSize: '12px' }}>From Date</th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #5a2d91', fontSize: '12px' }}>To Date</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.programmes.arpit_programmes.map((arpit, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#6f42c1' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{arpit.programName || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center' }}>{arpit.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center' }}>{arpit.toDate || 'N/A'}</td>
                                           </tr>
                                         ))}
                                       </tbody>

@@ -101,7 +101,8 @@ class FacultyDataScraper {
         programmes: {
           faculty_development: this.extractFacultyDevelopment($),
           executive_development: this.extractExecutiveDevelopment($),
-          special_programmes: this.extractSpecialProgrammes($)
+          special_programmes: this.extractSpecialProgrammes($),
+          arpit_programmes: this.extractArpitProgrammes($)
         },
 
         // Meta information
@@ -2396,7 +2397,7 @@ class FacultyDataScraper {
       'Participation & Extension Activities (Co-Curricular)',
       'Co-Curricular Activities',
       'NSS Activities',
-      'NCC Activities', 
+      'NCC Activities',
       'NSS Programme',
       'Co-Curricular'
     ], 'co_curricular');
@@ -2412,27 +2413,295 @@ class FacultyDataScraper {
     ], 'institutional_collaboration');
   }
 
-  // Programme Section Methods
+  // Enhanced programme table extraction method
+  extractProgrammeTable($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Data ---`);
+    const items = [];
+
+    // Focus on Programme tab (tab_content9) as specified by user
+    const programmeTab = $('#tab_content9');
+
+    if (programmeTab.length === 0) {
+      console.log('Programme tab (tab_content9) not found');
+      return items;
+    }
+
+    console.log(`Found Programme tab with ${programmeTab.find('table').length} tables`);
+
+    // Look for panels with specific titles based on the HTML structure
+    let targetPanels = [];
+
+    // Search for panels matching our keywords
+    programmeTab.find('.x_panel').each((i, panel) => {
+      const $panel = $(panel);
+      const heading = $panel.find('.x_title h2').text().trim();
+
+      console.log(`Checking panel: "${heading}"`);
+
+      const headingLower = heading.toLowerCase();
+      const matchesKeywords = keywords.some(keyword =>
+        headingLower.includes(keyword.toLowerCase())
+      );
+
+      if (matchesKeywords) {
+        console.log(`✓ Panel "${heading}" matches keywords`);
+        targetPanels.push(panel);
+      }
+    });
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s)`);
+
+      targetPanels.forEach((panel, panelIndex) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+
+          // Check if this table has the expected programme structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+
+          // Verify this looks like the programme table structure based on type
+          let hasCorrectStructure = false;
+
+          if (type === 'faculty_development') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('organiser')) &&
+                                headers.some(h => h.toLowerCase().includes('venue')) &&
+                                headers.some(h => h.toLowerCase().includes('duration'));
+          } else if (type === 'executive_development') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('programme')) &&
+                                headers.some(h => h.toLowerCase().includes('participants')) &&
+                                headers.some(h => h.toLowerCase().includes('venue')) &&
+                                headers.some(h => h.toLowerCase().includes('revenue'));
+          } else if (type === 'special_programmes') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                (headers.some(h => h.toLowerCase().includes('impress')) ||
+                                 headers.some(h => h.toLowerCase().includes('imprint')) ||
+                                 headers.some(h => h.toLowerCase().includes('sparc')) ||
+                                 headers.some(h => h.toLowerCase().includes('stars')) ||
+                                 headers.some(h => h.toLowerCase().includes('leap'))) &&
+                                headers.some(h => h.toLowerCase().includes('place'));
+          } else if (type === 'arpit_programmes') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('programme')) &&
+                                headers.some(h => h.toLowerCase().includes('period'));
+          }
+
+          if (hasCorrectStructure) {
+            console.log(`✓ Table has correct ${type} structure - extracting data`);
+            this.parseProgrammeTable($, $table, items, type);
+          } else {
+            console.log(`✗ Table doesn't match expected ${type} structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found, falling back to table-based search`);
+
+      // Fallback: search all tables in the tab
+      const tables = programmeTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+
+        // Quick check if this looks like a programme table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasProgrammeStructure = headers.includes('S.No') &&
+                                    (headers.some(h => h.toLowerCase().includes('programme')) ||
+                                     headers.some(h => h.toLowerCase().includes('title')) ||
+                                     headers.some(h => h.toLowerCase().includes('fdp')));
+
+        if (hasProgrammeStructure) {
+          console.log(`Found programme table (fallback) - extracting data`);
+          this.parseProgrammeTable($, $table, items, type);
+        }
+      });
+    }
+
+    console.log(`Total ${type} items extracted: ${items.length}`);
+    return items;
+  }
+
+  // Parse programme table based on type
+  parseProgrammeTable($, $table, items, type) {
+    console.log(`Parsing ${type} programme table`);
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+
+      // Handle both <th scope="row"> and <td> for S.No
+      const snoCell = $row.find('th[scope="row"]');
+      const dataCells = $row.find('td');
+
+      let item = {};
+
+      if (type === 'faculty_development') {
+        // Faculty Development: S.No | Title of the FDP | Organiser | Venue | Duration | From Date | To Date | Year
+        if (snoCell.length > 0 && dataCells.length >= 7) {
+          item = {
+            sno: snoCell.text().trim(),
+            title: $(dataCells[0]).text().trim(),
+            organiser: $(dataCells[1]).text().trim(),
+            venue: $(dataCells[2]).text().trim(),
+            duration: $(dataCells[3]).text().trim(),
+            fromDate: $(dataCells[4]).text().trim(),
+            toDate: $(dataCells[5]).text().trim(),
+            year: $(dataCells[6]).text().trim()
+          };
+          console.log(`Found faculty development: ${item.title} (${item.year})`);
+        } else if (dataCells.length >= 8) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            title: $(dataCells[1]).text().trim(),
+            organiser: $(dataCells[2]).text().trim(),
+            venue: $(dataCells[3]).text().trim(),
+            duration: $(dataCells[4]).text().trim(),
+            fromDate: $(dataCells[5]).text().trim(),
+            toDate: $(dataCells[6]).text().trim(),
+            year: $(dataCells[7]).text().trim()
+          };
+          console.log(`Found faculty development (alt): ${item.title} (${item.year})`);
+        }
+      } else if (type === 'executive_development') {
+        // Executive Development: S.No | Name of the Programme | No. of Participants | Venue | Duration | From Date | To Date | Year | Revenue Generated
+        if (snoCell.length > 0 && dataCells.length >= 8) {
+          item = {
+            sno: snoCell.text().trim(),
+            programName: $(dataCells[0]).text().trim(),
+            participants: $(dataCells[1]).text().trim(),
+            venue: $(dataCells[2]).text().trim(),
+            duration: $(dataCells[3]).text().trim(),
+            fromDate: $(dataCells[4]).text().trim(),
+            toDate: $(dataCells[5]).text().trim(),
+            year: $(dataCells[6]).text().trim(),
+            revenue: $(dataCells[7]).text().trim()
+          };
+          console.log(`Found executive development: ${item.programName} (${item.year})`);
+        } else if (dataCells.length >= 9) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            programName: $(dataCells[1]).text().trim(),
+            participants: $(dataCells[2]).text().trim(),
+            venue: $(dataCells[3]).text().trim(),
+            duration: $(dataCells[4]).text().trim(),
+            fromDate: $(dataCells[5]).text().trim(),
+            toDate: $(dataCells[6]).text().trim(),
+            year: $(dataCells[7]).text().trim(),
+            revenue: $(dataCells[8]).text().trim()
+          };
+          console.log(`Found executive development (alt): ${item.programName} (${item.year})`);
+        }
+      } else if (type === 'special_programmes') {
+        // Special Programmes: S.No | IMPRESS/IMPRINT/SPARC/STARS/LEAP/Others | Place | From Date | To Date | Year
+        if (snoCell.length > 0 && dataCells.length >= 5) {
+          item = {
+            sno: snoCell.text().trim(),
+            programType: $(dataCells[0]).text().trim(),
+            place: $(dataCells[1]).text().trim(),
+            fromDate: $(dataCells[2]).text().trim(),
+            toDate: $(dataCells[3]).text().trim(),
+            year: $(dataCells[4]).text().trim()
+          };
+          console.log(`Found special programme: ${item.programType} (${item.year})`);
+        } else if (dataCells.length >= 6) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            programType: $(dataCells[1]).text().trim(),
+            place: $(dataCells[2]).text().trim(),
+            fromDate: $(dataCells[3]).text().trim(),
+            toDate: $(dataCells[4]).text().trim(),
+            year: $(dataCells[5]).text().trim()
+          };
+          console.log(`Found special programme (alt): ${item.programType} (${item.year})`);
+        }
+      } else if (type === 'arpit_programmes') {
+        // ARPIT Programmes: S.No | Name of the Programme | Period of the Programme (From Date | To Date)
+        if (snoCell.length > 0 && dataCells.length >= 3) {
+          item = {
+            sno: snoCell.text().trim(),
+            programName: $(dataCells[0]).text().trim(),
+            fromDate: $(dataCells[1]).text().trim(),
+            toDate: $(dataCells[2]).text().trim()
+          };
+          console.log(`Found ARPIT programme: ${item.programName}`);
+        } else if (dataCells.length >= 4) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            programName: $(dataCells[1]).text().trim(),
+            fromDate: $(dataCells[2]).text().trim(),
+            toDate: $(dataCells[3]).text().trim()
+          };
+          console.log(`Found ARPIT programme (alt): ${item.programName}`);
+        }
+      }
+
+      // Only add if we have actual content
+      if (item.sno && Object.keys(item).length > 1) {
+        // Check if this is not just headers
+        const isHeader = (type === 'faculty_development' && item.title === 'Title of the FDP') ||
+                        (type === 'executive_development' && item.programName === 'Name of the Programme') ||
+                        (type === 'special_programmes' && item.programType === 'IMPRESS/IMPRINT/SPARC/STARS/LEAP/Others') ||
+                        (type === 'arpit_programmes' && item.programName === 'Name of the Programme');
+
+        if (!isHeader) {
+          items.push(item);
+          console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
+        } else {
+          console.log(`⚠️ Skipped header row`);
+        }
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't have sufficient data or structure`);
+      }
+    });
+  }
+
+  // Programme Section Methods - Enhanced for structured table extraction
   extractFacultyDevelopment($) {
-    return this.extractSectionData($, [
+    console.log('Starting Faculty Development Programme extraction...');
+    return this.extractProgrammeTable($, [
       'Faculty Development Programme Attended (Orientation, Refresher, other Short Term Course during the year)',
       'Faculty Development Programme',
       'FDP Attended',
       'Professional Development'
-    ]);
+    ], 'faculty_development');
   }
 
   extractExecutiveDevelopment($) {
-    return this.extractSectionData($, [
+    console.log('Starting Executive Development Programme extraction...');
+    return this.extractProgrammeTable($, [
       'Details of Executive Development Prog/Management Development Prog. conducted',
+      'Executive Development Prog',
+      'Management Development Prog',
       'Executive Development',
       'Management Development'
-    ]);
+    ], 'executive_development');
   }
 
   extractSpecialProgrammes($) {
-    return this.extractSectionData($, [
+    console.log('Starting Special Programmes extraction...');
+    return this.extractProgrammeTable($, [
       'Participation in IMPESS, IMPRINT, SPARC, STARS, LEAP Programme etc and DSF Funding Programme',
+      'IMPESS, IMPRINT, SPARC, STARS, LEAP',
       'Special Programmes',
       'Government Programmes',
       'IMPESS',
@@ -2440,7 +2709,16 @@ class FacultyDataScraper {
       'SPARC',
       'STARS',
       'LEAP'
-    ]);
+    ], 'special_programmes');
+  }
+
+  extractArpitProgrammes($) {
+    console.log('Starting ARPIT Programme extraction...');
+    return this.extractProgrammeTable($, [
+      'Enrolment under ARPIT Programme',
+      'ARPIT Programme',
+      'ARPIT Enrolment'
+    ], 'arpit_programmes');
   }
 
   /**
