@@ -2058,13 +2058,14 @@ class FacultyDataScraper {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('position')) &&
                                 headers.some(h => h.toLowerCase().includes('duration')) &&
-                                (headers.some(h => h.toLowerCase().includes('duties')) || 
+                                (headers.some(h => h.toLowerCase().includes('duties')) ||
                                  headers.some(h => h.toLowerCase().includes('dutites')));
           } else if (type === 'co_curricular') {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('position')) &&
                                 headers.some(h => h.toLowerCase().includes('duration')) &&
-                                headers.some(h => h.toLowerCase().includes('duties'));
+                                (headers.some(h => h.toLowerCase().includes('duties')) ||
+                                 headers.some(h => h.toLowerCase().includes('dutites')));
           } else if (type === 'institutional_collaboration') {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('collaborator')) &&
@@ -2313,6 +2314,7 @@ class FacultyDataScraper {
             duration: $(dataCells[1]).text().trim(),
             duties: $(dataCells[2]).text().trim()
           };
+          console.log(`Found co-curricular row: ${item.position} (${item.duration})`);
         } else if (dataCells.length >= 4) {
           item = {
             sno: $(dataCells[0]).text().trim(),
@@ -2320,6 +2322,7 @@ class FacultyDataScraper {
             duration: $(dataCells[2]).text().trim(),
             duties: $(dataCells[3]).text().trim()
           };
+          console.log(`Found co-curricular row (alt): ${item.position} (${item.duration})`);
         }
       } else if (type === 'institutional_collaboration') {
         // Institutional Collaboration: S.No | Collaborator Name | Designation | Institution/Industry | Type | Nature of Collaboration | Period of Collaboration (From Date | To Date) | Visits to Collaborating Institution/Industry (From Date | To Date) | Details of Collaborative Research/Teaching
@@ -2393,7 +2396,9 @@ class FacultyDataScraper {
       'Participation & Extension Activities (Co-Curricular)',
       'Co-Curricular Activities',
       'NSS Activities',
-      'NCC Activities'
+      'NCC Activities', 
+      'NSS Programme',
+      'Co-Curricular'
     ], 'co_curricular');
   }
 
