@@ -494,6 +494,227 @@ const FacultyImporter = () => {
                             </div>
                           )}
 
+                          {/* Debug Information for Innovation Data */}
+                          {result.data && (
+                            <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px', fontSize: '12px', fontFamily: 'monospace' }}>
+                              <h6 style={{ color: '#6c757d', marginBottom: '10px' }}>Debug: Innovation Data Structure</h6>
+                              <div>Innovation object exists: {result.data.innovation ? 'Yes' : 'No'}</div>
+                              {result.data.innovation && (
+                                <div>
+                                  <div>Contributions: {result.data.innovation.contributions ? `Array with ${result.data.innovation.contributions.length} items` : 'Not found'}</div>
+                                  <div>Patents: {result.data.innovation.patents ? `Array with ${result.data.innovation.patents.length} items` : 'Not found'}</div>
+                                  <div>UGC Papers: {result.data.innovation.ugc_papers ? `Array with ${result.data.innovation.ugc_papers.length} items` : 'Not found'}</div>
+                                  <div>Non-UGC Papers: {result.data.innovation.non_ugc_papers ? `Array with ${result.data.innovation.non_ugc_papers.length} items` : 'Not found'}</div>
+                                  <div>Conference Papers: {result.data.innovation.conference_papers ? `Array with ${result.data.innovation.conference_papers.length} items` : 'Not found'}</div>
+                                </div>
+                              )}
+                              {result.data.innovation?.contributions && result.data.innovation.contributions.length > 0 && (
+                                <div style={{ marginTop: '10px' }}>
+                                  <div>Sample contribution: {JSON.stringify(result.data.innovation.contributions[0], null, 2)}</div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Innovation Contributions Table */}
+                          {result.data.innovation?.contributions && result.data.innovation.contributions.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#6610f2', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🔬 Contribution towards Innovation
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#6610f2', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #520dc2', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #520dc2' }}>Name of the Work/Contribution</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #520dc2' }}>Specialization</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #520dc2' }}>Remarks</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.innovation.contributions.map((contrib, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#6610f2' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{contrib.workName || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{contrib.specialization || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{contrib.remarks || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Patent Details Table */}
+                          {result.data.innovation?.patents && result.data.innovation.patents.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#20c997', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                📜 Patent Details
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#20c997', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1aa179', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Status</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Patent Number</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Year of Award</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Type</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1aa179' }}>Commercialized Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.innovation.patents.map((patent, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#20c997' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{patent.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
+                                          <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: patent.status?.toLowerCase() === 'granted' ? '#d4edda' : '#fff3cd',
+                                            color: patent.status?.toLowerCase() === 'granted' ? '#155724' : '#856404',
+                                            fontSize: '12px',
+                                            fontWeight: '500'
+                                          }}>
+                                            {patent.status || 'N/A'}
+                                          </span>
+                                        </td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{patent.patentNumber || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{patent.yearOfAward || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{patent.type || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
+                                          <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: patent.commercializedStatus?.toLowerCase() === 'yes' ? '#d1ecf1' : '#f8d7da',
+                                            color: patent.commercializedStatus?.toLowerCase() === 'yes' ? '#0c5460' : '#721c24',
+                                            fontSize: '12px',
+                                            fontWeight: '500'
+                                          }}>
+                                            {patent.commercializedStatus || 'N/A'}
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* UGC Approved Papers Table */}
+                          {result.data.innovation?.ugc_papers && result.data.innovation.ugc_papers.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#0d6efd', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                📚 Papers Published in UGC Approved Journals
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#0d6efd', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #0a58ca', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Authors</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Journal Name</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Volume, Issue & Page Nos.</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Year</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0a58ca' }}>Impact Factor</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.innovation.ugc_papers.map((paper, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#0d6efd' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{paper.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{paper.authors || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.journalName || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.volumeIssuePages || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.year || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', color: '#198754' }}>{paper.impactFactor || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Non-UGC Papers Table */}
+                          {result.data.innovation?.non_ugc_papers && result.data.innovation.non_ugc_papers.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#6f42c1', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                📄 Papers Published in Non UGC Approved Peer Reviewed Journals
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#6f42c1', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #5a2d91', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Authors</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Journal Name</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Volume, Issue & Page Nos.</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Year</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Impact Factor</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.innovation.non_ugc_papers.map((paper, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#6f42c1' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{paper.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{paper.authors || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.journalName || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.volumeIssuePages || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.year || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', color: '#198754' }}>{paper.impactFactor || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Conference Papers Table */}
+                          {result.data.innovation?.conference_papers && result.data.innovation.conference_papers.length > 0 && (
+                            <div style={{ marginBottom: '30px' }}>
+                              <h5 style={{ color: '#fd7e14', marginBottom: '15px', fontSize: '1.3rem', fontWeight: '600' }}>
+                                🎤 Papers Published in Conference Proceedings
+                              </h5>
+                              <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                  <thead>
+                                    <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                      <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #dc6900', width: '60px' }}>S.No</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Title</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Authors</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Details of Conference Publication</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Page Nos.</th>
+                                      <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #dc6900' }}>Year</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {result.data.innovation.conference_papers.map((paper, index) => (
+                                      <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{paper.title || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{paper.authors || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{paper.conferenceDetails || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.pageNos || 'N/A'}</td>
+                                        <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{paper.year || 'N/A'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
                         </div>
                       </div>
                     )}

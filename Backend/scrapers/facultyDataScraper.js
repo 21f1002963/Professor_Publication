@@ -55,7 +55,8 @@ class FacultyDataScraper {
           contributions: this.extractInnovationContributions($),
           patents: this.extractPatentDetails($),
           ugc_papers: this.extractUGCApprovedPapers($),
-          non_ugc_papers: this.extractNonUGCPapers($)
+          non_ugc_papers: this.extractNonUGCPapers($),
+          conference_papers: this.extractConferencePapers($)
         },
 
         // Books Section
@@ -108,7 +109,14 @@ class FacultyDataScraper {
         node_id: nodeId
       };
 
-      console.log(`Successfully scraped data - ${facultyData.jsonData}`);
+      console.log('Innovation data extracted:');
+      console.log('- Contributions:', facultyData.innovation.contributions.length);
+      console.log('- Patents:', facultyData.innovation.patents.length);
+      console.log('- UGC Papers:', facultyData.innovation.ugc_papers.length);
+      console.log('- Non-UGC Papers:', facultyData.innovation.non_ugc_papers.length);
+      console.log('- Conference Papers:', facultyData.innovation.conference_papers.length);
+      
+      console.log(`Successfully scraped data for node ${nodeId}`);
       return facultyData;
 
     } catch (error) {
@@ -650,14 +658,14 @@ class FacultyDataScraper {
         console.log(`Table ${tableIndex} headers:`, headers);
 
         // Check if this is the industry experience table by looking for specific headers
-        const hasIndustryHeaders = 
+        const hasIndustryHeaders =
           headers.some(h => h.toLowerCase().includes('designation')) &&
           (headers.some(h => h.toLowerCase().includes('company') || h.toLowerCase().includes('corporate')) ||
            headers.some(h => h.toLowerCase().includes('nature') && h.toLowerCase().includes('work')));
 
         // Also check if table is preceded by "Industry Experience" heading
         const prevHeading = $(table).prevAll('h2, h3, h4, h5').first().text().toLowerCase();
-        const isIndustrySection = prevHeading.includes('industry') || 
+        const isIndustrySection = prevHeading.includes('industry') ||
                                  prevHeading.includes('corporate') ||
                                  tableIndex === 2; // Third table in experience tab
 
@@ -675,7 +683,7 @@ class FacultyDataScraper {
               if (cells.length === 4) {
                 // Full structure with S.No
                 designation = $(cells[1]).text().trim();
-                company = $(cells[2]).text().trim(); 
+                company = $(cells[2]).text().trim();
                 natureOfWork = $(cells[3]).text().trim();
               } else if (cells.length === 3) {
                 // Structure without S.No: Designation | Company/Corporate | Nature of Work
@@ -720,70 +728,172 @@ class FacultyDataScraper {
 
   // Innovation/Patents Section Methods
   extractInnovationContributions($) {
-    return this.extractSectionData($, [
-      'Contribution towards Innovation',
-      'Innovation',
-      'Innovations',
-      'Creative Contributions'
-    ]);
+    console.log('Extracting innovation contributions...');
+    const data = [];
+
+    // Look for Innovation Contributions in tab_content3 (Patents/Papers tab)
+    console.log('Available tabs:', $('[id*="tab_content"]').map((i, el) => $(el).attr('id')).get());
+    const patentsTab = $('#tab_content3');
+    console.log('Patents tab found:', patentsTab.length > 0);
+    
+    if (patentsTab.length) {
+      console.log('Total tables in patents tab:', patentsTab.find('table').length);
+      
+      patentsTab.find('table').each((tableIndex, table) => {
+        const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+        const tableText = $(table).text().toLowerCase();
+        console.log(`Table ${tableIndex} headers:`, headers);
+        console.log(`Table ${tableIndex} contains "contribution":`, tableText.includes('contribution'));
+        console.log(`Table ${tableIndex} contains "specialization":`, tableText.includes('specialization'));
+
+        // More flexible detection - check for any contribution-related keywords
+        const isInnovationTable = 
+          tableIndex === 0 || // First table in patents tab
+          tableText.includes('contribution') ||
+          tableText.includes('innovation') ||
+          headers.some(h => h.toLowerCase().includes('work') || h.toLowerCase().includes('contribution')) ||
+          headers.some(h => h.toLowerCase().includes('specialization')) ||
+          headers.some(h => h.toLowerCase().includes('remarks'));
+
+        if (isInnovationTable && headers.length >= 3) {
+          console.log(`Processing innovation contributions table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+            console.log(`Row ${rowIndex} has ${cells.length} cells`);
+
+            if (cells.length >= 3) {
+              let workName = '', specialization = '', remarks = '';
+
+              // Try different column structures
+              if (cells.length >= 4) {
+                // Structure: S.No | Name of Work/Contribution | Specialization | Remarks
+                workName = $(cells[1]).text().trim();
+                specialization = $(cells[2]).text().trim();
+                remarks = $(cells[3]).text().trim();
+              } else {
+                // Structure: Name of Work/Contribution | Specialization | Remarks
+                workName = $(cells[0]).text().trim();
+                specialization = $(cells[1]).text().trim();
+                remarks = $(cells[2]).text().trim();
+              }
+
+              console.log(`Potential work: "${workName}", specialization: "${specialization}"`);
+
+              if (workName && workName !== 'Name of the Work/Contribution' && workName !== 'S.No' && !isNaN(workName) === false) {
+                data.push({
+                  workName: workName,
+                  specialization: specialization || '',
+                  remarks: remarks || ''
+                });
+                console.log(`Added innovation contribution: ${workName}`);
+              }
+            }
+          });
+        } else {
+          console.log(`Skipping table ${tableIndex} - not innovation table`);
+        }
+      });
+    } else {
+      console.log('Patents tab (#tab_content3) not found');
+    }
+
+    // Fallback: If no data found, try to extract from any table with enough columns
+    if (data.length === 0 && patentsTab.length) {
+      console.log('Fallback: Trying to extract from any table with 4+ columns...');
+      patentsTab.find('table').each((tableIndex, table) => {
+        const rows = $(table).find('tr');
+        if (rows.length > 1) {
+          const firstRow = $(rows[1]).find('td');
+          if (firstRow.length >= 4) {
+            console.log(`Attempting fallback extraction from table ${tableIndex}`);
+            // Try to extract assuming: S.No | Work/Title | Description/Specialization | Notes/Remarks
+            const workName = $(firstRow[1]).text().trim();
+            const specialization = $(firstRow[2]).text().trim();
+            const remarks = $(firstRow[3]).text().trim();
+            
+            if (workName && workName !== 'Title' && workName !== 'S.No') {
+              data.push({
+                workName: workName,
+                specialization: specialization || '',
+                remarks: remarks || ''
+              });
+              console.log(`Fallback added: ${workName}`);
+            }
+          }
+        }
+      });
+    }
+
+    console.log(`Total innovation contributions: ${data.length}`);
+    return data;
   }
 
   extractPatentDetails($) {
-    return this.extractSectionData($, [
-      'Patent Details',
-      'Patents',
-      'Patent Applications',
-      'Intellectual Property'
-    ]);
-  }
-
-  extractUGCApprovedPapers($) {
+    console.log('Extracting patent details...');
     const data = [];
 
-    // Look for UGC papers in tab_content3 (Innovation tab)
-    const innovationTab = $('#tab_content3');
-    if (innovationTab.length) {
-      innovationTab.find('table').each((tableIndex, table) => {
-        const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
+    // Look for Patent Details in tab_content3 (Patents/Papers tab)
+    const patentsTab = $('#tab_content3');
+    if (patentsTab.length) {
+      patentsTab.find('table').each((tableIndex, table) => {
+        const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+        const tableText = $(table).text().toLowerCase();
+        console.log(`Patent table ${tableIndex} headers:`, headers);
 
-        // Check if this is UGC papers table - typically table 8 based on our analysis
-        const isUGCTable = headers.some(h =>
-          h.includes('title') && h.includes('authors') && h.includes('journal') && h.includes('impact factor')
-        );
+        // More flexible patent detection
+        const isPatentTable = 
+          tableIndex === 1 || // Second table in patents tab
+          tableText.includes('patent') ||
+          headers.some(h => h.toLowerCase().includes('title')) &&
+          (headers.some(h => h.toLowerCase().includes('status')) ||
+           headers.some(h => h.toLowerCase().includes('patent')) ||
+           headers.some(h => h.toLowerCase().includes('commercialized')));
 
-        if (isUGCTable) {
+        if (isPatentTable && headers.length >= 4) {
+          console.log(`Processing patent details table (index: ${tableIndex})`);
+          
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
-            if (cells.length >= 5) {
-              const firstCol = $(cells[0]).text().trim();
-              let title = '', authors = '', journal = '', volume = '', year = '', impact = '';
+            if (cells.length >= 4) {
+              let title = '', status = '', patentNumber = '', yearOfAward = '', type = '', commercializedStatus = '';
 
-              if (isNaN(firstCol)) { // Not S.No
-                title = $(cells[0]).text().trim();
-                authors = $(cells[1]).text().trim();
-                journal = $(cells[2]).text().trim();
-                volume = $(cells[3]).text().trim();
-                year = $(cells[4]).text().trim();
-                impact = cells.length > 5 ? $(cells[5]).text().trim() : '';
-              } else { // Has S.No
+              // Try different column structures
+              if (cells.length >= 7) {
+                // Full structure: S.No | Title | Status | Patent Number | Year of Award | Type | Commercialized Status
                 title = $(cells[1]).text().trim();
-                authors = $(cells[2]).text().trim();
-                journal = $(cells[3]).text().trim();
-                volume = $(cells[4]).text().trim();
-                year = $(cells[5]).text().trim();
-                impact = cells.length > 6 ? $(cells[6]).text().trim() : '';
+                status = $(cells[2]).text().trim();
+                patentNumber = $(cells[3]).text().trim();
+                yearOfAward = $(cells[4]).text().trim();
+                type = $(cells[5]).text().trim();
+                commercializedStatus = $(cells[6]).text().trim();
+              } else if (cells.length >= 6) {
+                // Without S.No: Title | Status | Patent Number | Year | Type | Commercialized
+                title = $(cells[0]).text().trim();
+                status = $(cells[1]).text().trim();
+                patentNumber = $(cells[2]).text().trim();
+                yearOfAward = $(cells[3]).text().trim();
+                type = $(cells[4]).text().trim();
+                commercializedStatus = $(cells[5]).text().trim();
+              } else {
+                // Minimal structure: extract what we can
+                title = $(cells[0]).text().trim();
+                status = cells.length > 1 ? $(cells[1]).text().trim() : '';
+                patentNumber = cells.length > 2 ? $(cells[2]).text().trim() : '';
+                yearOfAward = cells.length > 3 ? $(cells[3]).text().trim() : '';
               }
 
-              if (title && authors && journal) {
+              if (title && title !== 'Title' && title !== 'S.No' && !isNaN(title) === false) {
                 data.push({
-                  title,
-                  authors,
-                  journal,
-                  volume: volume || '',
-                  year: year || '',
-                  impactFactor: impact || ''
+                  title: title,
+                  status: status || '',
+                  patentNumber: patentNumber || '',
+                  yearOfAward: yearOfAward || '',
+                  type: type || '',
+                  commercializedStatus: commercializedStatus || ''
                 });
+                console.log(`Added patent: ${title}`);
               }
             }
           });
@@ -791,15 +901,171 @@ class FacultyDataScraper {
       });
     }
 
+    console.log(`Total patents: ${data.length}`);
+    return data;
+  }
+
+  extractUGCApprovedPapers($) {
+    console.log('Extracting UGC approved papers...');
+    const data = [];
+
+    // Look for UGC papers in tab_content3 (Patents/Papers tab)
+    const patentsTab = $('#tab_content3');
+    if (patentsTab.length) {
+      patentsTab.find('table').each((tableIndex, table) => {
+        const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+
+        // Check if this is UGC papers table (Table 3)
+        const isUGCTable = 
+          headers.some(h => h.toLowerCase().includes('title')) &&
+          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
+          headers.some(h => h.toLowerCase().includes('journal name')) &&
+          headers.some(h => h.toLowerCase().includes('volume') && h.toLowerCase().includes('issue')) &&
+          headers.some(h => h.toLowerCase().includes('impact factor'));
+
+        if (isUGCTable && headers.length >= 6) {
+          console.log(`Found UGC papers table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+
+            if (cells.length >= 7) {
+              // Structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
+              const title = $(cells[1]).text().trim();
+              const authors = $(cells[2]).text().trim();
+              const journalName = $(cells[3]).text().trim();
+              const volumeIssuePages = $(cells[4]).text().trim();
+              const year = $(cells[5]).text().trim();
+              const impactFactor = $(cells[6]).text().trim();
+
+              if (title && title !== 'Title') {
+                data.push({
+                  title: title,
+                  authors: authors || '',
+                  journalName: journalName || '',
+                  volumeIssuePages: volumeIssuePages || '',
+                  year: year || '',
+                  impactFactor: impactFactor || ''
+                });
+                console.log(`Added UGC paper: ${title}`);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    console.log(`Total UGC papers: ${data.length}`);
     return data;
   }
 
   extractNonUGCPapers($) {
-    return this.extractSectionData($, [
-      'Papers Published in Non UGC Approved Peer Reviewed Journals',
-      'Non UGC Papers',
-      'Peer Reviewed Papers'
-    ]);
+    console.log('Extracting Non-UGC papers...');
+    const data = [];
+
+    // Look for Non-UGC papers in tab_content3 (Patents/Papers tab)
+    const patentsTab = $('#tab_content3');
+    if (patentsTab.length) {
+      patentsTab.find('table').each((tableIndex, table) => {
+        const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+
+        // Check if this is Non-UGC papers table (Table 4) - similar structure to UGC but different context
+        const isNonUGCTable = 
+          headers.some(h => h.toLowerCase().includes('title')) &&
+          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
+          headers.some(h => h.toLowerCase().includes('journal name')) &&
+          headers.some(h => h.toLowerCase().includes('volume') && h.toLowerCase().includes('issue')) &&
+          headers.some(h => h.toLowerCase().includes('impact factor')) &&
+          (tableIndex > 2 || // Likely after UGC table
+           $(table).prevAll().text().toLowerCase().includes('non ugc') ||
+           $(table).prev('h3, h4, h5').text().toLowerCase().includes('non ugc'));
+
+        if (isNonUGCTable && headers.length >= 6) {
+          console.log(`Found Non-UGC papers table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+
+            if (cells.length >= 7) {
+              // Structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
+              const title = $(cells[1]).text().trim();
+              const authors = $(cells[2]).text().trim();
+              const journalName = $(cells[3]).text().trim();
+              const volumeIssuePages = $(cells[4]).text().trim();
+              const year = $(cells[5]).text().trim();
+              const impactFactor = $(cells[6]).text().trim();
+
+              if (title && title !== 'Title') {
+                data.push({
+                  title: title,
+                  authors: authors || '',
+                  journalName: journalName || '',
+                  volumeIssuePages: volumeIssuePages || '',
+                  year: year || '',
+                  impactFactor: impactFactor || ''
+                });
+                console.log(`Added Non-UGC paper: ${title}`);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    console.log(`Total Non-UGC papers: ${data.length}`);
+    return data;
+  }
+
+  extractConferencePapers($) {
+    console.log('Extracting conference papers...');
+    const data = [];
+
+    // Look for Conference papers in tab_content3 (Patents/Papers tab)
+    const patentsTab = $('#tab_content3');
+    if (patentsTab.length) {
+      patentsTab.find('table').each((tableIndex, table) => {
+        const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+
+        // Check if this is conference papers table (Table 5)
+        const isConferenceTable = 
+          headers.some(h => h.toLowerCase().includes('title')) &&
+          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
+          headers.some(h => h.toLowerCase().includes('conference') && h.toLowerCase().includes('publication')) &&
+          headers.some(h => h.toLowerCase().includes('page nos')) &&
+          !headers.some(h => h.toLowerCase().includes('impact factor')); // Key difference from journal papers
+
+        if (isConferenceTable && headers.length >= 5) {
+          console.log(`Found conference papers table (index: ${tableIndex})`);
+          
+          $(table).find('tr').slice(1).each((rowIndex, row) => {
+            const cells = $(row).find('td');
+
+            if (cells.length >= 6) {
+              // Structure: S.No | Title | Authors | Conference Details | Page Nos | Year
+              const title = $(cells[1]).text().trim();
+              const authors = $(cells[2]).text().trim();
+              const conferenceDetails = $(cells[3]).text().trim();
+              const pageNos = $(cells[4]).text().trim();
+              const year = $(cells[5]).text().trim();
+
+              if (title && title !== 'Title') {
+                data.push({
+                  title: title,
+                  authors: authors || '',
+                  conferenceDetails: conferenceDetails || '',
+                  pageNos: pageNos || '',
+                  year: year || ''
+                });
+                console.log(`Added conference paper: ${title}`);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    console.log(`Total conference papers: ${data.length}`);
+    return data;
   }
 
   // Books Section Methods
