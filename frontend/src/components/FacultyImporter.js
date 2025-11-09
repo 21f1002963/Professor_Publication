@@ -27,7 +27,10 @@ const FacultyImporter = () => {
     ongoingProjects: true,
     ongoingConsultancy: true,
     completedProjects: true,
-    completedConsultancy: true
+    completedConsultancy: true,
+    pgGuidance: true,
+    phdGuidanceDetailed: true,
+    postdocGuidance: true
   });
 
   // Check backend status on component mount
@@ -870,7 +873,7 @@ const FacultyImporter = () => {
                               <h3 style={{ color: '#007bff', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #007bff', paddingBottom: '10px' }}>
                                 📊 Projects & Consultancy
                               </h3>
-                              
+
                               {/* Table 1 - Ongoing Projects */}
                               <div style={{ marginBottom: '30px' }}>
                                 {createTableHeader('🚀 Ongoing Projects', 'ongoingProjects', '#28a745')}
@@ -995,6 +998,120 @@ const FacultyImporter = () => {
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.period || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.sanctionedAmount || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Research Guidance Tables */}
+                          {result.data.research_guidance && (
+                            <div style={{ marginTop: '40px' }}>
+                              <h3 style={{ color: '#6f42c1', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #6f42c1', paddingBottom: '10px' }}>
+                                🎓 Research Guidance
+                              </h3>
+                              
+                              {/* Table 3 - Research Guidance - PG */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('📋 Research Guidance - PG', 'pgGuidance', '#007bff')}
+                                {tableVisibility.pgGuidance && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #0056b3', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Year</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Degree</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>No. of Students Awarded</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Department/Centre</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.research_guidance.pg_guidance.map((guidance, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#007bff' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.year || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500' }}>{guidance.degree || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.studentsAwarded || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.department || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 4 - Research Guidance - Ph.D */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🎯 Research Guidance - Ph.D', 'phdGuidanceDetailed', '#28a745')}
+                                {tableVisibility.phdGuidanceDetailed && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Student Name</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Registration Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Registration No.</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Thesis Title</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Thesis Submitted Status</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Thesis Submitted Date</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Vivavoce Completed Status</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Date Awarded</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.research_guidance.phd_guidance.map((guidance, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '200px', wordWrap: 'break-word' }}>{guidance.studentName || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.registrationNo || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{guidance.thesisTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.thesisSubmittedStatus || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.thesisSubmittedDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.vivavoceCompletedStatus || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.dateAwarded || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 5 - Research Guidance - Post Doctoral */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🌟 Research Guidance - Post Doctoral', 'postdocGuidance', '#fd7e14')}
+                                {tableVisibility.postdocGuidance && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #e55a00', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Scholar Name</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Designation</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Funding Agency</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Fellowship Title</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Year of Joining</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Year of Completion</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.research_guidance.postdoc_guidance.map((guidance, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '200px', wordWrap: 'break-word' }}>{guidance.scholarName || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.designation || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{guidance.fundingAgency || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{guidance.fellowshipTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.yearOfJoining || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.yearOfCompletion || 'N/A'}</td>
                                           </tr>
                                         ))}
                                       </tbody>

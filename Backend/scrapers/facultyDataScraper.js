@@ -1400,22 +1400,217 @@ class FacultyDataScraper {
   extractProjectConsultancyTable($, keywords, type) {
     console.log(`\n--- Extracting ${type} Data ---`);
     const items = [];
-    
+
     // Focus on Projects/Consultancy tab (tab_content5) as specified by user
     const projectsTab = $('#tab_content5');
-    
+
     if (projectsTab.length === 0) {
       console.log('Projects/Consultancy tab (tab_content5) not found');
       return items;
     }
-    
+
     console.log(`Found Projects/Consultancy tab with ${projectsTab.find('table').length} tables`);
+
+    // Look for panels with specific titles based on the HTML structure
+    let targetPanels = [];
+
+    // Search for panels matching our keywords
+    projectsTab.find('.x_panel').each((i, panel) => {
+      const $panel = $(panel);
+      const heading = $panel.find('.x_title h2').text().trim();
+
+      console.log(`Checking panel: "${heading}"`);
+
+      const headingLower = heading.toLowerCase();
+      const matchesKeywords = keywords.some(keyword =>
+        headingLower.includes(keyword.toLowerCase())
+      );
+
+      if (matchesKeywords) {
+        console.log(`✓ Panel "${heading}" matches keywords`);
+        targetPanels.push(panel);
+      }
+    });
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s)`);
+
+      targetPanels.forEach((panel, panelIndex) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+
+          // Check if this table has the expected project/consultancy structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+
+          // Verify this looks like the project/consultancy table structure
+          const hasProjectStructure = headers.includes('S.No') &&
+                                    (headers.some(h => h.toLowerCase().includes('title')) ||
+                                     headers.some(h => h.toLowerCase().includes('project')) ||
+                                     headers.some(h => h.toLowerCase().includes('consultancy'))) &&
+                                    headers.some(h => h.toLowerCase().includes('sponsored')) &&
+                                    headers.some(h => h.toLowerCase().includes('period')) &&
+                                    (headers.some(h => h.toLowerCase().includes('amount')) ||
+                                     headers.some(h => h.toLowerCase().includes('sanctioned')));
+
+          if (hasProjectStructure) {
+            console.log(`✓ Table has correct project/consultancy structure - extracting data`);
+            this.parseProjectConsultancyTable($, $table, items, type);
+          } else {
+            console.log(`✗ Table doesn't match expected project/consultancy structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found, falling back to table-based search`);
+
+      // Fallback: search all tables in the tab
+      const tables = projectsTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+
+        // Quick check if this looks like a project/consultancy table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasProjectStructure = headers.includes('S.No') &&
+                                  headers.some(h => h.toLowerCase().includes('title')) &&
+                                  headers.some(h => h.toLowerCase().includes('sponsored'));
+
+        if (hasProjectStructure) {
+          console.log(`Found project/consultancy table (fallback) - extracting data`);
+          this.parseProjectConsultancyTable($, $table, items, type);
+        }
+      });
+    }
+
+    console.log(`Total ${type} items extracted: ${items.length}`);
+    return items;
+  }
+
+  // Parse project/consultancy table with the exact structure: S.No | Title | Sponsored By | Period | Sanctioned Amount | Year
+  parseProjectConsultancyTable($, $table, items, type) {
+    console.log(`Parsing ${type} table with structured format`);
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+
+      // Handle both <th scope="row"> and <td> for S.No
+      const snoCell = $row.find('th[scope="row"]');
+      const dataCells = $row.find('td');
+
+      let sno, title, sponsoredBy, period, sanctionedAmount, year;
+
+      if (snoCell.length > 0 && dataCells.length >= 5) {
+        // Structure: <th scope="row">S.No</th> + 5 <td> elements
+        sno = snoCell.text().trim();
+        title = $(dataCells[0]).text().trim();
+        sponsoredBy = $(dataCells[1]).text().trim();
+        period = $(dataCells[2]).text().trim();
+        sanctionedAmount = $(dataCells[3]).text().trim();
+        year = $(dataCells[4]).text().trim();
+      } else if (dataCells.length >= 6) {
+        // All in <td> elements: S.No | Title | Sponsored By | Period | Amount | Year
+        sno = $(dataCells[0]).text().trim();
+        title = $(dataCells[1]).text().trim();
+        sponsoredBy = $(dataCells[2]).text().trim();
+        period = $(dataCells[3]).text().trim();
+        sanctionedAmount = $(dataCells[4]).text().trim();
+        year = $(dataCells[5]).text().trim();
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't match expected structure`);
+        return;
+      }
+
+      console.log(`Extracted: S.No="${sno}", Title="${title}", Sponsored="${sponsoredBy}", Period="${period}", Amount="${sanctionedAmount}", Year="${year}"`);
+
+      // Only add if we have actual content
+      if (title && title !== 'Title of the Project' && title !== 'Title of the Consultancy Work' &&
+          sponsoredBy && sponsoredBy !== 'Sponsored By') {
+
+        const item = {
+          sno: sno,
+          title: title,
+          sponsoredBy: sponsoredBy,
+          period: period,
+          sanctionedAmount: sanctionedAmount,
+          year: year
+        };
+
+        items.push(item);
+        console.log(`✅ Successfully added ${type}: "${title}" (${year})`);
+      } else {
+        console.log(`⚠️ Skipped row - appears to be header or empty: title="${title}", sponsored="${sponsoredBy}"`);
+      }
+    });
+  }
+
+  // Research Guidance Section Methods
+  extractPGGuidance($) {
+    return this.extractResearchGuidanceTable($, [
+      'Research Guidance - PG',
+      'PG Guidance',
+      'Postgraduate Guidance',
+      'Masters Guidance'
+    ], 'pg');
+  }
+
+  extractPhDGuidance($) {
+    return this.extractResearchGuidanceTable($, [
+      'Research Guidance - Ph.D',
+      'Research Guidance - PhD',
+      'Ph.D Guidance',
+      'PhD Guidance',
+      'Doctoral Guidance'
+    ], 'phd');
+  }
+
+  extractPostDocGuidance($) {
+    return this.extractResearchGuidanceTable($, [
+      'Research Guidance - Post Doctoral',
+      'Post Doctoral Guidance',
+      'Postdoc Guidance',
+      'Post Doc Guidance'
+    ], 'postdoc');
+  }
+
+  // Enhanced research guidance table extraction method
+  extractResearchGuidanceTable($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Research Guidance Data ---`);
+    const items = [];
+    
+    // Focus on Research Guidance tab (tab_content6) as specified by user
+    const guidanceTab = $('#tab_content6');
+    
+    if (guidanceTab.length === 0) {
+      console.log('Research Guidance tab (tab_content6) not found');
+      return items;
+    }
+    
+    console.log(`Found Research Guidance tab with ${guidanceTab.find('table').length} tables`);
     
     // Look for panels with specific titles based on the HTML structure
     let targetPanels = [];
     
     // Search for panels matching our keywords
-    projectsTab.find('.x_panel').each((i, panel) => {
+    guidanceTab.find('.x_panel').each((i, panel) => {
       const $panel = $(panel);
       const heading = $panel.find('.x_title h2').text().trim();
       
@@ -1448,7 +1643,7 @@ class FacultyDataScraper {
           const $table = $(table);
           console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
           
-          // Check if this table has the expected project/consultancy structure
+          // Check if this table has the expected research guidance structure
           const headerRow = $table.find('thead tr').first();
           if (headerRow.length === 0) {
             console.log('No thead found, skipping table');
@@ -1458,21 +1653,34 @@ class FacultyDataScraper {
           const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
           console.log(`Table headers: ${headers.join(' | ')}`);
           
-          // Verify this looks like the project/consultancy table structure
-          const hasProjectStructure = headers.includes('S.No') &&
-                                    (headers.some(h => h.toLowerCase().includes('title')) ||
-                                     headers.some(h => h.toLowerCase().includes('project')) ||
-                                     headers.some(h => h.toLowerCase().includes('consultancy'))) &&
-                                    headers.some(h => h.toLowerCase().includes('sponsored')) &&
-                                    headers.some(h => h.toLowerCase().includes('period')) &&
-                                    (headers.some(h => h.toLowerCase().includes('amount')) ||
-                                     headers.some(h => h.toLowerCase().includes('sanctioned')));
+          // Verify this looks like the research guidance table structure based on type
+          let hasCorrectStructure = false;
           
-          if (hasProjectStructure) {
-            console.log(`✓ Table has correct project/consultancy structure - extracting data`);
-            this.parseProjectConsultancyTable($, $table, items, type);
+          if (type === 'pg') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('year')) &&
+                                headers.some(h => h.toLowerCase().includes('degree')) &&
+                                headers.some(h => h.toLowerCase().includes('students')) &&
+                                headers.some(h => h.toLowerCase().includes('department'));
+          } else if (type === 'phd') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('student')) &&
+                                headers.some(h => h.toLowerCase().includes('registration')) &&
+                                headers.some(h => h.toLowerCase().includes('thesis')) &&
+                                headers.some(h => h.toLowerCase().includes('status'));
+          } else if (type === 'postdoc') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('scholar')) &&
+                                headers.some(h => h.toLowerCase().includes('designation')) &&
+                                headers.some(h => h.toLowerCase().includes('funding')) &&
+                                headers.some(h => h.toLowerCase().includes('fellowship'));
+          }
+          
+          if (hasCorrectStructure) {
+            console.log(`✓ Table has correct ${type} research guidance structure - extracting data`);
+            this.parseResearchGuidanceTable($, $table, items, type);
           } else {
-            console.log(`✗ Table doesn't match expected project/consultancy structure`);
+            console.log(`✗ Table doesn't match expected ${type} research guidance structure`);
           }
         });
       });
@@ -1480,30 +1688,31 @@ class FacultyDataScraper {
       console.log(`No panels found, falling back to table-based search`);
       
       // Fallback: search all tables in the tab
-      const tables = projectsTab.find('table');
+      const tables = guidanceTab.find('table');
       tables.each((tableIndex, table) => {
         const $table = $(table);
         
-        // Quick check if this looks like a project/consultancy table
+        // Quick check if this looks like a research guidance table
         const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
-        const hasProjectStructure = headers.includes('S.No') &&
-                                  headers.some(h => h.toLowerCase().includes('title')) &&
-                                  headers.some(h => h.toLowerCase().includes('sponsored'));
+        const hasGuidanceStructure = headers.includes('S.No') &&
+                                   (headers.some(h => h.toLowerCase().includes('student')) ||
+                                    headers.some(h => h.toLowerCase().includes('scholar')) ||
+                                    headers.some(h => h.toLowerCase().includes('degree')));
         
-        if (hasProjectStructure) {
-          console.log(`Found project/consultancy table (fallback) - extracting data`);
-          this.parseProjectConsultancyTable($, $table, items, type);
+        if (hasGuidanceStructure) {
+          console.log(`Found research guidance table (fallback) - extracting data`);
+          this.parseResearchGuidanceTable($, $table, items, type);
         }
       });
     }
 
-    console.log(`Total ${type} items extracted: ${items.length}`);
+    console.log(`Total ${type} research guidance items extracted: ${items.length}`);
     return items;
   }
 
-  // Parse project/consultancy table with the exact structure: S.No | Title | Sponsored By | Period | Sanctioned Amount | Year
-  parseProjectConsultancyTable($, $table, items, type) {
-    console.log(`Parsing ${type} table with structured format`);
+  // Parse research guidance table based on type (PG, PhD, PostDoc)
+  parseResearchGuidanceTable($, $table, items, type) {
+    console.log(`Parsing ${type} research guidance table`);
 
     const rows = $table.find('tr');
     if (rows.length < 2) return; // Need at least header + 1 data row
@@ -1516,126 +1725,96 @@ class FacultyDataScraper {
       const snoCell = $row.find('th[scope="row"]');
       const dataCells = $row.find('td');
 
-      let sno, title, sponsoredBy, period, sanctionedAmount, year;
+      let item = {};
 
-      if (snoCell.length > 0 && dataCells.length >= 5) {
-        // Structure: <th scope="row">S.No</th> + 5 <td> elements
-        sno = snoCell.text().trim();
-        title = $(dataCells[0]).text().trim();
-        sponsoredBy = $(dataCells[1]).text().trim();
-        period = $(dataCells[2]).text().trim();
-        sanctionedAmount = $(dataCells[3]).text().trim();
-        year = $(dataCells[4]).text().trim();
-      } else if (dataCells.length >= 6) {
-        // All in <td> elements: S.No | Title | Sponsored By | Period | Amount | Year
-        sno = $(dataCells[0]).text().trim();
-        title = $(dataCells[1]).text().trim();
-        sponsoredBy = $(dataCells[2]).text().trim();
-        period = $(dataCells[3]).text().trim();
-        sanctionedAmount = $(dataCells[4]).text().trim();
-        year = $(dataCells[5]).text().trim();
-      } else {
-        console.log(`⚠️ Row ${rowIndex + 1} doesn't match expected structure`);
-        return;
+      if (type === 'pg') {
+        // PG Table: S.No | Year | Degree | No. of Students Awarded | Department/Centre
+        if (snoCell.length > 0 && dataCells.length >= 4) {
+          item = {
+            sno: snoCell.text().trim(),
+            year: $(dataCells[0]).text().trim(),
+            degree: $(dataCells[1]).text().trim(),
+            studentsAwarded: $(dataCells[2]).text().trim(),
+            department: $(dataCells[3]).text().trim()
+          };
+        } else if (dataCells.length >= 5) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            year: $(dataCells[1]).text().trim(),
+            degree: $(dataCells[2]).text().trim(),
+            studentsAwarded: $(dataCells[3]).text().trim(),
+            department: $(dataCells[4]).text().trim()
+          };
+        }
+      } else if (type === 'phd') {
+        // PhD Table: S.No | Student Name | Registration Date | Registration No. | Thesis Title | Thesis Submitted Status | Thesis Submitted Date | Vivavoce Completed Status | Date Awarded
+        if (snoCell.length > 0 && dataCells.length >= 8) {
+          item = {
+            sno: snoCell.text().trim(),
+            studentName: $(dataCells[0]).text().trim(),
+            registrationDate: $(dataCells[1]).text().trim(),
+            registrationNo: $(dataCells[2]).text().trim(),
+            thesisTitle: $(dataCells[3]).text().trim(),
+            thesisSubmittedStatus: $(dataCells[4]).text().trim(),
+            thesisSubmittedDate: $(dataCells[5]).text().trim(),
+            vivavoceCompletedStatus: $(dataCells[6]).text().trim(),
+            dateAwarded: $(dataCells[7]).text().trim()
+          };
+        } else if (dataCells.length >= 9) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            studentName: $(dataCells[1]).text().trim(),
+            registrationDate: $(dataCells[2]).text().trim(),
+            registrationNo: $(dataCells[3]).text().trim(),
+            thesisTitle: $(dataCells[4]).text().trim(),
+            thesisSubmittedStatus: $(dataCells[5]).text().trim(),
+            thesisSubmittedDate: $(dataCells[6]).text().trim(),
+            vivavoceCompletedStatus: $(dataCells[7]).text().trim(),
+            dateAwarded: $(dataCells[8]).text().trim()
+          };
+        }
+      } else if (type === 'postdoc') {
+        // PostDoc Table: S.No | Scholar Name | Designation | Funding Agency | Fellowship Title | Year of Joining | Year of Completion
+        if (snoCell.length > 0 && dataCells.length >= 6) {
+          item = {
+            sno: snoCell.text().trim(),
+            scholarName: $(dataCells[0]).text().trim(),
+            designation: $(dataCells[1]).text().trim(),
+            fundingAgency: $(dataCells[2]).text().trim(),
+            fellowshipTitle: $(dataCells[3]).text().trim(),
+            yearOfJoining: $(dataCells[4]).text().trim(),
+            yearOfCompletion: $(dataCells[5]).text().trim()
+          };
+        } else if (dataCells.length >= 7) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            scholarName: $(dataCells[1]).text().trim(),
+            designation: $(dataCells[2]).text().trim(),
+            fundingAgency: $(dataCells[3]).text().trim(),
+            fellowshipTitle: $(dataCells[4]).text().trim(),
+            yearOfJoining: $(dataCells[5]).text().trim(),
+            yearOfCompletion: $(dataCells[6]).text().trim()
+          };
+        }
       }
-
-      console.log(`Extracted: S.No="${sno}", Title="${title}", Sponsored="${sponsoredBy}", Period="${period}", Amount="${sanctionedAmount}", Year="${year}"`);
 
       // Only add if we have actual content
-      if (title && title !== 'Title of the Project' && title !== 'Title of the Consultancy Work' && 
-          sponsoredBy && sponsoredBy !== 'Sponsored By') {
+      if (item.sno && Object.keys(item).length > 1) {
+        // Check if this is not just headers
+        const isHeader = (type === 'pg' && item.year === 'Year') ||
+                        (type === 'phd' && item.studentName === 'Student Name') ||
+                        (type === 'postdoc' && item.scholarName === 'Scholar Name');
         
-        const item = {
-          sno: sno,
-          title: title,
-          sponsoredBy: sponsoredBy,
-          period: period,
-          sanctionedAmount: sanctionedAmount,
-          year: year
-        };
-
-        items.push(item);
-        console.log(`✅ Successfully added ${type}: "${title}" (${year})`);
+        if (!isHeader) {
+          items.push(item);
+          console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
+        } else {
+          console.log(`⚠️ Skipped header row`);
+        }
       } else {
-        console.log(`⚠️ Skipped row - appears to be header or empty: title="${title}", sponsored="${sponsoredBy}"`);
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't have sufficient data or structure`);
       }
     });
-  }
-
-  // Research Guidance Section Methods
-  extractPGGuidance($) {
-    return this.extractSectionData($, [
-      'Research Guidance - PG',
-      'PG Guidance',
-      'Postgraduate Guidance',
-      'Masters Guidance'
-    ]);
-  }
-
-  extractPhDGuidance($) {
-    const data = [];
-
-    // Look for PhD guidance in tab_content6 (Research Guidance tab)
-    const guidanceTab = $('#tab_content6');
-    if (guidanceTab.length) {
-      guidanceTab.find('table').each((tableIndex, table) => {
-        const headers = $(table).find('th').map((i, th) => $(th).text().toLowerCase().trim()).get();
-
-        // Check if this is PhD guidance table
-        const isPhdTable = headers.some(h =>
-          (h.includes('student') && h.includes('name')) ||
-          h.includes('thesis') || h.includes('registration')
-        );
-
-        if (isPhdTable) {
-          $(table).find('tr').slice(1).each((rowIndex, row) => {
-            const cells = $(row).find('td');
-
-            if (cells.length >= 4) {
-              const firstCol = $(cells[0]).text().trim();
-              let studentName = '', regDate = '', regNo = '', thesisTitle = '', status = '', dateAwarded = '';
-
-              if (isNaN(firstCol)) { // Not S.No
-                studentName = $(cells[0]).text().trim();
-                regDate = $(cells[1]).text().trim();
-                regNo = $(cells[2]).text().trim();
-                thesisTitle = $(cells[3]).text().trim();
-                status = cells.length > 4 ? $(cells[4]).text().trim() : '';
-                dateAwarded = cells.length > 8 ? $(cells[8]).text().trim() : '';
-              } else { // Has S.No
-                studentName = $(cells[1]).text().trim();
-                regDate = $(cells[2]).text().trim();
-                regNo = $(cells[3]).text().trim();
-                thesisTitle = $(cells[4]).text().trim();
-                status = cells.length > 5 ? $(cells[5]).text().trim() : '';
-                dateAwarded = cells.length > 8 ? $(cells[8]).text().trim() : '';
-              }
-
-              if (studentName && thesisTitle) {
-                data.push({
-                  studentName,
-                  registrationDate: regDate || '',
-                  registrationNo: regNo || '',
-                  thesisTitle,
-                  status: status || '',
-                  dateAwarded: dateAwarded || ''
-                });
-              }
-            }
-          });
-        }
-      });
-    }
-
-    return data;
-  }
-
-  extractPostDocGuidance($) {
-    return this.extractSectionData($, [
-      'Research Guidance - Post Doctoral',
-      'Post Doctoral Guidance',
-      'Postdoc Guidance'
-    ]);
   }
 
   // Conference/Seminars Section Methods
