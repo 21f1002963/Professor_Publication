@@ -23,7 +23,11 @@ const FacultyImporter = () => {
     conferencePapers: true,
     authoredBooks: true,
     bookChapters: true,
-    editedBooks: true
+    editedBooks: true,
+    ongoingProjects: true,
+    ongoingConsultancy: true,
+    completedProjects: true,
+    completedConsultancy: true
   });
 
   // Check backend status on component mount
@@ -860,7 +864,146 @@ const FacultyImporter = () => {
                             </div>
                           )}
 
-                          
+                          {/* Projects/Consultancy Tables */}
+                          {result.data.projects && (
+                            <div style={{ marginTop: '40px' }}>
+                              <h3 style={{ color: '#007bff', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #007bff', paddingBottom: '10px' }}>
+                                📊 Projects & Consultancy
+                              </h3>
+                              
+                              {/* Table 1 - Ongoing Projects */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🚀 Ongoing Projects', 'ongoingProjects', '#28a745')}
+                                {tableVisibility.ongoingProjects && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Title of the Project</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Sponsored By</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Period</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Sanctioned Amount(Rs. Lakh)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.projects.ongoing_projects.map((project, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{project.title || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{project.sponsoredBy || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.period || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.sanctionedAmount || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 2 - Ongoing Consultancy Works */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('💼 Ongoing Consultancy Works', 'ongoingConsultancy', '#fd7e14')}
+                                {tableVisibility.ongoingConsultancy && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #e55a00', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Title of the Consultancy Work</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Sponsored By</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Period</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Sanctioned Amount(Rs. Lakh)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.projects.ongoing_consultancy.map((consultancy, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{consultancy.title || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{consultancy.sponsoredBy || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.period || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.sanctionedAmount || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 3 - Completed Projects */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('✅ Completed Projects', 'completedProjects', '#17a2b8')}
+                                {tableVisibility.completedProjects && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#17a2b8', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #117a8b', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #117a8b' }}>Title of the Project</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #117a8b' }}>Sponsored By</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #117a8b' }}>Period</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #117a8b' }}>Sanctioned Amount(Rs. Lakh)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #117a8b' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.projects.completed_projects.map((project, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#17a2b8' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{project.title || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{project.sponsoredBy || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.period || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.sanctionedAmount || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{project.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 4 - Completed Consultancy Works */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🏆 Completed Consultancy Works', 'completedConsultancy', '#dc3545')}
+                                {tableVisibility.completedConsultancy && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#dc3545', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #c82333', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Title of the Consultancy Work</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Sponsored By</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Period</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Sanctioned Amount(Rs. Lakh)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.projects.completed_consultancy.map((consultancy, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#dc3545' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{consultancy.title || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{consultancy.sponsoredBy || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.period || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.sanctionedAmount || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{consultancy.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
 
                         </div>
                       </div>

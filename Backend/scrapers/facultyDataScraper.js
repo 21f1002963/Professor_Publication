@@ -67,7 +67,7 @@ class FacultyDataScraper {
         },
 
         // Projects/Consultancy Section
-        projects_consultancy: {
+        projects: {
           ongoing_projects: this.extractOngoingProjects($),
           ongoing_consultancy: this.extractOngoingConsultancy($),
           completed_projects: this.extractCompletedProjects($),
@@ -1222,7 +1222,7 @@ class FacultyDataScraper {
 
     // Look for panels with specific titles based on the HTML structure provided
     let targetPanels = [];
-    
+
     if (type === 'books') {
       // Look for panel with "Books" heading
       targetPanels = booksTab.find('.x_panel').filter((i, panel) => {
@@ -1245,37 +1245,37 @@ class FacultyDataScraper {
 
     if (targetPanels.length > 0) {
       console.log(`Found ${targetPanels.length} matching panel(s) for ${type}`);
-      
+
       targetPanels.each((panelIndex, panel) => {
         const $panel = $(panel);
         const panelTitle = $panel.find('.x_title h2').text().trim();
         console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
-        
+
         // Find tables in this specific panel
         const tables = $panel.find('table');
         console.log(`Panel has ${tables.length} table(s)`);
-        
+
         tables.each((tableIndex, table) => {
           const $table = $(table);
           console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
-          
+
           // Check if this table has the expected book structure
           const headerRow = $table.find('thead tr').first();
           if (headerRow.length === 0) {
             console.log('No thead found, skipping table');
             return;
           }
-          
+
           const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
           console.log(`Table headers: ${headers.join(' | ')}`);
-          
+
           // Verify this looks like the book table structure
           const hasBookStructure = headers.includes('S.No') &&
                                   headers.some(h => h.toLowerCase().includes('title')) &&
                                   headers.some(h => h.toLowerCase().includes('author')) &&
                                   headers.includes('Publisher') &&
                                   headers.includes('Year');
-          
+
           if (hasBookStructure) {
             console.log(`✓ Table has correct book structure - extracting data`);
             this.parseCleanBookTable($, $table, books);
@@ -1286,18 +1286,18 @@ class FacultyDataScraper {
       });
     } else {
       console.log(`No panels found for ${type}, falling back to table-based search`);
-      
+
       // Fallback: search all tables in the tab
       const tables = booksTab.find('table');
       tables.each((tableIndex, table) => {
         const $table = $(table);
-        
+
         // Quick check if this looks like a book table
         const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
         const hasBookStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('title')) &&
                                 headers.some(h => h.toLowerCase().includes('author'));
-        
+
         if (hasBookStructure) {
           console.log(`Found book table (fallback) - extracting data`);
           this.parseCleanBookTable($, $table, books);
@@ -1319,7 +1319,7 @@ class FacultyDataScraper {
     // Skip header row and process data rows
     rows.slice(1).each((rowIndex, row) => {
       const $row = $(row);
-      
+
       // The HTML structure uses <th scope="row"> for S.No and <td> for other columns
       const snoCell = $row.find('th[scope="row"]'); // S.No is in <th scope="row">
       const dataCells = $row.find('td'); // Rest are in <td>
@@ -1361,37 +1361,205 @@ class FacultyDataScraper {
 
 
 
-  // Projects/Consultancy Section Methods
+  // Projects/Consultancy Section Methods - Enhanced for structured table extraction
   extractOngoingProjects($) {
-    return this.extractSectionData($, [
+    return this.extractProjectConsultancyTable($, [
       'Ongoing Projects',
       'Current Projects',
       'Active Projects'
-    ]);
+    ], 'projects');
   }
 
   extractOngoingConsultancy($) {
-    return this.extractSectionData($, [
+    return this.extractProjectConsultancyTable($, [
       'Ongoing Consultancy Works',
+      'Ongoing Consultancy',
       'Current Consultancy',
       'Active Consultancy'
-    ]);
+    ], 'consultancy');
   }
 
   extractCompletedProjects($) {
-    return this.extractSectionData($, [
+    return this.extractProjectConsultancyTable($, [
       'Completed Projects',
       'Finished Projects',
       'Past Projects'
-    ]);
+    ], 'projects');
   }
 
   extractCompletedConsultancy($) {
-    return this.extractSectionData($, [
+    return this.extractProjectConsultancyTable($, [
       'Completed Consultancy Works',
+      'Completed Consultancy',
       'Finished Consultancy',
       'Past Consultancy'
-    ]);
+    ], 'consultancy');
+  }
+
+  // Enhanced project/consultancy table extraction method
+  extractProjectConsultancyTable($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Data ---`);
+    const items = [];
+    
+    // Focus on Projects/Consultancy tab (tab_content5) as specified by user
+    const projectsTab = $('#tab_content5');
+    
+    if (projectsTab.length === 0) {
+      console.log('Projects/Consultancy tab (tab_content5) not found');
+      return items;
+    }
+    
+    console.log(`Found Projects/Consultancy tab with ${projectsTab.find('table').length} tables`);
+    
+    // Look for panels with specific titles based on the HTML structure
+    let targetPanels = [];
+    
+    // Search for panels matching our keywords
+    projectsTab.find('.x_panel').each((i, panel) => {
+      const $panel = $(panel);
+      const heading = $panel.find('.x_title h2').text().trim();
+      
+      console.log(`Checking panel: "${heading}"`);
+      
+      const headingLower = heading.toLowerCase();
+      const matchesKeywords = keywords.some(keyword => 
+        headingLower.includes(keyword.toLowerCase())
+      );
+      
+      if (matchesKeywords) {
+        console.log(`✓ Panel "${heading}" matches keywords`);
+        targetPanels.push(panel);
+      }
+    });
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s)`);
+      
+      targetPanels.forEach((panel, panelIndex) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+        
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+        
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+          
+          // Check if this table has the expected project/consultancy structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+          
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+          
+          // Verify this looks like the project/consultancy table structure
+          const hasProjectStructure = headers.includes('S.No') &&
+                                    (headers.some(h => h.toLowerCase().includes('title')) ||
+                                     headers.some(h => h.toLowerCase().includes('project')) ||
+                                     headers.some(h => h.toLowerCase().includes('consultancy'))) &&
+                                    headers.some(h => h.toLowerCase().includes('sponsored')) &&
+                                    headers.some(h => h.toLowerCase().includes('period')) &&
+                                    (headers.some(h => h.toLowerCase().includes('amount')) ||
+                                     headers.some(h => h.toLowerCase().includes('sanctioned')));
+          
+          if (hasProjectStructure) {
+            console.log(`✓ Table has correct project/consultancy structure - extracting data`);
+            this.parseProjectConsultancyTable($, $table, items, type);
+          } else {
+            console.log(`✗ Table doesn't match expected project/consultancy structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found, falling back to table-based search`);
+      
+      // Fallback: search all tables in the tab
+      const tables = projectsTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+        
+        // Quick check if this looks like a project/consultancy table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasProjectStructure = headers.includes('S.No') &&
+                                  headers.some(h => h.toLowerCase().includes('title')) &&
+                                  headers.some(h => h.toLowerCase().includes('sponsored'));
+        
+        if (hasProjectStructure) {
+          console.log(`Found project/consultancy table (fallback) - extracting data`);
+          this.parseProjectConsultancyTable($, $table, items, type);
+        }
+      });
+    }
+
+    console.log(`Total ${type} items extracted: ${items.length}`);
+    return items;
+  }
+
+  // Parse project/consultancy table with the exact structure: S.No | Title | Sponsored By | Period | Sanctioned Amount | Year
+  parseProjectConsultancyTable($, $table, items, type) {
+    console.log(`Parsing ${type} table with structured format`);
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+      
+      // Handle both <th scope="row"> and <td> for S.No
+      const snoCell = $row.find('th[scope="row"]');
+      const dataCells = $row.find('td');
+
+      let sno, title, sponsoredBy, period, sanctionedAmount, year;
+
+      if (snoCell.length > 0 && dataCells.length >= 5) {
+        // Structure: <th scope="row">S.No</th> + 5 <td> elements
+        sno = snoCell.text().trim();
+        title = $(dataCells[0]).text().trim();
+        sponsoredBy = $(dataCells[1]).text().trim();
+        period = $(dataCells[2]).text().trim();
+        sanctionedAmount = $(dataCells[3]).text().trim();
+        year = $(dataCells[4]).text().trim();
+      } else if (dataCells.length >= 6) {
+        // All in <td> elements: S.No | Title | Sponsored By | Period | Amount | Year
+        sno = $(dataCells[0]).text().trim();
+        title = $(dataCells[1]).text().trim();
+        sponsoredBy = $(dataCells[2]).text().trim();
+        period = $(dataCells[3]).text().trim();
+        sanctionedAmount = $(dataCells[4]).text().trim();
+        year = $(dataCells[5]).text().trim();
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't match expected structure`);
+        return;
+      }
+
+      console.log(`Extracted: S.No="${sno}", Title="${title}", Sponsored="${sponsoredBy}", Period="${period}", Amount="${sanctionedAmount}", Year="${year}"`);
+
+      // Only add if we have actual content
+      if (title && title !== 'Title of the Project' && title !== 'Title of the Consultancy Work' && 
+          sponsoredBy && sponsoredBy !== 'Sponsored By') {
+        
+        const item = {
+          sno: sno,
+          title: title,
+          sponsoredBy: sponsoredBy,
+          period: period,
+          sanctionedAmount: sanctionedAmount,
+          year: year
+        };
+
+        items.push(item);
+        console.log(`✅ Successfully added ${type}: "${title}" (${year})`);
+      } else {
+        console.log(`⚠️ Skipped row - appears to be header or empty: title="${title}", sponsored="${sponsoredBy}"`);
+      }
+    });
   }
 
   // Research Guidance Section Methods
