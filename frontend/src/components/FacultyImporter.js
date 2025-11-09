@@ -35,7 +35,10 @@ const FacultyImporter = () => {
     onlineEducation: true,
     invitedTalks: true,
     organizedConferences: true,
-    organizedWorkshops: true
+    organizedWorkshops: true,
+    academicAdministration: true,
+    coCurricular: true,
+    institutionalCollaboration: true
   });
 
   // Check backend status on component mount
@@ -1133,7 +1136,7 @@ const FacultyImporter = () => {
                               <h3 style={{ color: '#17a2b8', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #17a2b8', paddingBottom: '10px' }}>
                                 🎤 Conferences, Seminars & Workshops
                               </h3>
-                              
+
                               {/* Table 2 - E-Lecture Details */}
                               <div style={{ marginBottom: '30px' }}>
                                 {createTableHeader('💻 E-Lecture Details', 'eLectures', '#007bff')}
@@ -1305,6 +1308,127 @@ const FacultyImporter = () => {
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.fromDate || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.toDate || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Collaboration/Affiliation Tables */}
+                          {result.data.collaboration && (
+                            <div style={{ marginTop: '40px' }}>
+                              <h3 style={{ color: '#6c757d', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #6c757d', paddingBottom: '10px' }}>
+                                🤝 Affiliation & Collaboration
+                              </h3>
+                              
+                              {/* Table 3 - Academic/Administration Activities */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🎓 Participation & Extension Activities (Academic/Administration)', 'academicAdministration', '#007bff')}
+                                {tableVisibility.academicAdministration && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #0056b3', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Name of the Position (Head, Dean, Co-ordinator, Director, etc.)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Nature of Duties</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.collaboration.academic_administration.map((admin, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#007bff' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{admin.position || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{admin.duration || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{admin.duties || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 5 - Co-Curricular Activities */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🏃 Participation & Extension Activities (Co-Curricular)', 'coCurricular', '#28a745')}
+                                {tableVisibility.coCurricular && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Name of the Position (NSS, NCC, Warden etc.)</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Nature of Duties</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.collaboration.co_curricular.map((cocurricular, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '300px', wordWrap: 'break-word' }}>{cocurricular.position || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{cocurricular.duration || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{cocurricular.duties || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 6 - Institutional Collaboration */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🏢 Collaboration with Institution/Industry', 'institutionalCollaboration', '#fd7e14')}
+                                {tableVisibility.institutionalCollaboration && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #e55a00', width: '50px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Collaborator Name</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Designation</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Institution/Industry</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Type</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Nature of Collaboration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00', backgroundColor: '#f8f9fa', color: '#fd7e14' }} colSpan="2">Period of Collaboration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00', backgroundColor: '#f8f9fa', color: '#fd7e14' }} colSpan="2">Visits to Collaborating Institution/Industry</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Details of Collaborative Research/Teaching</th>
+                                        </tr>
+                                        <tr style={{ backgroundColor: '#f8f9fa', color: '#fd7e14' }}>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #e55a00', fontSize: '12px' }}>From Date</th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #e55a00', fontSize: '12px' }}>To Date</th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #e55a00', fontSize: '12px' }}>From Date</th>
+                                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '1px solid #e55a00', fontSize: '12px' }}>To Date</th>
+                                          <th style={{ padding: '8px', borderBottom: '1px solid #e55a00' }}></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.collaboration.institutional_collaboration.map((collab, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '150px', wordWrap: 'break-word' }}>{collab.collaboratorName || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '120px', wordWrap: 'break-word' }}>{collab.designation || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{collab.institution || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{collab.type || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{collab.natureOfCollaboration || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.periodFromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.periodToDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.visitFromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontSize: '14px' }}>{collab.visitToDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{collab.collaborativeDetails || 'N/A'}</td>
                                           </tr>
                                         ))}
                                       </tbody>

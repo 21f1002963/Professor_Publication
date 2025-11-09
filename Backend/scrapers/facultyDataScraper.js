@@ -92,7 +92,8 @@ class FacultyDataScraper {
 
         // Affiliation/Collaboration Section
         collaboration: {
-          participation_extension: this.extractParticipationExtension($),
+          academic_administration: this.extractAcademicAdministration($),
+          co_curricular: this.extractCoCurricular($),
           institutional_collaboration: this.extractInstitutionalCollaboration($)
         },
 
@@ -1819,11 +1820,13 @@ class FacultyDataScraper {
 
   // Conference/Seminars Section Methods - Enhanced for structured table extraction
   extractELectures($) {
+    console.log('Starting E-Lecture extraction...');
     return this.extractConferenceSeminarTable($, [
       'E-Lecture Details',
       'E-Lectures',
       'Online Lectures',
-      'Digital Lectures'
+      'Digital Lectures',
+      'e-lecture'
     ], 'e_lectures');
   }
 
@@ -1864,32 +1867,32 @@ class FacultyDataScraper {
   extractConferenceSeminarTable($, keywords, type) {
     console.log(`\n--- Extracting ${type} Data ---`);
     const items = [];
-    
+
     // Focus on Conferences/Seminars/Workshops tab (tab_content7) as specified by user
     const conferencesTab = $('#tab_content7');
-    
+
     if (conferencesTab.length === 0) {
       console.log('Conferences/Seminars/Workshops tab (tab_content7) not found');
       return items;
     }
-    
+
     console.log(`Found Conferences/Seminars/Workshops tab with ${conferencesTab.find('table').length} tables`);
-    
+
     // Look for panels with specific titles based on the HTML structure
     let targetPanels = [];
-    
+
     // Search for panels matching our keywords
     conferencesTab.find('.x_panel').each((i, panel) => {
       const $panel = $(panel);
       const heading = $panel.find('.x_title h2').text().trim();
-      
+
       console.log(`Checking panel: "${heading}"`);
-      
+
       const headingLower = heading.toLowerCase();
-      const matchesKeywords = keywords.some(keyword => 
+      const matchesKeywords = keywords.some(keyword =>
         headingLower.includes(keyword.toLowerCase())
       );
-      
+
       if (matchesKeywords) {
         console.log(`✓ Panel "${heading}" matches keywords`);
         targetPanels.push(panel);
@@ -1898,33 +1901,33 @@ class FacultyDataScraper {
 
     if (targetPanels.length > 0) {
       console.log(`Found ${targetPanels.length} matching panel(s)`);
-      
+
       targetPanels.forEach((panel, panelIndex) => {
         const $panel = $(panel);
         const panelTitle = $panel.find('.x_title h2').text().trim();
         console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
-        
+
         // Find tables in this specific panel
         const tables = $panel.find('table');
         console.log(`Panel has ${tables.length} table(s)`);
-        
+
         tables.each((tableIndex, table) => {
           const $table = $(table);
           console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
-          
+
           // Check if this table has the expected conference/seminar structure
           const headerRow = $table.find('thead tr').first();
           if (headerRow.length === 0) {
             console.log('No thead found, skipping table');
             return;
           }
-          
+
           const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
           console.log(`Table headers: ${headers.join(' | ')}`);
-          
+
           // Verify this looks like the conference/seminar table structure based on type
           let hasCorrectStructure = false;
-          
+
           if (type === 'e_lectures') {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('lecture')) &&
@@ -1951,7 +1954,7 @@ class FacultyDataScraper {
                                 headers.some(h => h.toLowerCase().includes('sponsors')) &&
                                 headers.some(h => h.toLowerCase().includes('venue'));
           }
-          
+
           if (hasCorrectStructure) {
             console.log(`✓ Table has correct ${type} structure - extracting data`);
             this.parseConferenceSeminarTable($, $table, items, type);
@@ -1962,22 +1965,138 @@ class FacultyDataScraper {
       });
     } else {
       console.log(`No panels found, falling back to table-based search`);
-      
+
       // Fallback: search all tables in the tab
       const tables = conferencesTab.find('table');
       tables.each((tableIndex, table) => {
         const $table = $(table);
-        
+
         // Quick check if this looks like a conference/seminar table
         const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
         const hasConferenceStructure = headers.includes('S.No') &&
                                      (headers.some(h => h.toLowerCase().includes('title')) ||
                                       headers.some(h => h.toLowerCase().includes('lecture')) ||
                                       headers.some(h => h.toLowerCase().includes('conference')));
-        
+
         if (hasConferenceStructure) {
           console.log(`Found conference/seminar table (fallback) - extracting data`);
           this.parseConferenceSeminarTable($, $table, items, type);
+        }
+      });
+    }
+
+    console.log(`Total ${type} items extracted: ${items.length}`);
+    return items;
+  }
+
+  // Enhanced collaboration table extraction method
+  extractCollaborationTable($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Data ---`);
+    const items = [];
+
+    // Focus on Affiliation/Collaboration tab (tab_content8) as specified by user
+    const collaborationTab = $('#tab_content8');
+
+    if (collaborationTab.length === 0) {
+      console.log('Affiliation/Collaboration tab (tab_content8) not found');
+      return items;
+    }
+
+    console.log(`Found Affiliation/Collaboration tab with ${collaborationTab.find('table').length} tables`);
+
+    // Look for panels with specific titles based on the HTML structure
+    let targetPanels = [];
+
+    // Search for panels matching our keywords
+    collaborationTab.find('.x_panel').each((i, panel) => {
+      const $panel = $(panel);
+      const heading = $panel.find('.x_title h2').text().trim();
+
+      console.log(`Checking panel: "${heading}"`);
+
+      const headingLower = heading.toLowerCase();
+      const matchesKeywords = keywords.some(keyword =>
+        headingLower.includes(keyword.toLowerCase())
+      );
+
+      if (matchesKeywords) {
+        console.log(`✓ Panel "${heading}" matches keywords`);
+        targetPanels.push(panel);
+      }
+    });
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s)`);
+
+      targetPanels.forEach((panel, panelIndex) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+
+          // Check if this table has the expected collaboration structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+
+          // Verify this looks like the collaboration table structure based on type
+          let hasCorrectStructure = false;
+
+          if (type === 'academic_administration') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('position')) &&
+                                headers.some(h => h.toLowerCase().includes('duration')) &&
+                                headers.some(h => h.toLowerCase().includes('duties'));
+          } else if (type === 'co_curricular') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('position')) &&
+                                headers.some(h => h.toLowerCase().includes('duration')) &&
+                                headers.some(h => h.toLowerCase().includes('duties'));
+          } else if (type === 'institutional_collaboration') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('collaborator')) &&
+                                headers.some(h => h.toLowerCase().includes('institution')) &&
+                                headers.some(h => h.toLowerCase().includes('collaboration'));
+          }
+
+          if (hasCorrectStructure) {
+            console.log(`✓ Table has correct ${type} structure - extracting data`);
+            this.parseCollaborationTable($, $table, items, type);
+          } else {
+            console.log(`✗ Table doesn't match expected ${type} structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found, falling back to table-based search`);
+
+      // Fallback: search all tables in the tab
+      const tables = collaborationTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+
+        // Quick check if this looks like a collaboration table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasCollaborationStructure = headers.includes('S.No') &&
+                                        (headers.some(h => h.toLowerCase().includes('position')) ||
+                                         headers.some(h => h.toLowerCase().includes('collaborator')) ||
+                                         headers.some(h => h.toLowerCase().includes('institution')));
+
+        if (hasCollaborationStructure) {
+          console.log(`Found collaboration table (fallback) - extracting data`);
+          this.parseCollaborationTable($, $table, items, type);
         }
       });
     }
@@ -1996,7 +2115,7 @@ class FacultyDataScraper {
     // Skip header row and process data rows
     rows.slice(1).each((rowIndex, row) => {
       const $row = $(row);
-      
+
       // Handle both <th scope="row"> and <td> for S.No
       const snoCell = $row.find('th[scope="row"]');
       const dataCells = $row.find('td');
@@ -2005,7 +2124,9 @@ class FacultyDataScraper {
 
       if (type === 'e_lectures') {
         // E-Lectures: S.No | E-Lecture Title | Content/Module Title | Institution/Platform | Year | Weblink | Member of Editorial Bodies | Reviewer/Referee of
+        // Handle complex header structure with colspan/rowspan - data is in 8 columns total
         if (snoCell.length > 0 && dataCells.length >= 7) {
+          // S.No is in <th scope="row">, rest are in <td>
           item = {
             sno: snoCell.text().trim(),
             lectureTitle: $(dataCells[0]).text().trim(),
@@ -2013,10 +2134,11 @@ class FacultyDataScraper {
             institution: $(dataCells[2]).text().trim(),
             year: $(dataCells[3]).text().trim(),
             weblink: $(dataCells[4]).text().trim(),
-            editorialBodies: $(dataCells[5]).text().trim(),
-            reviewer: $(dataCells[6]).text().trim()
+            editorialBodies: $(dataCells[5]).text().trim() || '',
+            reviewer: $(dataCells[6]).text().trim() || ''
           };
         } else if (dataCells.length >= 8) {
+          // All cells are <td> including S.No
           item = {
             sno: $(dataCells[0]).text().trim(),
             lectureTitle: $(dataCells[1]).text().trim(),
@@ -2024,8 +2146,8 @@ class FacultyDataScraper {
             institution: $(dataCells[3]).text().trim(),
             year: $(dataCells[4]).text().trim(),
             weblink: $(dataCells[5]).text().trim(),
-            editorialBodies: $(dataCells[6]).text().trim(),
-            reviewer: $(dataCells[7]).text().trim()
+            editorialBodies: $(dataCells[6]).text().trim() || '',
+            reviewer: $(dataCells[7]).text().trim() || ''
           };
         }
       } else if (type === 'online_education') {
@@ -2132,7 +2254,7 @@ class FacultyDataScraper {
                         (type === 'invited_talks' && item.paperTitle === 'Title of the Paper') ||
                         (type === 'organized_conferences' && item.programmeTitle === 'Title of the Programme') ||
                         (type === 'organized_workshops' && item.programmeTitle === 'Title of the Programme');
-        
+
         if (!isHeader) {
           items.push(item);
           console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
@@ -2145,21 +2267,138 @@ class FacultyDataScraper {
     });
   }
 
-  // Collaboration Section Methods
-  extractParticipationExtension($) {
-    return this.extractSectionData($, [
-      'Participation & Extension Activities',
-      'Extension Activities',
-      'Community Participation'
-    ]);
+  // Parse collaboration table based on type
+  parseCollaborationTable($, $table, items, type) {
+    console.log(`Parsing ${type} collaboration table`);
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+
+      // Handle both <th scope="row"> and <td> for S.No
+      const snoCell = $row.find('th[scope="row"]');
+      const dataCells = $row.find('td');
+
+      let item = {};
+
+      if (type === 'academic_administration') {
+        // Academic Administration: S.No | Name of the Position (Head, Dean, Co-ordinator, Director, etc.,) | Duration | Nature of Duties
+        if (snoCell.length > 0 && dataCells.length >= 3) {
+          item = {
+            sno: snoCell.text().trim(),
+            position: $(dataCells[0]).text().trim(),
+            duration: $(dataCells[1]).text().trim(),
+            duties: $(dataCells[2]).text().trim()
+          };
+        } else if (dataCells.length >= 4) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            position: $(dataCells[1]).text().trim(),
+            duration: $(dataCells[2]).text().trim(),
+            duties: $(dataCells[3]).text().trim()
+          };
+        }
+      } else if (type === 'co_curricular') {
+        // Co-Curricular: S.No | Name of the Position (NSS, NCC, Warden etc.,) | Duration | Nature of Duties
+        if (snoCell.length > 0 && dataCells.length >= 3) {
+          item = {
+            sno: snoCell.text().trim(),
+            position: $(dataCells[0]).text().trim(),
+            duration: $(dataCells[1]).text().trim(),
+            duties: $(dataCells[2]).text().trim()
+          };
+        } else if (dataCells.length >= 4) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            position: $(dataCells[1]).text().trim(),
+            duration: $(dataCells[2]).text().trim(),
+            duties: $(dataCells[3]).text().trim()
+          };
+        }
+      } else if (type === 'institutional_collaboration') {
+        // Institutional Collaboration: S.No | Collaborator Name | Designation | Institution/Industry | Type | Nature of Collaboration | Period of Collaboration (From Date | To Date) | Visits to Collaborating Institution/Industry (From Date | To Date) | Details of Collaborative Research/Teaching
+        if (snoCell.length > 0 && dataCells.length >= 9) {
+          item = {
+            sno: snoCell.text().trim(),
+            collaboratorName: $(dataCells[0]).text().trim(),
+            designation: $(dataCells[1]).text().trim(),
+            institution: $(dataCells[2]).text().trim(),
+            type: $(dataCells[3]).text().trim(),
+            natureOfCollaboration: $(dataCells[4]).text().trim(),
+            periodFromDate: $(dataCells[5]).text().trim(),
+            periodToDate: $(dataCells[6]).text().trim(),
+            visitFromDate: $(dataCells[7]).text().trim(),
+            visitToDate: $(dataCells[8]).text().trim(),
+            collaborativeDetails: dataCells.length > 9 ? $(dataCells[9]).text().trim() : ''
+          };
+        } else if (dataCells.length >= 10) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            collaboratorName: $(dataCells[1]).text().trim(),
+            designation: $(dataCells[2]).text().trim(),
+            institution: $(dataCells[3]).text().trim(),
+            type: $(dataCells[4]).text().trim(),
+            natureOfCollaboration: $(dataCells[5]).text().trim(),
+            periodFromDate: $(dataCells[6]).text().trim(),
+            periodToDate: $(dataCells[7]).text().trim(),
+            visitFromDate: $(dataCells[8]).text().trim(),
+            visitToDate: $(dataCells[9]).text().trim(),
+            collaborativeDetails: dataCells.length > 10 ? $(dataCells[10]).text().trim() : ''
+          };
+        }
+      }
+
+      // Only add if we have actual content
+      if (item.sno && Object.keys(item).length > 1) {
+        // Check if this is not just headers
+        const isHeader = (type === 'academic_administration' && item.position === 'Name of the Position') ||
+                        (type === 'co_curricular' && item.position === 'Name of the Position') ||
+                        (type === 'institutional_collaboration' && item.collaboratorName === 'Collaborator Name');
+
+        if (!isHeader) {
+          items.push(item);
+          console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
+        } else {
+          console.log(`⚠️ Skipped header row`);
+        }
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't have sufficient data or structure`);
+      }
+    });
+  }
+
+  // Collaboration Section Methods - Enhanced for structured table extraction
+  extractAcademicAdministration($) {
+    console.log('Starting Academic Administration extraction...');
+    return this.extractCollaborationTable($, [
+      'Participation & Extension Activities (Academic/Administraion)',
+      'Academic Administration',
+      'Administrative Position',
+      'Academic Position'
+    ], 'academic_administration');
+  }
+
+  extractCoCurricular($) {
+    console.log('Starting Co-Curricular extraction...');
+    return this.extractCollaborationTable($, [
+      'Participation & Extension Activities (Co-Curricular)',
+      'Co-Curricular Activities',
+      'NSS Activities',
+      'NCC Activities'
+    ], 'co_curricular');
   }
 
   extractInstitutionalCollaboration($) {
-    return this.extractSectionData($, [
+    console.log('Starting Institutional Collaboration extraction...');
+    return this.extractCollaborationTable($, [
       'Collaboration with Institution/Industry',
       'Institutional Collaboration',
-      'Industry Collaboration'
-    ]);
+      'Industry Collaboration',
+      'Research Collaboration'
+    ], 'institutional_collaboration');
   }
 
   // Programme Section Methods
