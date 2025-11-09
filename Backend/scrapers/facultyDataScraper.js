@@ -1595,32 +1595,32 @@ class FacultyDataScraper {
   extractResearchGuidanceTable($, keywords, type) {
     console.log(`\n--- Extracting ${type} Research Guidance Data ---`);
     const items = [];
-    
+
     // Focus on Research Guidance tab (tab_content6) as specified by user
     const guidanceTab = $('#tab_content6');
-    
+
     if (guidanceTab.length === 0) {
       console.log('Research Guidance tab (tab_content6) not found');
       return items;
     }
-    
+
     console.log(`Found Research Guidance tab with ${guidanceTab.find('table').length} tables`);
-    
+
     // Look for panels with specific titles based on the HTML structure
     let targetPanels = [];
-    
+
     // Search for panels matching our keywords
     guidanceTab.find('.x_panel').each((i, panel) => {
       const $panel = $(panel);
       const heading = $panel.find('.x_title h2').text().trim();
-      
+
       console.log(`Checking panel: "${heading}"`);
-      
+
       const headingLower = heading.toLowerCase();
-      const matchesKeywords = keywords.some(keyword => 
+      const matchesKeywords = keywords.some(keyword =>
         headingLower.includes(keyword.toLowerCase())
       );
-      
+
       if (matchesKeywords) {
         console.log(`✓ Panel "${heading}" matches keywords`);
         targetPanels.push(panel);
@@ -1629,33 +1629,33 @@ class FacultyDataScraper {
 
     if (targetPanels.length > 0) {
       console.log(`Found ${targetPanels.length} matching panel(s)`);
-      
+
       targetPanels.forEach((panel, panelIndex) => {
         const $panel = $(panel);
         const panelTitle = $panel.find('.x_title h2').text().trim();
         console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
-        
+
         // Find tables in this specific panel
         const tables = $panel.find('table');
         console.log(`Panel has ${tables.length} table(s)`);
-        
+
         tables.each((tableIndex, table) => {
           const $table = $(table);
           console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
-          
+
           // Check if this table has the expected research guidance structure
           const headerRow = $table.find('thead tr').first();
           if (headerRow.length === 0) {
             console.log('No thead found, skipping table');
             return;
           }
-          
+
           const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
           console.log(`Table headers: ${headers.join(' | ')}`);
-          
+
           // Verify this looks like the research guidance table structure based on type
           let hasCorrectStructure = false;
-          
+
           if (type === 'pg') {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('year')) &&
@@ -1675,7 +1675,7 @@ class FacultyDataScraper {
                                 headers.some(h => h.toLowerCase().includes('funding')) &&
                                 headers.some(h => h.toLowerCase().includes('fellowship'));
           }
-          
+
           if (hasCorrectStructure) {
             console.log(`✓ Table has correct ${type} research guidance structure - extracting data`);
             this.parseResearchGuidanceTable($, $table, items, type);
@@ -1686,19 +1686,19 @@ class FacultyDataScraper {
       });
     } else {
       console.log(`No panels found, falling back to table-based search`);
-      
+
       // Fallback: search all tables in the tab
       const tables = guidanceTab.find('table');
       tables.each((tableIndex, table) => {
         const $table = $(table);
-        
+
         // Quick check if this looks like a research guidance table
         const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
         const hasGuidanceStructure = headers.includes('S.No') &&
                                    (headers.some(h => h.toLowerCase().includes('student')) ||
                                     headers.some(h => h.toLowerCase().includes('scholar')) ||
                                     headers.some(h => h.toLowerCase().includes('degree')));
-        
+
         if (hasGuidanceStructure) {
           console.log(`Found research guidance table (fallback) - extracting data`);
           this.parseResearchGuidanceTable($, $table, items, type);
@@ -1720,7 +1720,7 @@ class FacultyDataScraper {
     // Skip header row and process data rows
     rows.slice(1).each((rowIndex, row) => {
       const $row = $(row);
-      
+
       // Handle both <th scope="row"> and <td> for S.No
       const snoCell = $row.find('th[scope="row"]');
       const dataCells = $row.find('td');
@@ -1804,7 +1804,7 @@ class FacultyDataScraper {
         const isHeader = (type === 'pg' && item.year === 'Year') ||
                         (type === 'phd' && item.studentName === 'Student Name') ||
                         (type === 'postdoc' && item.scholarName === 'Scholar Name');
-        
+
         if (!isHeader) {
           items.push(item);
           console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
@@ -1817,47 +1817,332 @@ class FacultyDataScraper {
     });
   }
 
-  // Conference/Seminars Section Methods
+  // Conference/Seminars Section Methods - Enhanced for structured table extraction
   extractELectures($) {
-    return this.extractSectionData($, [
+    return this.extractConferenceSeminarTable($, [
       'E-Lecture Details',
       'E-Lectures',
       'Online Lectures',
       'Digital Lectures'
-    ]);
+    ], 'e_lectures');
   }
 
   extractOnlineEducation($) {
-    return this.extractSectionData($, [
+    return this.extractConferenceSeminarTable($, [
       'Details of Online Education Conducted',
       'Online Education',
       'Virtual Teaching'
-    ]);
+    ], 'online_education');
   }
 
   extractInvitedTalks($) {
-    return this.extractSectionData($, [
+    return this.extractConferenceSeminarTable($, [
       'Invited Talks in Conference/Seminar/Workshop/Training Programme',
       'Invited Talks',
       'Guest Lectures',
       'Keynote Speeches'
-    ]);
+    ], 'invited_talks');
   }
 
   extractOrganizedConferences($) {
-    return this.extractSectionData($, [
+    return this.extractConferenceSeminarTable($, [
       'Conferences/Seminars Organized',
       'Organized Conferences',
       'Conferences Organized'
-    ]);
+    ], 'organized_conferences');
   }
 
   extractOrganizedWorkshops($) {
-    return this.extractSectionData($, [
+    return this.extractConferenceSeminarTable($, [
       'Workshop Organized',
       'Workshops Organized',
       'Training Programs Organized'
-    ]);
+    ], 'organized_workshops');
+  }
+
+  // Enhanced conference/seminar table extraction method
+  extractConferenceSeminarTable($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Data ---`);
+    const items = [];
+    
+    // Focus on Conferences/Seminars/Workshops tab (tab_content7) as specified by user
+    const conferencesTab = $('#tab_content7');
+    
+    if (conferencesTab.length === 0) {
+      console.log('Conferences/Seminars/Workshops tab (tab_content7) not found');
+      return items;
+    }
+    
+    console.log(`Found Conferences/Seminars/Workshops tab with ${conferencesTab.find('table').length} tables`);
+    
+    // Look for panels with specific titles based on the HTML structure
+    let targetPanels = [];
+    
+    // Search for panels matching our keywords
+    conferencesTab.find('.x_panel').each((i, panel) => {
+      const $panel = $(panel);
+      const heading = $panel.find('.x_title h2').text().trim();
+      
+      console.log(`Checking panel: "${heading}"`);
+      
+      const headingLower = heading.toLowerCase();
+      const matchesKeywords = keywords.some(keyword => 
+        headingLower.includes(keyword.toLowerCase())
+      );
+      
+      if (matchesKeywords) {
+        console.log(`✓ Panel "${heading}" matches keywords`);
+        targetPanels.push(panel);
+      }
+    });
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s)`);
+      
+      targetPanels.forEach((panel, panelIndex) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+        
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+        
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+          
+          // Check if this table has the expected conference/seminar structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+          
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+          
+          // Verify this looks like the conference/seminar table structure based on type
+          let hasCorrectStructure = false;
+          
+          if (type === 'e_lectures') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('lecture')) &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('institution'));
+          } else if (type === 'online_education') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('nature')) &&
+                                headers.some(h => h.toLowerCase().includes('sessions')) &&
+                                headers.some(h => h.toLowerCase().includes('target'));
+          } else if (type === 'invited_talks') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('conference')) &&
+                                headers.some(h => h.toLowerCase().includes('organized'));
+          } else if (type === 'organized_conferences') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('sponsors')) &&
+                                headers.some(h => h.toLowerCase().includes('venue'));
+          } else if (type === 'organized_workshops') {
+            hasCorrectStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('sponsors')) &&
+                                headers.some(h => h.toLowerCase().includes('venue'));
+          }
+          
+          if (hasCorrectStructure) {
+            console.log(`✓ Table has correct ${type} structure - extracting data`);
+            this.parseConferenceSeminarTable($, $table, items, type);
+          } else {
+            console.log(`✗ Table doesn't match expected ${type} structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found, falling back to table-based search`);
+      
+      // Fallback: search all tables in the tab
+      const tables = conferencesTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+        
+        // Quick check if this looks like a conference/seminar table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasConferenceStructure = headers.includes('S.No') &&
+                                     (headers.some(h => h.toLowerCase().includes('title')) ||
+                                      headers.some(h => h.toLowerCase().includes('lecture')) ||
+                                      headers.some(h => h.toLowerCase().includes('conference')));
+        
+        if (hasConferenceStructure) {
+          console.log(`Found conference/seminar table (fallback) - extracting data`);
+          this.parseConferenceSeminarTable($, $table, items, type);
+        }
+      });
+    }
+
+    console.log(`Total ${type} items extracted: ${items.length}`);
+    return items;
+  }
+
+  // Parse conference/seminar table based on type
+  parseConferenceSeminarTable($, $table, items, type) {
+    console.log(`Parsing ${type} conference/seminar table`);
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+      
+      // Handle both <th scope="row"> and <td> for S.No
+      const snoCell = $row.find('th[scope="row"]');
+      const dataCells = $row.find('td');
+
+      let item = {};
+
+      if (type === 'e_lectures') {
+        // E-Lectures: S.No | E-Lecture Title | Content/Module Title | Institution/Platform | Year | Weblink | Member of Editorial Bodies | Reviewer/Referee of
+        if (snoCell.length > 0 && dataCells.length >= 7) {
+          item = {
+            sno: snoCell.text().trim(),
+            lectureTitle: $(dataCells[0]).text().trim(),
+            contentTitle: $(dataCells[1]).text().trim(),
+            institution: $(dataCells[2]).text().trim(),
+            year: $(dataCells[3]).text().trim(),
+            weblink: $(dataCells[4]).text().trim(),
+            editorialBodies: $(dataCells[5]).text().trim(),
+            reviewer: $(dataCells[6]).text().trim()
+          };
+        } else if (dataCells.length >= 8) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            lectureTitle: $(dataCells[1]).text().trim(),
+            contentTitle: $(dataCells[2]).text().trim(),
+            institution: $(dataCells[3]).text().trim(),
+            year: $(dataCells[4]).text().trim(),
+            weblink: $(dataCells[5]).text().trim(),
+            editorialBodies: $(dataCells[6]).text().trim(),
+            reviewer: $(dataCells[7]).text().trim()
+          };
+        }
+      } else if (type === 'online_education') {
+        // Online Education: S.No | Nature of Online Course | No. of Sessions | Target Group | Date
+        if (snoCell.length > 0 && dataCells.length >= 4) {
+          item = {
+            sno: snoCell.text().trim(),
+            nature: $(dataCells[0]).text().trim(),
+            sessions: $(dataCells[1]).text().trim(),
+            targetGroup: $(dataCells[2]).text().trim(),
+            date: $(dataCells[3]).text().trim()
+          };
+        } else if (dataCells.length >= 5) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            nature: $(dataCells[1]).text().trim(),
+            sessions: $(dataCells[2]).text().trim(),
+            targetGroup: $(dataCells[3]).text().trim(),
+            date: $(dataCells[4]).text().trim()
+          };
+        }
+      } else if (type === 'invited_talks') {
+        // Invited Talks: S.No | Title of the Paper | Conferences/Seminar/Workshop/Training Programme | Organized by | Whether International / National / State / Regional / College or University Level | From | To | Year
+        if (snoCell.length > 0 && dataCells.length >= 7) {
+          item = {
+            sno: snoCell.text().trim(),
+            paperTitle: $(dataCells[0]).text().trim(),
+            programme: $(dataCells[1]).text().trim(),
+            organizedBy: $(dataCells[2]).text().trim(),
+            level: $(dataCells[3]).text().trim(),
+            fromDate: $(dataCells[4]).text().trim(),
+            toDate: $(dataCells[5]).text().trim(),
+            year: $(dataCells[6]).text().trim()
+          };
+        } else if (dataCells.length >= 8) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            paperTitle: $(dataCells[1]).text().trim(),
+            programme: $(dataCells[2]).text().trim(),
+            organizedBy: $(dataCells[3]).text().trim(),
+            level: $(dataCells[4]).text().trim(),
+            fromDate: $(dataCells[5]).text().trim(),
+            toDate: $(dataCells[6]).text().trim(),
+            year: $(dataCells[7]).text().trim()
+          };
+        }
+      } else if (type === 'organized_conferences') {
+        // Organized Conferences: S.No | Title of the Programme | Sponsors | Venue & Duration | Whether International / National / State / Regional / College or University Level | From | To | Year
+        if (snoCell.length > 0 && dataCells.length >= 7) {
+          item = {
+            sno: snoCell.text().trim(),
+            programmeTitle: $(dataCells[0]).text().trim(),
+            sponsors: $(dataCells[1]).text().trim(),
+            venue: $(dataCells[2]).text().trim(),
+            level: $(dataCells[3]).text().trim(),
+            fromDate: $(dataCells[4]).text().trim(),
+            toDate: $(dataCells[5]).text().trim(),
+            year: $(dataCells[6]).text().trim()
+          };
+        } else if (dataCells.length >= 8) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            programmeTitle: $(dataCells[1]).text().trim(),
+            sponsors: $(dataCells[2]).text().trim(),
+            venue: $(dataCells[3]).text().trim(),
+            level: $(dataCells[4]).text().trim(),
+            fromDate: $(dataCells[5]).text().trim(),
+            toDate: $(dataCells[6]).text().trim(),
+            year: $(dataCells[7]).text().trim()
+          };
+        }
+      } else if (type === 'organized_workshops') {
+        // Organized Workshops: S.No | Title of the Programme | Sponsors | Venue & Duration | Whether International / National / State / Regional / College or University Level | From | To | Year
+        if (snoCell.length > 0 && dataCells.length >= 7) {
+          item = {
+            sno: snoCell.text().trim(),
+            programmeTitle: $(dataCells[0]).text().trim(),
+            sponsors: $(dataCells[1]).text().trim(),
+            venue: $(dataCells[2]).text().trim(),
+            level: $(dataCells[3]).text().trim(),
+            fromDate: $(dataCells[4]).text().trim(),
+            toDate: $(dataCells[5]).text().trim(),
+            year: $(dataCells[6]).text().trim()
+          };
+        } else if (dataCells.length >= 8) {
+          item = {
+            sno: $(dataCells[0]).text().trim(),
+            programmeTitle: $(dataCells[1]).text().trim(),
+            sponsors: $(dataCells[2]).text().trim(),
+            venue: $(dataCells[3]).text().trim(),
+            level: $(dataCells[4]).text().trim(),
+            fromDate: $(dataCells[5]).text().trim(),
+            toDate: $(dataCells[6]).text().trim(),
+            year: $(dataCells[7]).text().trim()
+          };
+        }
+      }
+
+      // Only add if we have actual content
+      if (item.sno && Object.keys(item).length > 1) {
+        // Check if this is not just headers
+        const isHeader = (type === 'e_lectures' && item.lectureTitle === 'E-Lecture Title') ||
+                        (type === 'online_education' && item.nature === 'Nature of Online Course') ||
+                        (type === 'invited_talks' && item.paperTitle === 'Title of the Paper') ||
+                        (type === 'organized_conferences' && item.programmeTitle === 'Title of the Programme') ||
+                        (type === 'organized_workshops' && item.programmeTitle === 'Title of the Programme');
+        
+        if (!isHeader) {
+          items.push(item);
+          console.log(`✅ Successfully added ${type} item: S.No ${item.sno}`);
+        } else {
+          console.log(`⚠️ Skipped header row`);
+        }
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't have sufficient data or structure`);
+      }
+    });
   }
 
   // Collaboration Section Methods

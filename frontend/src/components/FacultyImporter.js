@@ -30,7 +30,12 @@ const FacultyImporter = () => {
     completedConsultancy: true,
     pgGuidance: true,
     phdGuidanceDetailed: true,
-    postdocGuidance: true
+    postdocGuidance: true,
+    eLectures: true,
+    onlineEducation: true,
+    invitedTalks: true,
+    organizedConferences: true,
+    organizedWorkshops: true
   });
 
   // Check backend status on component mount
@@ -1014,7 +1019,7 @@ const FacultyImporter = () => {
                               <h3 style={{ color: '#6f42c1', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #6f42c1', paddingBottom: '10px' }}>
                                 🎓 Research Guidance
                               </h3>
-                              
+
                               {/* Table 3 - Research Guidance - PG */}
                               <div style={{ marginBottom: '30px' }}>
                                 {createTableHeader('📋 Research Guidance - PG', 'pgGuidance', '#007bff')}
@@ -1112,6 +1117,194 @@ const FacultyImporter = () => {
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '250px', wordWrap: 'break-word' }}>{guidance.fellowshipTitle || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.yearOfJoining || 'N/A'}</td>
                                             <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{guidance.yearOfCompletion || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Conferences/Seminars/Workshops Tables */}
+                          {result.data.conferences_seminars && (
+                            <div style={{ marginTop: '40px' }}>
+                              <h3 style={{ color: '#17a2b8', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #17a2b8', paddingBottom: '10px' }}>
+                                🎤 Conferences, Seminars & Workshops
+                              </h3>
+                              
+                              {/* Table 2 - E-Lecture Details */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('💻 E-Lecture Details', 'eLectures', '#007bff')}
+                                {tableVisibility.eLectures && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #0056b3', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>E-Lecture Title</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Content/Module Title</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Institution/Platform</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Year</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Weblink</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Member of Editorial Bodies</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #0056b3' }}>Reviewer/Referee of</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.conferences_seminars.e_lectures.map((lecture, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#007bff' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '200px', wordWrap: 'break-word' }}>{lecture.lectureTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{lecture.contentTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{lecture.institution || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{lecture.year || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{lecture.weblink || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{lecture.editorialBodies || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{lecture.reviewer || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 3 - Details of Online Education Conducted */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🌐 Details of Online Education Conducted', 'onlineEducation', '#28a745')}
+                                {tableVisibility.onlineEducation && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#28a745', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #1e7e34', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Nature of Online Course</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>No. of Sessions</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Target Group</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #1e7e34' }}>Date</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.conferences_seminars.online_education.map((education, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#28a745' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{education.nature || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{education.sessions || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{education.targetGroup || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{education.date || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 4 - Invited Talks in Conference/Seminar/Workshop/Training Programme */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🎯 Invited Talks in Conference/Seminar/Workshop/Training Programme', 'invitedTalks', '#fd7e14')}
+                                {tableVisibility.invitedTalks && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#fd7e14', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #e55a00', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Title of the Paper</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Conference/Seminar/Workshop/Training Programme</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Organized by</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Level</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>From</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>To</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #e55a00' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.conferences_seminars.invited_talks.map((talk, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#fd7e14' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '200px', wordWrap: 'break-word' }}>{talk.paperTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{talk.programme || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{talk.organizedBy || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{talk.level || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{talk.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{talk.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{talk.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 5 - Conferences/Seminars Organized */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🏛️ Conferences/Seminars Organized', 'organizedConferences', '#6f42c1')}
+                                {tableVisibility.organizedConferences && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#6f42c1', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #5a2d91', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Title of the Programme</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Sponsors</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Venue & Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Level</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>From</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>To</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #5a2d91' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.conferences_seminars.organized_conferences.map((conference, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#6f42c1' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{conference.programmeTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{conference.sponsors || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{conference.venue || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{conference.level || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{conference.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{conference.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{conference.year || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Table 6 - Workshop Organized */}
+                              <div style={{ marginBottom: '30px' }}>
+                                {createTableHeader('🔧 Workshop Organized', 'organizedWorkshops', '#dc3545')}
+                                {tableVisibility.organizedWorkshops && (
+                                  <div style={{ overflowX: 'auto', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                      <thead>
+                                        <tr style={{ backgroundColor: '#dc3545', color: 'white' }}>
+                                          <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #c82333', width: '60px' }}>S.No</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Title of the Programme</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Sponsors</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Venue & Duration</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Level</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>From</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>To</th>
+                                          <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #c82333' }}>Year</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {result.data.conferences_seminars.organized_workshops.map((workshop, index) => (
+                                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', textAlign: 'center', fontWeight: '600', color: '#dc3545' }}>{index + 1}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', fontWeight: '500', maxWidth: '250px', wordWrap: 'break-word' }}>{workshop.programmeTitle || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '150px', wordWrap: 'break-word' }}>{workshop.sponsors || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6', maxWidth: '200px', wordWrap: 'break-word' }}>{workshop.venue || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.level || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.fromDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.toDate || 'N/A'}</td>
+                                            <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>{workshop.year || 'N/A'}</td>
                                           </tr>
                                         ))}
                                       </tbody>
