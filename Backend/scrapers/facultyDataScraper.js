@@ -2058,7 +2058,8 @@ class FacultyDataScraper {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('position')) &&
                                 headers.some(h => h.toLowerCase().includes('duration')) &&
-                                headers.some(h => h.toLowerCase().includes('duties'));
+                                (headers.some(h => h.toLowerCase().includes('duties')) || 
+                                 headers.some(h => h.toLowerCase().includes('dutites')));
           } else if (type === 'co_curricular') {
             hasCorrectStructure = headers.includes('S.No') &&
                                 headers.some(h => h.toLowerCase().includes('position')) &&
@@ -2293,6 +2294,7 @@ class FacultyDataScraper {
             duration: $(dataCells[1]).text().trim(),
             duties: $(dataCells[2]).text().trim()
           };
+          console.log(`Found academic administration row: ${item.position} (${item.duration})`);
         } else if (dataCells.length >= 4) {
           item = {
             sno: $(dataCells[0]).text().trim(),
@@ -2300,6 +2302,7 @@ class FacultyDataScraper {
             duration: $(dataCells[2]).text().trim(),
             duties: $(dataCells[3]).text().trim()
           };
+          console.log(`Found academic administration row (alt): ${item.position} (${item.duration})`);
         }
       } else if (type === 'co_curricular') {
         // Co-Curricular: S.No | Name of the Position (NSS, NCC, Warden etc.,) | Duration | Nature of Duties
@@ -2375,6 +2378,9 @@ class FacultyDataScraper {
     console.log('Starting Academic Administration extraction...');
     return this.extractCollaborationTable($, [
       'Participation & Extension Activities (Academic/Administraion)',
+      'Participation & Extension Activities (Academic/Administration)',
+      'Academic/Administraion',
+      'Academic/Administration',
       'Academic Administration',
       'Administrative Position',
       'Academic Position'

@@ -1324,7 +1324,7 @@ const FacultyImporter = () => {
                               <h3 style={{ color: '#6c757d', fontSize: '24px', marginBottom: '20px', fontWeight: '600', borderBottom: '2px solid #6c757d', paddingBottom: '10px' }}>
                                 🤝 Affiliation & Collaboration
                               </h3>
-                              
+
                               {/* Table 3 - Academic/Administration Activities */}
                               <div style={{ marginBottom: '30px' }}>
                                 {createTableHeader('🎓 Participation & Extension Activities (Academic/Administration)', 'academicAdministration', '#007bff')}
