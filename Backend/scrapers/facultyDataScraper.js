@@ -908,7 +908,7 @@ class FacultyDataScraper {
   extractUGCApprovedPapers($) {
     console.log('Extracting UGC approved papers...');
     const data = [];
-    
+
     // Track which tables have been processed to avoid conflicts
     if (!this.processedTables) {
       this.processedTables = new Set();
@@ -926,17 +926,17 @@ class FacultyDataScraper {
         const hasUGCKeywords = tableText.includes('ugc approved') || tableText.includes('ugc journal');
         const hasNonUGCKeywords = tableText.includes('non ugc') || tableText.includes('non-ugc');
         const hasPeerReviewedOnly = tableText.includes('peer reviewed') && !tableText.includes('ugc');
-        
+
         console.log(`UGC Table ${tableIndex} analysis:`);
         console.log(`- Has UGC keywords: ${hasUGCKeywords}`);
         console.log(`- Has Non-UGC keywords: ${hasNonUGCKeywords}`);
         console.log(`- Has peer reviewed only: ${hasPeerReviewedOnly}`);
         console.log(`- Table text snippet: "${tableText.substring(0, 100)}..."`);
 
-        const isUGCTable = 
+        const isUGCTable =
           hasUGCKeywords || // Explicit UGC keywords
           (tableIndex === 2 && !hasNonUGCKeywords && !hasPeerReviewedOnly) || // Third table, clean of non-UGC indicators
-          (tableText.includes('ugc') && !hasNonUGCKeywords && 
+          (tableText.includes('ugc') && !hasNonUGCKeywords &&
            headers.some(h => h.toLowerCase().includes('title')) &&
            headers.some(h => h.toLowerCase().includes('authors')));
 
@@ -1015,14 +1015,14 @@ class FacultyDataScraper {
         const hasExplicitNonUGC = tableText.includes('non ugc') || tableText.includes('non-ugc');
         const hasUGCApproved = tableText.includes('ugc approved') || tableText.includes('ugc journal');
         const hasPeerReviewedWithoutUGC = tableText.includes('peer reviewed') && !tableText.includes('ugc');
-        
+
         console.log(`Non-UGC Table ${tableIndex} analysis:`);
         console.log(`- Has explicit Non-UGC: ${hasExplicitNonUGC}`);
         console.log(`- Has UGC approved: ${hasUGCApproved}`);
         console.log(`- Has peer reviewed without UGC: ${hasPeerReviewedWithoutUGC}`);
         console.log(`- Table text snippet: "${tableText.substring(0, 100)}..."`);
 
-        const isNonUGCTable = 
+        const isNonUGCTable =
           hasExplicitNonUGC || // Explicit non-ugc mention
           hasPeerReviewedWithoutUGC || // Peer reviewed but not UGC
           (tableIndex === 3 && !hasUGCApproved && // Fourth table, not UGC approved
@@ -1102,13 +1102,13 @@ class FacultyDataScraper {
         console.log(`Conference table ${tableIndex} headers:`, headers);
 
         // More flexible conference papers detection
-        const isConferenceTable = 
+        const isConferenceTable =
           tableIndex === 4 || // Fifth table in patents tab
           tableText.includes('conference') ||
           tableText.includes('proceedings') ||
           (headers.some(h => h.toLowerCase().includes('title')) &&
            headers.some(h => h.toLowerCase().includes('authors')) &&
-           (headers.some(h => h.toLowerCase().includes('conference')) || 
+           (headers.some(h => h.toLowerCase().includes('conference')) ||
             headers.some(h => h.toLowerCase().includes('proceedings')) ||
             headers.some(h => h.toLowerCase().includes('page')) &&
             !headers.some(h => h.toLowerCase().includes('impact factor')))); // Key difference from journal papers
@@ -1167,28 +1167,199 @@ class FacultyDataScraper {
 
   // Books Section Methods
   extractAuthoredBooks($) {
-    return this.extractSectionData($, [
+    return this.extractBookTableData($, [
       'Books',
       'Authored Books',
-      'Published Books'
-    ]);
+      'Published Books',
+      'Book Publications',
+      'Books Published',
+      'Authored Publications',
+      'Books Written',
+      'Written Books'
+    ], 'books');
   }
 
   extractBookChapters($) {
-    return this.extractSectionData($, [
+    return this.extractBookTableData($, [
       'Chapters in Books',
       'Book Chapters',
-      'Chapters'
-    ]);
+      'Chapters',
+      'Chapter Publications',
+      'Chapters Published',
+      'Book Chapter',
+      'Edited Chapters',
+      'Contributed Chapters'
+    ], 'chapters');
   }
 
   extractEditedBooks($) {
-    return this.extractSectionData($, [
+    return this.extractBookTableData($, [
       'Edited Books',
       'Books Edited',
-      'Editorial Work'
-    ]);
+      'Editorial Work',
+      'Edited Publications',
+      'Editorial Contributions',
+      'Books as Editor',
+      'Editor Books',
+      'Edited Volumes'
+    ], 'edited');
   }
+
+  // Enhanced book table extraction method
+  extractBookTableData($, keywords, type) {
+    console.log(`\n--- Extracting ${type} Book Data ---`);
+    const books = [];
+
+    // Focus on Books tab (tab_content4) as specified by user
+    const booksTab = $('#tab_content4');
+
+    if (booksTab.length === 0) {
+      console.log('Books tab (tab_content4) not found');
+      return books;
+    }
+
+    console.log(`Found Books tab with ${booksTab.find('table').length} tables`);
+
+    // Look for panels with specific titles based on the HTML structure provided
+    let targetPanels = [];
+    
+    if (type === 'books') {
+      // Look for panel with "Books" heading
+      targetPanels = booksTab.find('.x_panel').filter((i, panel) => {
+        const heading = $(panel).find('.x_title h2').text().trim().toLowerCase();
+        return heading === 'books';
+      });
+    } else if (type === 'chapters') {
+      // Look for panel with "Chapters" or "Chapters in Books" heading
+      targetPanels = booksTab.find('.x_panel').filter((i, panel) => {
+        const heading = $(panel).find('.x_title h2').text().trim().toLowerCase();
+        return heading.includes('chapter');
+      });
+    } else if (type === 'edited') {
+      // Look for panel with "Edited Books" heading
+      targetPanels = booksTab.find('.x_panel').filter((i, panel) => {
+        const heading = $(panel).find('.x_title h2').text().trim().toLowerCase();
+        return heading.includes('edited');
+      });
+    }
+
+    if (targetPanels.length > 0) {
+      console.log(`Found ${targetPanels.length} matching panel(s) for ${type}`);
+      
+      targetPanels.each((panelIndex, panel) => {
+        const $panel = $(panel);
+        const panelTitle = $panel.find('.x_title h2').text().trim();
+        console.log(`\n=== Processing Panel: "${panelTitle}" ===`);
+        
+        // Find tables in this specific panel
+        const tables = $panel.find('table');
+        console.log(`Panel has ${tables.length} table(s)`);
+        
+        tables.each((tableIndex, table) => {
+          const $table = $(table);
+          console.log(`\nProcessing table ${tableIndex + 1} in "${panelTitle}" panel`);
+          
+          // Check if this table has the expected book structure
+          const headerRow = $table.find('thead tr').first();
+          if (headerRow.length === 0) {
+            console.log('No thead found, skipping table');
+            return;
+          }
+          
+          const headers = headerRow.find('th').map((i, th) => $(th).text().trim()).get();
+          console.log(`Table headers: ${headers.join(' | ')}`);
+          
+          // Verify this looks like the book table structure
+          const hasBookStructure = headers.includes('S.No') &&
+                                  headers.some(h => h.toLowerCase().includes('title')) &&
+                                  headers.some(h => h.toLowerCase().includes('author')) &&
+                                  headers.includes('Publisher') &&
+                                  headers.includes('Year');
+          
+          if (hasBookStructure) {
+            console.log(`✓ Table has correct book structure - extracting data`);
+            this.parseCleanBookTable($, $table, books);
+          } else {
+            console.log(`✗ Table doesn't match expected book structure`);
+          }
+        });
+      });
+    } else {
+      console.log(`No panels found for ${type}, falling back to table-based search`);
+      
+      // Fallback: search all tables in the tab
+      const tables = booksTab.find('table');
+      tables.each((tableIndex, table) => {
+        const $table = $(table);
+        
+        // Quick check if this looks like a book table
+        const headers = $table.find('th').map((i, th) => $(th).text().trim()).get();
+        const hasBookStructure = headers.includes('S.No') &&
+                                headers.some(h => h.toLowerCase().includes('title')) &&
+                                headers.some(h => h.toLowerCase().includes('author'));
+        
+        if (hasBookStructure) {
+          console.log(`Found book table (fallback) - extracting data`);
+          this.parseCleanBookTable($, $table, books);
+        }
+      });
+    }
+
+    console.log(`Total ${type} books extracted: ${books.length}`);
+    return books;
+  }
+
+  // Simple, clean book table parser based on the exact HTML structure provided by user
+  parseCleanBookTable($, $table, books) {
+    console.log('Parsing clean book table with HTML structure: <th scope="row"> for S.No, <td> for rest');
+
+    const rows = $table.find('tr');
+    if (rows.length < 2) return; // Need at least header + 1 data row
+
+    // Skip header row and process data rows
+    rows.slice(1).each((rowIndex, row) => {
+      const $row = $(row);
+      
+      // The HTML structure uses <th scope="row"> for S.No and <td> for other columns
+      const snoCell = $row.find('th[scope="row"]'); // S.No is in <th scope="row">
+      const dataCells = $row.find('td'); // Rest are in <td>
+
+      console.log(`Row ${rowIndex + 1}: Found ${snoCell.length} S.No cells, ${dataCells.length} data cells`);
+
+      if (snoCell.length > 0 && dataCells.length >= 5) {
+        // Extract data according to the exact HTML structure you provided
+        const sno = snoCell.text().trim();
+        const title = $(dataCells[0]).text().trim(); // Title of the Book
+        const authors = $(dataCells[1]).text().trim(); // Name of the Authors as per the order in Book
+        const publisher = $(dataCells[2]).text().trim(); // Publisher
+        const year = $(dataCells[3]).text().trim(); // Year
+        const isbn = $(dataCells[4]).text().trim(); // ISBN No.
+
+        console.log(`Extracted: S.No="${sno}", Title="${title}", Authors="${authors}", Publisher="${publisher}", Year="${year}", ISBN="${isbn}"`);
+
+        // Only add if we have actual book content
+        if (title && title !== 'Title of the Book' && authors && authors !== 'Name of the Authors as per the order in Book') {
+          const bookEntry = {
+            sno: sno,
+            title: title,
+            authors: authors,
+            publisher: publisher,
+            year: year,
+            isbn: isbn || 'N/A'
+          };
+
+          books.push(bookEntry);
+          console.log(`✅ Successfully added book: "${title}" by ${authors} (${year})`);
+        } else {
+          console.log(`⚠️ Skipped row - appears to be header or empty: title="${title}", authors="${authors}"`);
+        }
+      } else {
+        console.log(`⚠️ Row ${rowIndex + 1} doesn't match expected structure: ${snoCell.length} S.No cells, ${dataCells.length} data cells`);
+      }
+    });
+  }
+
+
 
   // Projects/Consultancy Section Methods
   extractOngoingProjects($) {
