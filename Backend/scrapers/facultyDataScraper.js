@@ -115,7 +115,7 @@ class FacultyDataScraper {
       console.log('- UGC Papers:', facultyData.innovation.ugc_papers.length);
       console.log('- Non-UGC Papers:', facultyData.innovation.non_ugc_papers.length);
       console.log('- Conference Papers:', facultyData.innovation.conference_papers.length);
-      
+
       console.log(`Successfully scraped data for node ${nodeId}`);
       return facultyData;
 
@@ -735,10 +735,10 @@ class FacultyDataScraper {
     console.log('Available tabs:', $('[id*="tab_content"]').map((i, el) => $(el).attr('id')).get());
     const patentsTab = $('#tab_content3');
     console.log('Patents tab found:', patentsTab.length > 0);
-    
+
     if (patentsTab.length) {
       console.log('Total tables in patents tab:', patentsTab.find('table').length);
-      
+
       patentsTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
         const tableText = $(table).text().toLowerCase();
@@ -747,7 +747,7 @@ class FacultyDataScraper {
         console.log(`Table ${tableIndex} contains "specialization":`, tableText.includes('specialization'));
 
         // More flexible detection - check for any contribution-related keywords
-        const isInnovationTable = 
+        const isInnovationTable =
           tableIndex === 0 || // First table in patents tab
           tableText.includes('contribution') ||
           tableText.includes('innovation') ||
@@ -757,7 +757,7 @@ class FacultyDataScraper {
 
         if (isInnovationTable && headers.length >= 3) {
           console.log(`Processing innovation contributions table (index: ${tableIndex})`);
-          
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
             console.log(`Row ${rowIndex} has ${cells.length} cells`);
@@ -811,7 +811,7 @@ class FacultyDataScraper {
             const workName = $(firstRow[1]).text().trim();
             const specialization = $(firstRow[2]).text().trim();
             const remarks = $(firstRow[3]).text().trim();
-            
+
             if (workName && workName !== 'Title' && workName !== 'S.No') {
               data.push({
                 workName: workName,
@@ -842,7 +842,7 @@ class FacultyDataScraper {
         console.log(`Patent table ${tableIndex} headers:`, headers);
 
         // More flexible patent detection
-        const isPatentTable = 
+        const isPatentTable =
           tableIndex === 1 || // Second table in patents tab
           tableText.includes('patent') ||
           headers.some(h => h.toLowerCase().includes('title')) &&
@@ -852,7 +852,7 @@ class FacultyDataScraper {
 
         if (isPatentTable && headers.length >= 4) {
           console.log(`Processing patent details table (index: ${tableIndex})`);
-          
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
@@ -908,37 +908,77 @@ class FacultyDataScraper {
   extractUGCApprovedPapers($) {
     console.log('Extracting UGC approved papers...');
     const data = [];
+    
+    // Track which tables have been processed to avoid conflicts
+    if (!this.processedTables) {
+      this.processedTables = new Set();
+    }
 
     // Look for UGC papers in tab_content3 (Patents/Papers tab)
     const patentsTab = $('#tab_content3');
     if (patentsTab.length) {
       patentsTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+        const tableText = $(table).text().toLowerCase();
+        console.log(`UGC table ${tableIndex} headers:`, headers);
 
-        // Check if this is UGC papers table (Table 3)
+        // More specific UGC papers detection - exclude Non-UGC tables
+        const hasUGCKeywords = tableText.includes('ugc approved') || tableText.includes('ugc journal');
+        const hasNonUGCKeywords = tableText.includes('non ugc') || tableText.includes('non-ugc');
+        const hasPeerReviewedOnly = tableText.includes('peer reviewed') && !tableText.includes('ugc');
+        
+        console.log(`UGC Table ${tableIndex} analysis:`);
+        console.log(`- Has UGC keywords: ${hasUGCKeywords}`);
+        console.log(`- Has Non-UGC keywords: ${hasNonUGCKeywords}`);
+        console.log(`- Has peer reviewed only: ${hasPeerReviewedOnly}`);
+        console.log(`- Table text snippet: "${tableText.substring(0, 100)}..."`);
+
         const isUGCTable = 
-          headers.some(h => h.toLowerCase().includes('title')) &&
-          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
-          headers.some(h => h.toLowerCase().includes('journal name')) &&
-          headers.some(h => h.toLowerCase().includes('volume') && h.toLowerCase().includes('issue')) &&
-          headers.some(h => h.toLowerCase().includes('impact factor'));
+          hasUGCKeywords || // Explicit UGC keywords
+          (tableIndex === 2 && !hasNonUGCKeywords && !hasPeerReviewedOnly) || // Third table, clean of non-UGC indicators
+          (tableText.includes('ugc') && !hasNonUGCKeywords && 
+           headers.some(h => h.toLowerCase().includes('title')) &&
+           headers.some(h => h.toLowerCase().includes('authors')));
 
-        if (isUGCTable && headers.length >= 6) {
-          console.log(`Found UGC papers table (index: ${tableIndex})`);
-          
+        console.log(`UGC Table ${tableIndex} decision: ${isUGCTable ? 'PROCESS' : 'SKIP'}`);
+
+        if (isUGCTable && headers.length >= 5 && !this.processedTables.has(`ugc_${tableIndex}`)) {
+          console.log(`Processing UGC papers table (index: ${tableIndex})`);
+          this.processedTables.add(`ugc_${tableIndex}`);
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
-            if (cells.length >= 7) {
-              // Structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
-              const title = $(cells[1]).text().trim();
-              const authors = $(cells[2]).text().trim();
-              const journalName = $(cells[3]).text().trim();
-              const volumeIssuePages = $(cells[4]).text().trim();
-              const year = $(cells[5]).text().trim();
-              const impactFactor = $(cells[6]).text().trim();
+            if (cells.length >= 5) {
+              let title = '', authors = '', journalName = '', volumeIssuePages = '', year = '', impactFactor = '';
 
-              if (title && title !== 'Title') {
+              // Try different column structures
+              if (cells.length >= 7) {
+                // Full structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
+                title = $(cells[1]).text().trim();
+                authors = $(cells[2]).text().trim();
+                journalName = $(cells[3]).text().trim();
+                volumeIssuePages = $(cells[4]).text().trim();
+                year = $(cells[5]).text().trim();
+                impactFactor = $(cells[6]).text().trim();
+              } else if (cells.length >= 6) {
+                // Without S.No: Title | Authors | Journal | Volume/Issue | Year | Impact Factor
+                title = $(cells[0]).text().trim();
+                authors = $(cells[1]).text().trim();
+                journalName = $(cells[2]).text().trim();
+                volumeIssuePages = $(cells[3]).text().trim();
+                year = $(cells[4]).text().trim();
+                impactFactor = $(cells[5]).text().trim();
+              } else {
+                // Minimal structure: extract what we can
+                title = $(cells[0]).text().trim();
+                authors = cells.length > 1 ? $(cells[1]).text().trim() : '';
+                journalName = cells.length > 2 ? $(cells[2]).text().trim() : '';
+                year = cells.length > 3 ? $(cells[3]).text().trim() : '';
+                impactFactor = cells.length > 4 ? $(cells[4]).text().trim() : '';
+              }
+
+              if (title && title !== 'Title' && title !== 'S.No' && !isNaN(title) === false) {
                 data.push({
                   title: title,
                   authors: authors || '',
@@ -968,34 +1008,67 @@ class FacultyDataScraper {
     if (patentsTab.length) {
       patentsTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+        const tableText = $(table).text().toLowerCase();
+        console.log(`Non-UGC table ${tableIndex} headers:`, headers);
 
-        // Check if this is Non-UGC papers table (Table 4) - similar structure to UGC but different context
+        // More specific Non-UGC papers detection
+        const hasExplicitNonUGC = tableText.includes('non ugc') || tableText.includes('non-ugc');
+        const hasUGCApproved = tableText.includes('ugc approved') || tableText.includes('ugc journal');
+        const hasPeerReviewedWithoutUGC = tableText.includes('peer reviewed') && !tableText.includes('ugc');
+        
+        console.log(`Non-UGC Table ${tableIndex} analysis:`);
+        console.log(`- Has explicit Non-UGC: ${hasExplicitNonUGC}`);
+        console.log(`- Has UGC approved: ${hasUGCApproved}`);
+        console.log(`- Has peer reviewed without UGC: ${hasPeerReviewedWithoutUGC}`);
+        console.log(`- Table text snippet: "${tableText.substring(0, 100)}..."`);
+
         const isNonUGCTable = 
-          headers.some(h => h.toLowerCase().includes('title')) &&
-          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
-          headers.some(h => h.toLowerCase().includes('journal name')) &&
-          headers.some(h => h.toLowerCase().includes('volume') && h.toLowerCase().includes('issue')) &&
-          headers.some(h => h.toLowerCase().includes('impact factor')) &&
-          (tableIndex > 2 || // Likely after UGC table
-           $(table).prevAll().text().toLowerCase().includes('non ugc') ||
-           $(table).prev('h3, h4, h5').text().toLowerCase().includes('non ugc'));
+          hasExplicitNonUGC || // Explicit non-ugc mention
+          hasPeerReviewedWithoutUGC || // Peer reviewed but not UGC
+          (tableIndex === 3 && !hasUGCApproved && // Fourth table, not UGC approved
+           headers.some(h => h.toLowerCase().includes('title')) &&
+           headers.some(h => h.toLowerCase().includes('authors')) &&
+           headers.some(h => h.toLowerCase().includes('journal')));
 
-        if (isNonUGCTable && headers.length >= 6) {
-          console.log(`Found Non-UGC papers table (index: ${tableIndex})`);
-          
+        console.log(`Non-UGC Table ${tableIndex} decision: ${isNonUGCTable ? 'PROCESS' : 'SKIP'}`);
+
+        if (isNonUGCTable && headers.length >= 5 && !this.processedTables.has(`ugc_${tableIndex}`)) {
+          console.log(`Processing Non-UGC papers table (index: ${tableIndex})`);
+          this.processedTables.add(`nonugc_${tableIndex}`);
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
-            if (cells.length >= 7) {
-              // Structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
-              const title = $(cells[1]).text().trim();
-              const authors = $(cells[2]).text().trim();
-              const journalName = $(cells[3]).text().trim();
-              const volumeIssuePages = $(cells[4]).text().trim();
-              const year = $(cells[5]).text().trim();
-              const impactFactor = $(cells[6]).text().trim();
+            if (cells.length >= 5) {
+              let title = '', authors = '', journalName = '', volumeIssuePages = '', year = '', impactFactor = '';
 
-              if (title && title !== 'Title') {
+              // Try different column structures
+              if (cells.length >= 7) {
+                // Full structure: S.No | Title | Authors | Journal Name | Volume/Issue/Page | Year | Impact Factor
+                title = $(cells[1]).text().trim();
+                authors = $(cells[2]).text().trim();
+                journalName = $(cells[3]).text().trim();
+                volumeIssuePages = $(cells[4]).text().trim();
+                year = $(cells[5]).text().trim();
+                impactFactor = $(cells[6]).text().trim();
+              } else if (cells.length >= 6) {
+                // Without S.No: Title | Authors | Journal | Volume/Issue | Year | Impact Factor
+                title = $(cells[0]).text().trim();
+                authors = $(cells[1]).text().trim();
+                journalName = $(cells[2]).text().trim();
+                volumeIssuePages = $(cells[3]).text().trim();
+                year = $(cells[4]).text().trim();
+                impactFactor = $(cells[5]).text().trim();
+              } else {
+                // Minimal structure: extract what we can
+                title = $(cells[0]).text().trim();
+                authors = cells.length > 1 ? $(cells[1]).text().trim() : '';
+                journalName = cells.length > 2 ? $(cells[2]).text().trim() : '';
+                year = cells.length > 3 ? $(cells[3]).text().trim() : '';
+                impactFactor = cells.length > 4 ? $(cells[4]).text().trim() : '';
+              }
+
+              if (title && title !== 'Title' && title !== 'S.No' && !isNaN(title) === false) {
                 data.push({
                   title: title,
                   authors: authors || '',
@@ -1025,30 +1098,54 @@ class FacultyDataScraper {
     if (patentsTab.length) {
       patentsTab.find('table').each((tableIndex, table) => {
         const headers = $(table).find('th').map((i, th) => $(th).text().trim()).get();
+        const tableText = $(table).text().toLowerCase();
+        console.log(`Conference table ${tableIndex} headers:`, headers);
 
-        // Check if this is conference papers table (Table 5)
+        // More flexible conference papers detection
         const isConferenceTable = 
-          headers.some(h => h.toLowerCase().includes('title')) &&
-          headers.some(h => h.toLowerCase().includes('authors') && h.toLowerCase().includes('order')) &&
-          headers.some(h => h.toLowerCase().includes('conference') && h.toLowerCase().includes('publication')) &&
-          headers.some(h => h.toLowerCase().includes('page nos')) &&
-          !headers.some(h => h.toLowerCase().includes('impact factor')); // Key difference from journal papers
+          tableIndex === 4 || // Fifth table in patents tab
+          tableText.includes('conference') ||
+          tableText.includes('proceedings') ||
+          (headers.some(h => h.toLowerCase().includes('title')) &&
+           headers.some(h => h.toLowerCase().includes('authors')) &&
+           (headers.some(h => h.toLowerCase().includes('conference')) || 
+            headers.some(h => h.toLowerCase().includes('proceedings')) ||
+            headers.some(h => h.toLowerCase().includes('page')) &&
+            !headers.some(h => h.toLowerCase().includes('impact factor')))); // Key difference from journal papers
 
-        if (isConferenceTable && headers.length >= 5) {
-          console.log(`Found conference papers table (index: ${tableIndex})`);
-          
+        if (isConferenceTable && headers.length >= 4) {
+          console.log(`Processing conference papers table (index: ${tableIndex})`);
+
           $(table).find('tr').slice(1).each((rowIndex, row) => {
             const cells = $(row).find('td');
 
-            if (cells.length >= 6) {
-              // Structure: S.No | Title | Authors | Conference Details | Page Nos | Year
-              const title = $(cells[1]).text().trim();
-              const authors = $(cells[2]).text().trim();
-              const conferenceDetails = $(cells[3]).text().trim();
-              const pageNos = $(cells[4]).text().trim();
-              const year = $(cells[5]).text().trim();
+            if (cells.length >= 4) {
+              let title = '', authors = '', conferenceDetails = '', pageNos = '', year = '';
 
-              if (title && title !== 'Title') {
+              // Try different column structures
+              if (cells.length >= 6) {
+                // Full structure: S.No | Title | Authors | Conference Details | Page Nos | Year
+                title = $(cells[1]).text().trim();
+                authors = $(cells[2]).text().trim();
+                conferenceDetails = $(cells[3]).text().trim();
+                pageNos = $(cells[4]).text().trim();
+                year = $(cells[5]).text().trim();
+              } else if (cells.length >= 5) {
+                // Without S.No: Title | Authors | Conference Details | Page Nos | Year
+                title = $(cells[0]).text().trim();
+                authors = $(cells[1]).text().trim();
+                conferenceDetails = $(cells[2]).text().trim();
+                pageNos = $(cells[3]).text().trim();
+                year = $(cells[4]).text().trim();
+              } else {
+                // Minimal structure: extract what we can
+                title = $(cells[0]).text().trim();
+                authors = cells.length > 1 ? $(cells[1]).text().trim() : '';
+                conferenceDetails = cells.length > 2 ? $(cells[2]).text().trim() : '';
+                year = cells.length > 3 ? $(cells[3]).text().trim() : '';
+              }
+
+              if (title && title !== 'Title' && title !== 'S.No' && !isNaN(title) === false) {
                 data.push({
                   title: title,
                   authors: authors || '',
