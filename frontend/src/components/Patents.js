@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function Patents() {
   const [patents, setPatents] = useState({
     // Contribution towards Innovation
@@ -50,7 +51,7 @@ function Patents() {
 
     try {
       const response = await fetch(
-        "https://professorpublication-production.up.railway.app/api/professor/patents",
+        getApiUrl("/api/professor/patents"),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,7 +79,7 @@ function Patents() {
       }
 
       // Send patents data directly to backend for immediate saving
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/patents", {
+      const response = await fetch(getApiUrl("/api/professor/patents"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

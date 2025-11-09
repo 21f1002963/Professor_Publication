@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function Fellowship() {
   const [fellowships, setFellowships] = useState({
     fellowship_details: [
@@ -27,7 +28,7 @@ function Fellowship() {
       }
 
       // Send fellowship data to backend
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/fellowship", {
+      const response = await fetch(getApiUrl("/api/professor/fellowship"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +114,7 @@ function Fellowship() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/fellowship", {
+        const response = await fetch(getApiUrl("/api/professor/fellowship"), {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import LoadingSpinner from './LoadingSpinner';
 
+import { getApiUrl } from '../config/api';
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDesignation, setuserDesignation] = useState('Assistant Professor');
@@ -63,7 +64,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      const response = await fetch('https://professorpublication-production.up.railway.app/api/professor/profile', {
+      const response = await fetch(getApiUrl("/api/professor/profile"), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -91,7 +92,7 @@ function Dashboard() {
     if (!token) return;
 
     try {
-      const response = await fetch('https://professorpublication-production.up.railway.app/api/faculty', {
+      const response = await fetch(getApiUrl("/api/faculty"), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -126,7 +127,7 @@ function Dashboard() {
     try {
       // Fetch incoming requests count
       const incomingResponse = await fetch(
-        'https://professorpublication-production.up.railway.app/api/access-requests/incoming',
+        getApiUrl("/api/access-requests/incoming"),
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -140,7 +141,7 @@ function Dashboard() {
 
       // Fetch outgoing requests count
       const outgoingResponse = await fetch(
-        'https://professorpublication-production.up.railway.app/api/access-requests/outgoing',
+        getApiUrl("/api/access-requests/outgoing"),
         {
           headers: { Authorization: `Bearer ${token}` }
         }

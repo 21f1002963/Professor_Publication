@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Professor = require('./Professor');
 const scraperRoutes = require('./routes/scraperRoutes');
+const scraperIntegrationRoutes = require('./routes/scraperIntegrationRoutes');
 require('dotenv').config();
 const { TOKEN } = process.env;
 const { MONGO_URI } = process.env;
@@ -121,6 +122,9 @@ app.post('/api/scraper/faculty', async (req, res) => {
 
 // Scraper routes (authentication required)
 app.use('/api/scraper', authenticateToken, scraperRoutes);
+
+// Scraper Integration routes (authentication required)
+app.use('/api/integration', authenticateToken, scraperIntegrationRoutes);
 
 // Register Professor/HOD
 app.post('/signup', async (req, res) => {
@@ -447,10 +451,20 @@ app.get('/api/professor/publications', authenticateToken, async (req, res) => {
             }));
         };
 
-        // Return publications data with conditional sensitive data
+        // Return publications data with field names that match frontend expectations
         const publicationsData = {
             name: professor.name,
             email: professor.email,
+            // Frontend expects these specific field names
+            ugcPapers: sanitizePublications([
+                ...(professor.ugc_papers || []),
+                ...(professor.ugc_approved_journals || [])
+            ]),
+            nonUgcPapers: sanitizePublications([
+                ...(professor.non_ugc_papers || []),
+                ...(professor.non_ugc_journals || [])
+            ]),
+            // Legacy fields for backward compatibility
             seie_journals: sanitizePublications(professor.seie_journals || []),
             ugc_approved_journals: sanitizePublications(professor.ugc_approved_journals || []),
             non_ugc_journals: sanitizePublications(professor.non_ugc_journals || []),
@@ -1912,6 +1926,58 @@ app.get('/api/publication-access/:facultyId/:publicationType/:publicationIndex',
         res.status(403).json({ message: 'Access denied', hasAccess: false });
     } catch (error) {
         console.error('Error checking publication access:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// =============================================================================
+// DATA REFRESH NOTIFICATION ENDPOINT
+// =============================================================================
+
+// Get data refresh timestamp - used by frontend to check for updates
+app.get('/api/professor/data-status', authenticateToken, async (req, res) => {
+    try {
+        const professor = await Professor.findById(req.user.id).select('last_scraped data_source node_id');
+        if (!professor) {
+            return res.status(404).json({ message: 'Professor not found' });
+        }
+
+        res.status(200).json({
+            last_scraped: professor.last_scraped || null,
+            data_source: professor.data_source || 'manual',
+            node_id: professor.node_id || null,
+            has_scraped_data: professor.data_source === 'web_scraping' || professor.data_source === 'hybrid',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error fetching data status:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Notify frontend about successful data update (called after profile updates)
+app.post('/api/professor/refresh-notification', authenticateToken, async (req, res) => {
+    try {
+        const { updateType } = req.body; // 'scraped', 'manual', 'integration'
+        
+        // Update the professor's last refresh timestamp
+        await Professor.findByIdAndUpdate(
+            req.user.id,
+            { 
+                last_refresh_notification: new Date(),
+                last_update_type: updateType || 'manual'
+            },
+            { new: true }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Refresh notification sent',
+            timestamp: new Date().toISOString(),
+            updateType
+        });
+    } catch (error) {
+        console.error('Error sending refresh notification:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import RefreshNotification from './RefreshNotification';
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -321,6 +322,9 @@ function Layout({ children }) {
 
         {children}
       </div>
+      
+      {/* Refresh Notification */}
+      <RefreshNotification />
     </div>
   );
 }

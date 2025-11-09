@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
 import LoadingSpinner from './LoadingSpinner';
 
+import { getApiUrl } from '../config/api';
 function Report() {
   const [currentUser, setCurrentUser] = useState({});
   const [facultyData, setFacultyData] = useState({});
@@ -59,7 +60,7 @@ function Report() {
 
     try {
       setLoading(true);
-      const response = await fetch('https://professorpublication-production.up.railway.app/api/professor/profile', {
+      const response = await fetch(getApiUrl("/api/professor/profile"), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

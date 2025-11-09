@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
+import { getApiUrl } from '../config/api';
 
 const FacultyManagement = () => {
   const [faculty, setFaculty] = useState([]);
@@ -13,7 +14,7 @@ const FacultyManagement = () => {
   const fetchFaculty = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://professorpublication-production.up.railway.app/api/faculty', {
+      const response = await fetch(getApiUrl('/api/faculty'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

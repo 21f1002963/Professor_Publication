@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
 import LoadingSpinner from './LoadingSpinner';
 
+import { getApiUrl } from '../config/api';
 function RequestPublications() {
   const { facultyId } = useParams();
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ function RequestPublications() {
 
       // First, get all faculty to find the specific faculty member
       const facultyListResponse = await fetch(
-        'https://professorpublication-production.up.railway.app/api/faculty',
+        getApiUrl("/api/faculty"),
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -112,7 +113,7 @@ function RequestPublications() {
     try {
       const promises = selectedPublications.map(async (selectedPub) => {
         const response = await fetch(
-          'https://professorpublication-production.up.railway.app/api/access-request',
+          getApiUrl("/api/access-request"),
           {
             method: 'POST',
             headers: {

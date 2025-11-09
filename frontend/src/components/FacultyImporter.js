@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import { getApiUrl } from '../config/api';
+import { useRefreshTrigger } from '../hooks/useDataRefresh';
 
 const FacultyImporter = () => {
   const [nodeId, setNodeId] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [backendStatus, setBackendStatus] = useState('checking');
+  const { triggerRefresh, triggerRefreshAfterSuccess } = useRefreshTrigger();
 
   // State for managing table visibility
   const [tableVisibility, setTableVisibility] = useState({
@@ -158,6 +160,109 @@ const FacultyImporter = () => {
     }
   };
 
+  const handleUpdateDatabase = async () => {
+    if (!nodeId) {
+      setResult({
+        success: false,
+        error: 'Please enter a Node ID first'
+      });
+      return;
+    }
+
+    setLoading(true);
+    setResult(null);
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Please login first to update the database. Go to Login page to authenticate.');
+      }
+
+      const apiUrl = getApiUrl('/api/integration/faculty/' + nodeId);
+      console.log('Sending update request to:', apiUrl);
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          updateStrategy: 'merge', // Use merge strategy to preserve existing data
+          mergeOptions: {
+            arrayMergeStrategy: 'smart_merge',
+            conflictResolution: 'manual'
+          }
+        })
+      });
+
+      console.log('Update response status:', response.status);
+
+      if (!response.ok) {
+        let errorMessage;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || `HTTP error! status: ${response.status}`;
+        } catch {
+          errorMessage = `HTTP error! status: ${response.status}`;
+        }
+        
+        if (response.status === 401) {
+          errorMessage = 'Authentication failed. Please login again.';
+        } else if (response.status === 403) {
+          errorMessage = 'Access denied. Please check your login credentials.';
+        } else if (response.status === 404) {
+          errorMessage = 'Faculty data not found for this Node ID.';
+        } else if (response.status === 500) {
+          errorMessage = 'Server error. Please try again later.';
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      console.log('Update response data:', data);
+
+      if (data.success) {
+        setResult({
+          success: true,
+          updated: true,
+          nodeId,
+          message: data.message || 'Faculty data successfully updated in database',
+          recordId: data.recordId,
+          mergeStats: data.mergeStats
+        });
+
+        // 🔄 Trigger automatic refresh of all relevant components
+        console.log('✅ Profile update successful, triggering refresh...');
+        
+        // Check if backend provided refresh instructions
+        if (data.refreshRequired && data.refreshPages) {
+          console.log('📋 Backend requested refresh for:', data.refreshPages);
+          triggerRefresh(data);
+        } else {
+          // Default refresh for key pages
+          triggerRefreshAfterSuccess(['experience', 'publications', 'books', 'patents', 'profile']);
+        }
+      } else {
+        setResult({
+          success: false,
+          nodeId,
+          error: data.message || 'Failed to update faculty data in database'
+        });
+      }
+    } catch (error) {
+      console.error('Database update failed:', error);
+      setResult({
+        success: false,
+        nodeId,
+        error: 'Update error: ' + error.message
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div
@@ -202,17 +307,46 @@ const FacultyImporter = () => {
           }}>
             <h3 style={{
               color: '#2c3e50',
-              marginBottom: '25px',
+              marginBottom: '15px',
               fontSize: '1.5rem',
               fontWeight: '700'
             }}>
-              Import Faculty Data
+              Faculty Data Management
             </h3>
+            
+            <div style={{
+              backgroundColor: '#e8f4fd',
+              border: '1px solid #bee5eb',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '25px',
+              textAlign: 'center'
+            }}>
+              <p style={{ 
+                margin: '0 0 10px 0',
+                fontSize: '16px',
+                color: '#0c5460',
+                fontWeight: '600'
+              }}>
+                📝 <strong>Update My Profile:</strong> Enter a faculty Node ID and click "Update My Profile" 
+                to add their academic data to your current profile.
+              </p>
+              <p style={{ 
+                margin: 0,
+                fontSize: '14px',
+                color: '#0c5460',
+                opacity: 0.8
+              }}>
+                Your email and login credentials will remain unchanged. Only academic data (publications, experience, etc.) will be added.
+              </p>
+            </div>
+            
             <div style={{
               display: 'flex',
               gap: '20px',
               alignItems: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
               <input
                 type="text"
@@ -247,6 +381,34 @@ const FacultyImporter = () => {
                 }}
               >
                 {loading ? 'Importing...' : 'Import Faculty'}
+              </button>
+
+              <button
+                onClick={handleUpdateDatabase}
+                disabled={loading || !nodeId}
+                style={{
+                  padding: '18px 36px',
+                  backgroundColor: loading || !nodeId ? '#95a5a6' : '#3498db',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  cursor: loading || !nodeId ? 'not-allowed' : 'pointer',
+                  fontWeight: '700',
+                  fontSize: '16px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  if (!loading && nodeId) {
+                    e.target.style.backgroundColor = '#2980b9';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (!loading && nodeId) {
+                    e.target.style.backgroundColor = '#3498db';
+                  }
+                }}
+              >
+                {loading ? 'Updating My Profile...' : 'Update My Profile'}
               </button>
             </div>
           </div>
@@ -286,9 +448,50 @@ const FacultyImporter = () => {
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
               }}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '1.2rem' }}>
-                  {result.success ? 'Import Successful' : 'Import Failed'}
+                  {result.success ?
+                    (result.updated ? 'Your Profile Updated Successfully! 🎉' : 'Import Successful') :
+                    (result.updated ? 'Profile Update Failed' : 'Import Failed')
+                  }
                 </h4>
                 <p style={{ margin: '5px 0' }}><strong>Node ID:</strong> {result.nodeId}</p>
+                {result.updated && result.success && (
+                  <div style={{ marginTop: '10px' }}>
+                    <p style={{ margin: '5px 0', fontWeight: '600' }}>✅ {result.message}</p>
+                    <div style={{ 
+                      backgroundColor: '#d1ecf1', 
+                      border: '1px solid #bee5eb',
+                      borderRadius: '8px',
+                      padding: '15px',
+                      marginTop: '10px'
+                    }}>
+                      <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#0c5460' }}>
+                        📄 Your profile has been updated! You can now view the data at:
+                      </p>
+                      <div style={{ fontSize: '14px', color: '#0c5460' }}>
+                        • <a href="/experience" style={{color: '#0c5460'}}>Experience Page</a> - Teaching, research & industry experience<br/>
+                        • <a href="/publications" style={{color: '#0c5460'}}>Publications Page</a> - Papers, journals & conference proceedings<br/>
+                        • <a href="/books" style={{color: '#0c5460'}}>Books Page</a> - Authored & edited books<br/>
+                        • <a href="/profile" style={{color: '#0c5460'}}>Profile Page</a> - Complete academic profile
+                      </div>
+                    </div>
+                    {result.recordId && (
+                      <p style={{ margin: '5px 0' }}><strong>Record ID:</strong> {result.recordId}</p>
+                    )}
+                    {result.mergeStats && (
+                      <div style={{ marginTop: '10px', fontSize: '0.9rem' }}>
+                        <p style={{ margin: '2px 0' }}><strong>Merge Statistics:</strong></p>
+                        {Object.entries(result.mergeStats).map(([field, stats]) => (
+                          <p key={field} style={{ margin: '2px 0', paddingLeft: '10px' }}>
+                            • {field}: {stats.added || 0} added, {stats.updated || 0} updated, {stats.skipped || 0} skipped
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {result.error && (
+                  <p style={{ margin: '10px 0 0 0', fontWeight: '600' }}>❌ {result.error}</p>
+                )}
                 {result.success ? (
                   <div>
                     {result.data && (

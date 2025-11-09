@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { DataRefreshProvider } from './hooks/useDataRefresh';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
@@ -31,7 +32,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router>
+    <DataRefreshProvider>
+      <Router>
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -144,7 +146,8 @@ root.render(
         <Route path='*' element={<Login />} />
         <Route path='/' element={<Login />} />
       </Routes>
-    </Router>
+      </Router>
+    </DataRefreshProvider>
   </React.StrictMode>
 );
 

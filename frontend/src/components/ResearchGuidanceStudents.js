@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function ResearchGuidanceStudents() {
   const [researchGuidance, setResearchGuidance] = useState({
     pg_guidance: [
@@ -45,7 +46,7 @@ function ResearchGuidanceStudents() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/research-guidance/${userId}`, {
+      const response = await fetch(getApiUrl("/api/professor/research-guidance/${userId}"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +125,7 @@ function ResearchGuidanceStudents() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/research-guidance/${userId}`, {
+        const response = await fetch(getApiUrl("/api/professor/research-guidance/${userId}"), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

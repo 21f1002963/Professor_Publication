@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 import LoadingSpinner from "./LoadingSpinner";
+import { getApiUrl } from "../config/api";
+import { useComponentRefresh } from "../hooks/useDataRefresh";
 
 function Publications() {
   const [currentUser, setCurrentUser] = useState({});
@@ -81,7 +83,7 @@ function Publications() {
 
     try {
       const response = await fetch(
-        "https://professorpublication-production.up.railway.app/api/access-request",
+        getApiUrl("/api/access-request"),
         {
           method: "POST",
           headers: {
@@ -194,7 +196,7 @@ function Publications() {
     }
   };
 
-  const fetchPublications = async () => {
+  const fetchPublications = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       setLoading(false);
@@ -202,8 +204,9 @@ function Publications() {
     }
 
     try {
+      console.log('🔄 Fetching publications data...');
       setLoading(true);
-      let url = "https://professorpublication-production.up.railway.app/api/professor/publications";
+      let url = getApiUrl("/api/professor/publications");
 
       // If viewing someone else's profile, fetch their publications
       if (targetFacultyId && !isOwnProfile) {
@@ -218,6 +221,9 @@ function Publications() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('🔍 Publications API Response:', data);
+        console.log('UGC Papers Count:', data.ugcPapers?.length || 0);
+        console.log('Non-UGC Papers Count:', data.nonUgcPapers?.length || 0);
 
         // Convert legacy data to new format if needed
         let papersPublished = data.papers_published || [];
@@ -289,7 +295,10 @@ function Publications() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [targetFacultyId, isOwnProfile]);
+
+  // Register this component for automatic refresh
+  useComponentRefresh('publications', fetchPublications);
 
   const handleFileUpload = (arrayName, index, file) => {
     const reader = new FileReader();
@@ -312,7 +321,7 @@ function Publications() {
       }
 
       // Send publications data directly to backend for immediate saving
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/publications", {
+      const response = await fetch(getApiUrl('/api/professor/publications'), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

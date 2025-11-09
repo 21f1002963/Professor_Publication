@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import Layout from './Layout';
 import LoadingSpinner from './LoadingSpinner';
 import { useApiLoading } from '../hooks/useApiLoading';
+import { getApiUrl } from '../config/api';
 
 function AccessRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
@@ -24,7 +25,7 @@ function AccessRequests() {
 
             // Fetch incoming requests
             const incomingResponse = await fetch(
-                'https://professorpublication-production.up.railway.app/api/access-requests/incoming',
+                getApiUrl('/api/access-requests/incoming'),
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -37,7 +38,7 @@ function AccessRequests() {
 
             // Fetch outgoing requests
             const outgoingResponse = await fetch(
-                'https://professorpublication-production.up.railway.app/api/access-requests/outgoing',
+                getApiUrl('/api/access-requests/outgoing'),
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -62,7 +63,7 @@ function AccessRequests() {
             if (!token) throw new Error('No authentication token found');
 
             const response = await fetch(
-                `https://professorpublication-production.up.railway.app/api/access-request/${requestId}/respond`,
+                getApiUrl(`/api/access-request/${requestId}/respond`),
                 {
                     method: 'PUT',
                     headers: {

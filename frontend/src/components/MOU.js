@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function MOU() {
   const [mou, setMou] = useState({
     functional_mous: [
@@ -36,7 +37,7 @@ function MOU() {
   const fetchMouData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/mou", {
+      const response = await fetch(getApiUrl("/api/professor/mou"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,7 +56,7 @@ function MOU() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/mou", {
+      const response = await fetch(getApiUrl("/api/professor/mou"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function ParticipationCollaboration() {
     const [participationData, setParticipationData] = useState({
         participation_extension_academic: [
@@ -41,7 +42,7 @@ function ParticipationCollaboration() {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.id;
 
-            const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/participation-collaboration/${userId}`, {
+            const response = await fetch(getApiUrl("/api/professor/participation-collaboration/${userId}"), {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -116,7 +117,7 @@ function ParticipationCollaboration() {
                 const decodedToken = jwtDecode(token);
                 const userId = decodedToken.id;
 
-                const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/participation-collaboration/${userId}`, {
+                const response = await fetch(getApiUrl("/api/professor/participation-collaboration/${userId}"), {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,

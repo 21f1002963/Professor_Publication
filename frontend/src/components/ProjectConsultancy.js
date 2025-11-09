@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function ProjectConsultancy() {
   const [projectConsultancy, setProjectConsultancy] = useState({
     ongoing_projects: [
@@ -59,7 +60,7 @@ function ProjectConsultancy() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/project-consultancy/${userId}`, {
+      const response = await fetch(getApiUrl("/api/professor/project-consultancy/${userId}"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +149,7 @@ function ProjectConsultancy() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/project-consultancy/${userId}`, {
+        const response = await fetch(getApiUrl("/api/professor/project-consultancy/${userId}"), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

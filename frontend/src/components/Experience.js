@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
+import { getApiUrl } from "../config/api";
+import { useComponentRefresh } from "../hooks/useDataRefresh";
 
 function Experience() {
   const [experience, setExperience] = useState({
@@ -56,13 +58,14 @@ function Experience() {
     fetchExperience();
   }, []);
 
-  const fetchExperience = async () => {
+  const fetchExperience = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
+      console.log('🔄 Fetching experience data...');
       const response = await fetch(
-        "https://professorpublication-production.up.railway.app/api/professor/experience",
+        getApiUrl("/api/professor/experience"),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,12 +75,20 @@ function Experience() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('🔍 Experience API Response:', data);
+        console.log('Teaching Experience Count:', data.teaching_experience?.length || 0);
+        console.log('Research Experience Count:', data.research_experience?.length || 0);
         setExperience(data);
+      } else {
+        console.error('❌ Experience API Failed:', response.status, response.statusText);
       }
     } catch (error) {
       console.error("Error fetching experience:", error);
     }
-  };
+  }, []);
+
+  // Register this component for automatic refresh
+  useComponentRefresh('experience', fetchExperience);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +101,7 @@ function Experience() {
       }
 
       // Send experience data directly to backend for immediate saving
-      const response = await fetch("https://professorpublication-production.up.railway.app/api/professor/experience", {
+      const response = await fetch(getApiUrl("/api/professor/experience"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./Layout";
 
+import { getApiUrl } from '../config/api';
 function EEducation() {
   const [eEducation, setEEducation] = useState({
     e_lecture_details: [
@@ -32,7 +33,7 @@ function EEducation() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/e-education/${userId}`, {
+      const response = await fetch(getApiUrl("/api/professor/e-education/${userId}"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +101,7 @@ function EEducation() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(`https://professorpublication-production.up.railway.app/api/professor/e-education/${userId}`, {
+        const response = await fetch(getApiUrl("/api/professor/e-education/${userId}"), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
