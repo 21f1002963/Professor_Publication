@@ -42,7 +42,7 @@ function ParticipationCollaboration() {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.id;
 
-            const response = await fetch(getApiUrl("/api/professor/participation-collaboration/${userId}"), {
+            const response = await fetch(getApiUrl(`/api/professor/participation-collaboration/${userId}`), {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -117,7 +117,7 @@ function ParticipationCollaboration() {
                 const decodedToken = jwtDecode(token);
                 const userId = decodedToken.id;
 
-                const response = await fetch(getApiUrl("/api/professor/participation-collaboration/${userId}"), {
+                const response = await fetch(getApiUrl(`/api/professor/participation-collaboration/${userId}`), {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,

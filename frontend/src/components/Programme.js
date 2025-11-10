@@ -53,7 +53,7 @@ function Programme() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(getApiUrl("/api/professor/programme/${userId}"), {
+      const response = await fetch(getApiUrl(`/api/professor/programme/${userId}`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ function Programme() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(getApiUrl("/api/professor/programme/${userId}"), {
+        const response = await fetch(getApiUrl(`/api/professor/programme/${userId}`), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

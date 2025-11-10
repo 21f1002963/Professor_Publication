@@ -84,7 +84,7 @@ async function testConferenceDataUpdate() {
       pg_guidance: transformedData.pg_guidance || [],
       phd_guidance: transformedData.phd_guidance || [],
       postdoc_guidance: transformedData.postdoc_guidance || [],
-      
+
       // Meta information
       node_id: nodeId,
       data_source: currentUser.data_source === 'manual' ? 'hybrid' : 'web_scraping',

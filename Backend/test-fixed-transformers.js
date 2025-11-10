@@ -16,7 +16,7 @@ const DataTransformer = require('./utils/dataTransformer');
 async function reTransformConferenceData() {
     try {
         console.log('🔄 Re-transforming conference data with fixed field mappings...\n');
-        
+
         // This simulates the scraped data structure based on our previous integration output
         const mockScrapedData = {
             conferences_seminars: {
@@ -82,17 +82,17 @@ async function reTransformConferenceData() {
                 ]
             }
         };
-        
+
         console.log('🧪 Testing transformation with sample data...');
-        
+
         // Transform the data using our fixed transformers
         const transformedData = DataTransformer.transformScrapedData(mockScrapedData);
-        
+
         console.log('\n📊 TRANSFORMED DATA PREVIEW:');
         console.log(`   Invited Talks: ${transformedData.invited_talks.length}`);
         console.log(`   Organized Conferences/Workshops: ${transformedData.conferences_seminars_workshops_organized.length}`);
         console.log(`   Participated: ${transformedData.conferences_seminars_workshops_participated.length}\n`);
-        
+
         if (transformedData.invited_talks.length > 0) {
             console.log('🔍 Sample Transformed Invited Talk:');
             const talk = transformedData.invited_talks[0];
@@ -102,7 +102,7 @@ async function reTransformConferenceData() {
             console.log(`   Level: "${talk.level}"`);
             console.log(`   Year: "${talk.year}"\n`);
         }
-        
+
         if (transformedData.conferences_seminars_workshops_organized.length > 0) {
             console.log('🔍 Sample Transformed Organized Conference:');
             const conf = transformedData.conferences_seminars_workshops_organized[0];
@@ -112,11 +112,11 @@ async function reTransformConferenceData() {
             console.log(`   Level: "${conf.level}"`);
             console.log(`   Year: "${conf.year}"\n`);
         }
-        
+
         console.log('✅ Transformation test completed!');
         console.log('📝 The fixed transformers now correctly map all fields');
         console.log('🔄 Need to re-run the integration to apply these fixes to database');
-        
+
     } catch (error) {
         console.error('❌ Test failed:', error);
     } finally {

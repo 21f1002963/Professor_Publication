@@ -1015,7 +1015,7 @@ function Profile() {
     try {
       console.log('Attempting to fetch profile for professor ID:', professorId);
       const response = await fetch(
-        getApiUrl("/api/professor/profile/${professorId}"),
+        getApiUrl(`/api/professor/profile/${professorId}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1049,17 +1049,17 @@ function Profile() {
     try {
       // Fetch all data endpoints for comprehensive profile view
       const endpoints = [
-        { name: 'experience', url: getApiUrl("/api/professor/experience/${professorId}"), setter: setExperienceData },
-        { name: 'publications', url: getApiUrl("/api/professor/publications/${professorId}"), setter: setPublicationsData },
-        { name: 'patents', url: getApiUrl("/api/professor/patents/${professorId}"), setter: setPatentsData },
-        { name: 'fellowship', url: getApiUrl("/api/professor/fellowship/${professorId}"), setter: setFellowshipData },
-        { name: 'books', url: getApiUrl("/api/professor/books/${professorId}"), setter: setBooksData },
-        { name: 'research', url: getApiUrl("/api/professor/research-guidance/${professorId}"), setter: setResearchData },
-        { name: 'projects', url: getApiUrl("/api/professor/project-consultancy/${professorId}"), setter: setProjectData },
-        { name: 'education', url: getApiUrl("/api/professor/e-education/${professorId}"), setter: setEducationData },
-        { name: 'conferences', url: getApiUrl("/api/professor/conference-seminar-workshop/${professorId}"), setter: setConferenceData },
-        { name: 'participation', url: getApiUrl("/api/professor/participation-collaboration/${professorId}"), setter: setParticipationData },
-        { name: 'programmes', url: getApiUrl("/api/professor/programme/${professorId}"), setter: setProgrammeData }
+        { name: 'experience', url: getApiUrl(`/api/professor/experience/${professorId}`), setter: setExperienceData },
+        { name: 'publications', url: getApiUrl(`/api/professor/publications/${professorId}`), setter: setPublicationsData },
+        { name: 'patents', url: getApiUrl(`/api/professor/patents/${professorId}`), setter: setPatentsData },
+        { name: 'fellowship', url: getApiUrl(`/api/professor/fellowship/${professorId}`), setter: setFellowshipData },
+        { name: 'books', url: getApiUrl(`/api/professor/books/${professorId}`), setter: setBooksData },
+        { name: 'research', url: getApiUrl(`/api/professor/research-guidance/${professorId}`), setter: setResearchData },
+        { name: 'projects', url: getApiUrl(`/api/professor/project-consultancy/${professorId}`), setter: setProjectData },
+        { name: 'education', url: getApiUrl(`/api/professor/e-education/${professorId}`), setter: setEducationData },
+        { name: 'conferences', url: getApiUrl(`/api/professor/conference-seminar-workshop/${professorId}`), setter: setConferenceData },
+        { name: 'participation', url: getApiUrl(`/api/professor/participation-collaboration/${professorId}`), setter: setParticipationData },
+        { name: 'programmes', url: getApiUrl(`/api/professor/programme/${professorId}`), setter: setProgrammeData }
       ];
 
       for (const endpoint of endpoints) {

@@ -150,7 +150,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
           // Fix missing conference field
           if (!talk.conferences_seminar_workshop_training || talk.conferences_seminar_workshop_training.trim() === '') {
             let conferenceName = '';
-            
+
             if (talk.title_of_paper?.toLowerCase().includes('cloud')) {
               if (talk.level === 'International') conferenceName = 'International Conference on Cloud Computing and Technology';
               else if (talk.level === 'National') conferenceName = 'National Workshop on Cloud Computing';
@@ -166,14 +166,14 @@ router.post('/faculty/:nodeId', async (req, res) => {
               else if (talk.level === 'National') conferenceName = 'National Conference on Information Technology';
               else conferenceName = 'Regional Workshop on Technology and Innovation';
             }
-            
+
             talk.conferences_seminar_workshop_training = conferenceName;
           }
-          
+
           // Fix missing organized by field
           if (!talk.organized_by || talk.organized_by.trim() === '') {
             let organizer = '';
-            
+
             if (talk.level === 'International') {
               organizer = 'IEEE India / International Academic Consortium';
             } else if (talk.level === 'National') {
@@ -183,7 +183,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
             } else {
               organizer = 'Academic Institution';
             }
-            
+
             talk.organized_by = organizer;
           }
         });
@@ -194,7 +194,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
         data.conferences_seminars_workshops_organized.forEach(conf => {
           if (!conf.title_of_programme || conf.title_of_programme.trim() === '') {
             let title = '';
-            
+
             if (conf.sponsors?.toLowerCase().includes('tcs') || conf.sponsors?.toLowerCase().includes('tata consultancy')) {
               if (conf.venue_duration?.toLowerCase().includes('banking')) {
                 title = 'TCS Banking Technology Program';
@@ -232,7 +232,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
                 title = `Conference on Technology and Innovation ${conf.year}`;
               }
             }
-            
+
             conf.title_of_programme = title;
           }
         });

@@ -35,7 +35,7 @@ When a user enters Faculty Node ID **941** and clicks **"Update My Profile"**, t
 ### ✅ **Invited Talks in Conference/Seminar/Workshop/Training Programme** (12 items)
 - **Title of the Paper**: ✅ Complete
 - **Conferences/Seminar/Workshop/Training Programme**: ✅ Auto-populated
-- **Organized by**: ✅ Auto-populated  
+- **Organized by**: ✅ Auto-populated
 - **Level**: ✅ Complete
 - **Year**: ✅ Complete
 
