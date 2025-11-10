@@ -138,7 +138,7 @@ class DataTransformer {
       return {
         position: exp.designation || '',        // designation -> position
         organization: exp.institution || '',    // institution -> organization
-        project: '',                           // Not available in scraped data
+        project: exp.areaOfResearch || '',      // areaOfResearch -> project
         from: dateRange.from,
         to: dateRange.to
       };

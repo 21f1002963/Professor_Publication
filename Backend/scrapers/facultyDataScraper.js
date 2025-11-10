@@ -603,18 +603,18 @@ class FacultyDataScraper {
 
             if (cells.length >= 3) {
               const firstCol = $(cells[0]).text().trim();
-              let designation = '', department = '', institution = '', duration = '';
+              let designation = '', department = '', institution = '', areaOfResearch = '';
 
               if (isNaN(firstCol)) { // Not S.No
                 designation = $(cells[0]).text().trim();
                 department = $(cells[1]).text().trim();
                 institution = $(cells[2]).text().trim();
-                duration = cells.length > 3 ? $(cells[3]).text().trim() : '';
+                areaOfResearch = cells.length > 3 ? $(cells[3]).text().trim() : '';
               } else { // Has S.No
                 designation = $(cells[1]).text().trim();
                 department = $(cells[2]).text().trim();
                 institution = $(cells[3]).text().trim();
-                duration = cells.length > 4 ? $(cells[4]).text().trim() : '';
+                areaOfResearch = cells.length > 4 ? $(cells[4]).text().trim() : '';
               }
 
               if (designation && institution &&
@@ -625,9 +625,10 @@ class FacultyDataScraper {
                   designation,
                   department: department || '',
                   institution,
-                  duration: duration || ''
+                  areaOfResearch: areaOfResearch || '',
+                  duration: '' // Duration not available in source table
                 });
-                console.log(`Added research experience: ${designation} at ${institution}`);
+                console.log(`Added research experience: ${designation} at ${institution} (${areaOfResearch})`);
               }
             }
           });
