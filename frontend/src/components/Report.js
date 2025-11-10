@@ -517,10 +517,7 @@ function Report() {
       printWindow.document.close();
       printWindow.focus();
 
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 250);
+      // No automatic print - user will click the print icon when ready
       return;
     }
 
