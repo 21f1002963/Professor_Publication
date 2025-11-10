@@ -6,7 +6,7 @@ const checkProjectConsultancyData = async () => {
   try {
     console.log('🔄 Checking Project & Consultancy Data');
     console.log('=====================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
@@ -27,7 +27,7 @@ const checkProjectConsultancyData = async () => {
 
     for (const professor of professors) {
       console.log(`\n📋 Professor: ${professor.name}`);
-      
+
       // Check scraped project data (projects array)
       if (professor.projects && professor.projects.length > 0 && professor.projects[0].title) {
         console.log(`  📚 Scraped Projects: ${professor.projects.length}`);
@@ -70,10 +70,10 @@ const checkProjectConsultancyData = async () => {
 
     console.log('\n📊 Summary:');
     console.log(`  Total professors with project/consultancy data: ${professors.length}`);
-    
+
     const scrapedProjectsCount = professors.filter(p => p.projects && p.projects.length > 0 && p.projects[0].title).length;
     const scrapedConsultancyCount = professors.filter(p => p.consultancy_works && p.consultancy_works.length > 0 && p.consultancy_works[0].title).length;
-    
+
     console.log(`  Professors with scraped projects: ${scrapedProjectsCount}`);
     console.log(`  Professors with scraped consultancy: ${scrapedConsultancyCount}`);
 

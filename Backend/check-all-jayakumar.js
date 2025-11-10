@@ -34,7 +34,7 @@ async function checkAllProfessors() {
       console.log(`   Completed projects: ${prof.completed_projects?.length || 0}`);
       console.log(`   Ongoing consultancy: ${prof.ongoing_consultancy_works?.length || 0}`);
       console.log(`   Completed consultancy: ${prof.completed_consultancy_works?.length || 0}`);
-      
+
       // Show actual data for projects if exists
       if (prof.ongoing_projects?.length > 0) {
         console.log(`   First ongoing project title: "${prof.ongoing_projects[0].title_of_project}"`);
@@ -48,7 +48,7 @@ async function checkAllProfessors() {
       if (prof.completed_consultancy_works?.length > 0) {
         console.log(`   First completed consultancy title: "${prof.completed_consultancy_works[0].title_of_consultancy_work}"`);
       }
-      
+
       console.log('');
     });
 

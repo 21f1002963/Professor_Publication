@@ -6,12 +6,12 @@ const inspectProjectData = async () => {
   try {
     console.log('🔍 Inspecting Project Data Structure');
     console.log('===================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
     const professor = await Professor.findOne({ name: 'JAYAKUMAR S.K.V' });
-    
+
     if (!professor) {
       console.log('❌ Professor not found');
       return;

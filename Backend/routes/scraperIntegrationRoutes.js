@@ -180,6 +180,11 @@ router.post('/faculty/:nodeId', async (req, res) => {
       training_programs: transformedData.training_programs || [],
       mou_collaborations: transformedData.mou_collaborations || [],
 
+      // Research Guidance
+      pg_guidance: transformedData.pg_guidance || [],
+      phd_guidance: transformedData.phd_guidance || [],
+      postdoc_guidance: transformedData.postdoc_guidance || [],
+
       // Research areas
       area_of_expertise: transformedData.area_of_expertise || [],
       research_interests: transformedData.research_interests || [],
@@ -219,6 +224,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
       awards: updateData.awards?.length || 0,
       projects: (updateData.ongoing_projects?.length || 0) + (updateData.completed_projects?.length || 0),
       consultancy_works: (updateData.ongoing_consultancy_works?.length || 0) + (updateData.completed_consultancy_works?.length || 0),
+      research_guidance: (updateData.pg_guidance?.length || 0) + (updateData.phd_guidance?.length || 0) + (updateData.postdoc_guidance?.length || 0),
       patents: updateData.patents?.length || 0
     };
 

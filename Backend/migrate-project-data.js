@@ -6,13 +6,13 @@ const migrateProjectData = async () => {
   try {
     console.log('🔄 Migrating Project Data Between Profiles');
     console.log('=========================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
     // Source: Profile with project data (gmail.com)
     const sourceProf = await Professor.findById('691119dd1d472a4405ac5828');
-    // Target: Profile without project data (pondiuni.ac.in) 
+    // Target: Profile without project data (pondiuni.ac.in)
     const targetProf = await Professor.findById('68d399a034fd1c8cf6f5ef47');
 
     if (!sourceProf || !targetProf) {
@@ -32,17 +32,17 @@ const migrateProjectData = async () => {
 
     // Copy project data from source to target
     const updateData = {};
-    
+
     if (sourceProf.ongoing_projects && sourceProf.ongoing_projects.length > 0) {
       updateData.ongoing_projects = sourceProf.ongoing_projects.map(p => p.toObject());
       console.log(`\n✅ Will copy ${updateData.ongoing_projects.length} ongoing projects`);
     }
-    
+
     if (sourceProf.completed_projects && sourceProf.completed_projects.length > 0) {
       updateData.completed_projects = sourceProf.completed_projects.map(p => p.toObject());
       console.log(`✅ Will copy ${updateData.completed_projects.length} completed projects`);
     }
-    
+
     if (sourceProf.completed_consultancy_works && sourceProf.completed_consultancy_works.length > 0) {
       updateData.completed_consultancy_works = sourceProf.completed_consultancy_works.map(p => p.toObject());
       console.log(`✅ Will copy ${updateData.completed_consultancy_works.length} completed consultancy works`);
@@ -51,14 +51,14 @@ const migrateProjectData = async () => {
     if (Object.keys(updateData).length > 0) {
       await Professor.findByIdAndUpdate('68d399a034fd1c8cf6f5ef47', updateData);
       console.log('\n🎉 Project data migration completed successfully!');
-      
+
       // Verify the migration
       const updatedProf = await Professor.findById('68d399a034fd1c8cf6f5ef47');
       console.log('\n📊 Verification - Updated target profile:');
       console.log(`   Ongoing Projects: ${updatedProf.ongoing_projects?.length || 0}`);
       console.log(`   Completed Projects: ${updatedProf.completed_projects?.length || 0}`);
       console.log(`   Completed Consultancy: ${updatedProf.completed_consultancy_works?.length || 0}`);
-      
+
       if (updatedProf.ongoing_projects?.length > 0) {
         console.log(`   Sample ongoing project: ${updatedProf.ongoing_projects[0].title_of_project}`);
       }

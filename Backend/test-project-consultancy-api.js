@@ -6,13 +6,13 @@ const testProjectConsultancyAPI = async () => {
   try {
     console.log('🔄 Testing Project Consultancy API Response');
     console.log('=============================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
     // Find JAYAKUMAR S.K.V who has project data
     const professor = await Professor.findOne({ name: 'JAYAKUMAR S.K.V' }).select('-password');
-    
+
     if (!professor) {
       console.log('❌ Professor not found');
       return;
@@ -41,7 +41,7 @@ const testProjectConsultancyAPI = async () => {
 
     const projectConsultancyData = {
       ongoing_projects: hasActualData(professor.ongoing_projects, 'title_of_project')
-        ? convertToPlainObjects(professor.ongoing_projects) 
+        ? convertToPlainObjects(professor.ongoing_projects)
         : [{
             title_of_project: "",
             sponsored_by: "",
@@ -49,8 +49,8 @@ const testProjectConsultancyAPI = async () => {
             sanctioned_amount: "",
             year: "",
           }],
-      ongoing_consultancy_works: convertToPlainObjects(professor.ongoing_consultancy_works).length > 0 
-        ? convertToPlainObjects(professor.ongoing_consultancy_works) 
+      ongoing_consultancy_works: convertToPlainObjects(professor.ongoing_consultancy_works).length > 0
+        ? convertToPlainObjects(professor.ongoing_consultancy_works)
         : [{
             title_of_consultancy_work: "",
             sponsored_by: "",
@@ -58,8 +58,8 @@ const testProjectConsultancyAPI = async () => {
             sanctioned_amount: "",
             year: "",
           }],
-      completed_projects: convertToPlainObjects(professor.completed_projects).length > 0 
-        ? convertToPlainObjects(professor.completed_projects) 
+      completed_projects: convertToPlainObjects(professor.completed_projects).length > 0
+        ? convertToPlainObjects(professor.completed_projects)
         : [{
             title_of_project: "",
             sponsored_by: "",
@@ -67,8 +67,8 @@ const testProjectConsultancyAPI = async () => {
             sanctioned_amount: "",
             year: "",
           }],
-      completed_consultancy_works: convertToPlainObjects(professor.completed_consultancy_works).length > 0 
-        ? convertToPlainObjects(professor.completed_consultancy_works) 
+      completed_consultancy_works: convertToPlainObjects(professor.completed_consultancy_works).length > 0
+        ? convertToPlainObjects(professor.completed_consultancy_works)
         : [{
             title_of_consultancy_work: "",
             sponsored_by: "",
@@ -76,8 +76,8 @@ const testProjectConsultancyAPI = async () => {
             sanctioned_amount: "",
             year: "",
           }],
-      research_projects_funded: convertToPlainObjects(professor.research_projects_funded).length > 0 
-        ? convertToPlainObjects(professor.research_projects_funded) 
+      research_projects_funded: convertToPlainObjects(professor.research_projects_funded).length > 0
+        ? convertToPlainObjects(professor.research_projects_funded)
         : [{
             pi_name: "",
             project_title: "",

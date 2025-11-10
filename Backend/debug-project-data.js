@@ -14,7 +14,7 @@ async function debugProjectData() {
 
     // Find the professor with node_id 941
     const professor = await Professor.findOne({ node_id: '941' });
-    
+
     if (!professor) {
       console.log('❌ No professor found with node_id 941');
       return;

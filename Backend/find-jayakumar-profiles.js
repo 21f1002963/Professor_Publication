@@ -6,12 +6,12 @@ const findJayakumarProfiles = async () => {
   try {
     console.log('🔍 Finding JAYAKUMAR S.K.V Profiles');
     console.log('==================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
     // Find all professors with JAYAKUMAR name
-    const professors = await Professor.find({ 
+    const professors = await Professor.find({
       name: { $regex: 'JAYAKUMAR', $options: 'i' }
     }).select('_id name email ongoing_projects completed_projects completed_consultancy_works');
 
@@ -24,7 +24,7 @@ const findJayakumarProfiles = async () => {
       console.log(`   Ongoing Projects: ${prof.ongoing_projects?.length || 0}`);
       console.log(`   Completed Projects: ${prof.completed_projects?.length || 0}`);
       console.log(`   Completed Consultancy: ${prof.completed_consultancy_works?.length || 0}`);
-      
+
       // Show data from the one with projects
       if (prof.ongoing_projects && prof.ongoing_projects.length > 0) {
         console.log(`   📚 Ongoing Project Sample: ${prof.ongoing_projects[0].title_of_project}`);

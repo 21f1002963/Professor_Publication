@@ -1036,7 +1036,7 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
         // Return project consultancy data or default structure
         const projectConsultancyData = {
             ongoing_projects: hasActualData(professor.ongoing_projects, 'title_of_project')
-                ? convertToPlainObjects(professor.ongoing_projects) 
+                ? convertToPlainObjects(professor.ongoing_projects)
                 : [{
                     title_of_project: "",
                     sponsored_by: "",
@@ -1045,7 +1045,7 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                     year: "",
                 }],
             ongoing_consultancy_works: hasActualData(professor.ongoing_consultancy_works, 'title_of_consultancy_work')
-                ? convertToPlainObjects(professor.ongoing_consultancy_works) 
+                ? convertToPlainObjects(professor.ongoing_consultancy_works)
                 : [{
                     title_of_consultancy_work: "",
                     sponsored_by: "",
@@ -1054,7 +1054,7 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                     year: "",
                 }],
             completed_projects: hasActualData(professor.completed_projects, 'title_of_project')
-                ? convertToPlainObjects(professor.completed_projects) 
+                ? convertToPlainObjects(professor.completed_projects)
                 : [{
                     title_of_project: "",
                     sponsored_by: "",
@@ -1063,7 +1063,7 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                     year: "",
                 }],
             completed_consultancy_works: hasActualData(professor.completed_consultancy_works, 'title_of_consultancy_work')
-                ? convertToPlainObjects(professor.completed_consultancy_works) 
+                ? convertToPlainObjects(professor.completed_consultancy_works)
                 : [{
                     title_of_consultancy_work: "",
                     sponsored_by: "",
@@ -1072,7 +1072,7 @@ app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req,
                     year: "",
                 }],
             research_projects_funded: hasActualData(professor.research_projects_funded, 'project_title')
-                ? convertToPlainObjects(professor.research_projects_funded) 
+                ? convertToPlainObjects(professor.research_projects_funded)
                 : [{
                     pi_name: "",
                     project_title: "",

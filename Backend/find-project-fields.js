@@ -6,32 +6,32 @@ const findProjectConsultancyFields = async () => {
   try {
     console.log('🔍 Searching for Project/Consultancy Related Fields');
     console.log('==================================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
     // Get JAYAKUMAR S.K.V as our main test professor
     const professor = await Professor.findOne({ name: 'JAYAKUMAR S.K.V' });
-    
+
     if (!professor) {
       console.log('❌ JAYAKUMAR S.K.V not found');
       return;
     }
 
     console.log(`\n👨‍🏫 Analyzing all fields for: ${professor.name}`);
-    
+
     // Get all fields and look for anything that might contain project/consultancy data
     const professorObj = professor.toObject();
-    
+
     // Look for fields containing keywords
     const projectKeywords = ['project', 'consultancy', 'funding', 'grant', 'research'];
-    
+
     console.log('\n🔍 Fields that might contain project/consultancy data:');
-    
+
     for (const [key, value] of Object.entries(professorObj)) {
       const keyLower = key.toLowerCase();
       const hasKeyword = projectKeywords.some(keyword => keyLower.includes(keyword));
-      
+
       if (hasKeyword || key.includes('project') || key.includes('consultancy')) {
         console.log(`\n📋 Field: ${key}`);
         if (Array.isArray(value)) {
@@ -48,7 +48,7 @@ const findProjectConsultancyFields = async () => {
         }
       }
     }
-    
+
     // Also check if there are any fields we might have missed
     console.log('\n📋 All array fields (potential data sources):');
     for (const [key, value] of Object.entries(professorObj)) {
