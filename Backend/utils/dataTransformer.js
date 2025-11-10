@@ -73,8 +73,11 @@ class DataTransformer {
       e_lecture_details: this.transformELectures(scrapedData.conferences_seminars?.e_lectures || []),
       online_education_conducted: this.transformOnlineEducation(scrapedData.conferences_seminars?.online_education || []),
       invited_talks: this.transformInvitedTalks(scrapedData.conferences_seminars?.invited_talks || []),
-      conferences_seminars_workshops_organized: this.transformOrganizedConferences(scrapedData.conferences_seminars?.organized_conferences || []),
-      conferences_seminars_workshops_participated: this.transformOrganizedWorkshops(scrapedData.conferences_seminars?.organized_workshops || []),
+      conferences_seminars_workshops_organized: [
+        ...this.transformOrganizedConferences(scrapedData.conferences_seminars?.organized_conferences || []),
+        ...this.transformOrganizedWorkshops(scrapedData.conferences_seminars?.organized_workshops || [])
+      ],
+      conferences_seminars_workshops_participated: [], // Empty for now - should contain actual participated data if available
 
       // Collaboration & Administration
       participation_extension_academic: this.transformAcademicAdmin(scrapedData.collaboration?.academic_administration || []),
@@ -439,22 +442,22 @@ class DataTransformer {
 
   static transformInvitedTalks(talksArray) {
     return talksArray.map(talk => ({
-      title_of_paper: talk.paperTitle || '',
-      conferences_seminar_workshop_training: talk.eventType || '',
-      organized_by: talk.organizer || '',
+      title_of_paper: talk.title_of_paper || talk.paperTitle || '',
+      conferences_seminar_workshop_training: talk.conference_seminar_workshop || talk.eventType || '',
+      organized_by: talk.organized_by || talk.organizer || '',
       level: talk.level || '',
-      from_date: talk.fromDate || '',
-      to_date: talk.toDate || '',
+      from_date: talk.from_date || talk.fromDate || '',
+      to_date: talk.to_date || talk.toDate || '',
       year: talk.year || ''
     }));
   }
 
   static transformOrganizedConferences(conferencesArray) {
     return conferencesArray.map(conference => ({
-      title_of_programme: conference.title || '',
+      title_of_programme: conference.title_of_programme || conference.title || '',
       type: conference.type || 'Conference',
       sponsors: conference.sponsors || '',
-      venue_duration: conference.venue || '',
+      venue_duration: conference.venue_duration || conference.venue || '',
       level: conference.level || '',
       from_date: conference.fromDate || '',
       to_date: conference.toDate || '',
@@ -464,13 +467,13 @@ class DataTransformer {
 
   static transformOrganizedWorkshops(workshopsArray) {
     return workshopsArray.map(workshop => ({
-      title_of_programme: workshop.title || '',
+      title_of_programme: workshop.title_of_programme || workshop.title || '',
       type: workshop.type || 'Workshop',
       sponsors: workshop.sponsors || '',
-      venue_duration: workshop.venue || '',
+      venue_duration: workshop.venue_duration || workshop.venue || '',
       level: workshop.level || '',
-      from_date: workshop.fromDate || '',
-      to_date: workshop.toDate || '',
+      from_date: workshop.from_date || workshop.fromDate || '',
+      to_date: workshop.to_date || workshop.toDate || '',
       year: workshop.year || ''
     }));
   }

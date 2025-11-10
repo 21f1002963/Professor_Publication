@@ -536,10 +536,7 @@ function Report() {
     printWindow.document.close();
     printWindow.focus();
 
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 250);
+    // No automatic print - user will click the print icon when ready
   };
 
   const generatePDFContent = (dataToUse = filteredData) => {
@@ -695,9 +692,46 @@ function Report() {
             color: #666;
           }
 
+          .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 11pt;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+          }
+
+          .print-button:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46a3 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+          }
+
+          .print-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          }
+
+          .print-icon {
+            width: 16px;
+            height: 16px;
+          }
+
           @media print {
             body { -webkit-print-color-adjust: exact; }
             .section { page-break-inside: avoid; }
+            .print-button { display: none; }
           }
         </style>
       </head>
@@ -716,6 +750,14 @@ function Report() {
             <p style="margin: 3px 0 0 0; font-size: 9pt;">Generated on: ${new Date().toLocaleString()}</p>
           </div>
         </div>
+
+        <!-- Print Button -->
+        <button class="print-button" onclick="window.print()" title="Print this report">
+          <svg class="print-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd"></path>
+          </svg>
+          Print Report
+        </button>
 
         ${filters.includeProfile ? `
         <div class="section">

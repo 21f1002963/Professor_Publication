@@ -58,7 +58,7 @@ function ConferenceSeminarWorkshop() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(getApiUrl("/api/professor/conference-seminar-workshop/${userId}"), {
+      const response = await fetch(getApiUrl(`/api/professor/conference-seminar-workshop/${userId}`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +147,7 @@ function ConferenceSeminarWorkshop() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(getApiUrl("/api/professor/conference-seminar-workshop/${userId}"), {
+        const response = await fetch(getApiUrl(`/api/professor/conference-seminar-workshop/${userId}`), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

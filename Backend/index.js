@@ -1211,7 +1211,7 @@ app.put('/api/professor/e-education/:id', authenticateToken, async (req, res) =>
 app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
-        const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_organized workshops_organized financial_support');
+        const professor = await Professor.findById(professorId).select('invited_talks conferences_seminars_workshops_organized conferences_seminars_workshops_participated financial_support');
 
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
@@ -1220,8 +1220,8 @@ app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
         // Return conference/seminar/workshop data or default structure
         res.status(200).json({
             invited_talks: professor.invited_talks || [],
-            conferences_seminars_organized: professor.conferences_seminars_organized || [],
-            workshops_organized: professor.workshops_organized || [],
+            conferences_seminars_workshops_organized: professor.conferences_seminars_workshops_organized || [],
+            conferences_seminars_workshops_participated: professor.conferences_seminars_workshops_participated || [],
             financial_support: professor.financial_support || []
         });
     } catch (error) {
@@ -1234,14 +1234,14 @@ app.get('/api/professor/conference-seminar-workshop/:id', authenticateToken, asy
 app.put('/api/professor/conference-seminar-workshop/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
-        const { invited_talks, conferences_seminars_organized, workshops_organized, financial_support } = req.body;
+        const { invited_talks, conferences_seminars_workshops_organized, conferences_seminars_workshops_participated, financial_support } = req.body;
 
         const updatedProfessor = await Professor.findByIdAndUpdate(
             professorId,
             {
                 invited_talks: invited_talks,
-                conferences_seminars_organized: conferences_seminars_organized,
-                workshops_organized: workshops_organized,
+                conferences_seminars_workshops_organized: conferences_seminars_workshops_organized,
+                conferences_seminars_workshops_participated: conferences_seminars_workshops_participated,
                 financial_support: financial_support
             },
             { new: true, runValidators: true }

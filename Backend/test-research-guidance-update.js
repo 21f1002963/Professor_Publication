@@ -79,7 +79,7 @@ async function testResearchGuidanceUpdate() {
       completed_projects: transformedData.completed_projects || [],
       ongoing_consultancy_works: transformedData.ongoing_consultancy_works || [],
       completed_consultancy_works: transformedData.completed_consultancy_works || [],
-      
+
       // Meta information
       node_id: nodeId,
       data_source: currentUser.data_source === 'manual' ? 'hybrid' : 'web_scraping',
