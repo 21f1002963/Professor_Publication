@@ -1,6 +1,6 @@
 /**
  * API Routes for Faculty Data Scraping and Integration
- * 
+ *
  * Provides endpoints to scrape faculty data from university website
  * and integrate it with the existing manual entry system
  */
@@ -148,28 +148,28 @@ router.post('/faculty/:nodeId', async (req, res) => {
       name: transformedData.name || currentUser.name,
       department: transformedData.department || currentUser.department,
       designation: transformedData.designation || currentUser.designation,
-      
+
       // Update scraped data fields
       teaching_experience: transformedData.teaching_experience || [],
       research_experience: transformedData.research_experience || [],
       industry_experience: transformedData.industry_experience || [],
-      
+
       // Publications
       ugc_papers: transformedData.ugc_papers || [],
       ugc_approved_journals: transformedData.ugc_approved_journals || [],
       non_ugc_papers: transformedData.non_ugc_papers || [],
       non_ugc_journals: transformedData.non_ugc_journals || [],
       conference_proceedings: transformedData.conference_proceedings || [],
-      
+
       // Books and other publications
       books: transformedData.books || [],
       chapters_in_books: transformedData.chapters_in_books || [],
       edited_books: transformedData.edited_books || [],
-      
+
       // Education and awards
       education: transformedData.education || [],
       awards: transformedData.awards || [],
-      
+
       // Projects and other activities
       ongoing_projects: transformedData.ongoing_projects || [],
       completed_projects: transformedData.completed_projects || [],
@@ -177,16 +177,16 @@ router.post('/faculty/:nodeId', async (req, res) => {
       fellowship: transformedData.fellowship || [],
       training_programs: transformedData.training_programs || [],
       mou_collaborations: transformedData.mou_collaborations || [],
-      
+
       // Research areas
       area_of_expertise: transformedData.area_of_expertise || [],
       research_interests: transformedData.research_interests || [],
-      
+
       // Meta information
       node_id: nodeId,
       data_source: currentUser.data_source === 'manual' ? 'hybrid' : 'web_scraping',
       last_scraped: new Date(),
-      scraped_sections: Object.keys(transformedData).filter(key => 
+      scraped_sections: Object.keys(transformedData).filter(key =>
         Array.isArray(transformedData[key]) && transformedData[key].length > 0
       )
     };
@@ -348,7 +348,7 @@ router.get('/mapping', (req, res) => {
       ],
       missing_in_scraped: [
         'File uploads (papers, certificates)',
-        'Detailed project descriptions', 
+        'Detailed project descriptions',
         'Contact information (phone, office)',
         'Administrative responsibilities',
         'Some date ranges in experience'

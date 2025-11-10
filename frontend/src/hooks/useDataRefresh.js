@@ -11,7 +11,7 @@ export const DataRefreshProvider = ({ children }) => {
   const registerRefresh = useCallback((componentName, refreshFunction) => {
     refreshCallbacks.current[componentName] = refreshFunction;
     console.log(`📋 Registered refresh for ${componentName}`);
-    
+
     // Return cleanup function
     return () => {
       delete refreshCallbacks.current[componentName];
@@ -22,7 +22,7 @@ export const DataRefreshProvider = ({ children }) => {
   // Trigger refresh for specific components
   const refreshComponents = useCallback((componentNames = []) => {
     console.log(`🔄 Triggering refresh for components:`, componentNames);
-    
+
     componentNames.forEach(componentName => {
       const refreshFn = refreshCallbacks.current[componentName];
       if (refreshFn) {
@@ -58,12 +58,12 @@ export const DataRefreshProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         console.log('📊 Data status:', data);
-        
+
         // Check if data was recently scraped (within last 5 minutes)
         if (data.last_scraped) {
           const lastScraped = new Date(data.last_scraped);
           const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-          
+
           if (lastScraped > fiveMinutesAgo) {
             console.log('🆕 Recent data update detected, refreshing components...');
             refreshAll();
@@ -101,7 +101,7 @@ export const useDataRefresh = () => {
 // Hook for components to register their refresh function
 export const useComponentRefresh = (componentName, refreshFunction) => {
   const { registerRefresh } = useDataRefresh();
-  
+
   React.useEffect(() => {
     const unregister = registerRefresh(componentName, refreshFunction);
     return unregister;

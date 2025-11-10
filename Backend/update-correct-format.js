@@ -14,7 +14,7 @@ async function updateProfileCorrectFormat() {
     // Find your account
     console.log(`\n👤 Finding your account: ${userEmail}`);
     const user = await Professor.findOne({ email: userEmail });
-    
+
     if (!user) {
       console.log('❌ User not found');
       return;
@@ -34,7 +34,7 @@ async function updateProfileCorrectFormat() {
           to: "June 2015"
         },
         {
-          designation: "Associate Professor", 
+          designation: "Associate Professor",
           institution: "Pondicherry University",
           department: "Department of Computer Science",
           from: "July 2015",
@@ -59,7 +59,7 @@ async function updateProfileCorrectFormat() {
           authors: "Jayakumar S K V, Another Author",
           journal_name: "Journal of Advanced Computing",
           volume: "8",
-          issue: "2", 
+          issue: "2",
           page_nos: "123-140",
           year: "2022",
           impact_factor: "1.8"
@@ -98,7 +98,7 @@ async function updateProfileCorrectFormat() {
         },
         {
           degree: "M.Tech",
-          title: "Computer Science and Engineering", 
+          title: "Computer Science and Engineering",
           university: "NIT Tiruchirappalli",
           graduationYear: "2004"
         }
@@ -138,7 +138,7 @@ async function updateProfileCorrectFormat() {
     };
 
     console.log('\n🔄 Updating your profile with correctly formatted academic data...');
-    
+
     const updatedUser = await Professor.findByIdAndUpdate(
       user._id,
       { $set: updateData },

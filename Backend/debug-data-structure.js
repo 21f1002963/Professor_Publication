@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -35,14 +35,14 @@ async function debugDataStructure() {
       // Check the exact field names stored
       console.log('\n🔍 Database field analysis:');
       const fields = Object.keys(user.toObject());
-      const dataFields = fields.filter(field => 
-        field.includes('experience') || 
-        field.includes('papers') || 
-        field.includes('publications') || 
-        field.includes('books') || 
+      const dataFields = fields.filter(field =>
+        field.includes('experience') ||
+        field.includes('papers') ||
+        field.includes('publications') ||
+        field.includes('books') ||
         field.includes('journal')
       );
-      
+
       console.log('📝 Data-related fields found:');
       dataFields.forEach(field => {
         const value = user[field];
@@ -60,7 +60,7 @@ async function debugDataStructure() {
       console.log('\n🎯 Checking expected API response fields:');
       const expectedFields = [
         'teachingExperience', 'teaching_experience',
-        'researchExperience', 'research_experience', 
+        'researchExperience', 'research_experience',
         'industryExperience', 'industry_experience',
         'ugcPapers', 'ugc_papers', 'ugc_approved_journals',
         'nonUgcPapers', 'non_ugc_papers', 'non_ugc_journals',

@@ -17,11 +17,11 @@ function makeRequest(options, data = null) {
     });
 
     req.on('error', reject);
-    
+
     if (data) {
       req.write(JSON.stringify(data));
     }
-    
+
     req.end();
   });
 }
@@ -29,7 +29,7 @@ function makeRequest(options, data = null) {
 async function testApiAccess() {
   try {
     console.log('🔐 Testing login...');
-    
+
     // Step 1: Login
     const loginOptions = {
       hostname: 'localhost',
@@ -47,7 +47,7 @@ async function testApiAccess() {
     };
 
     const loginResponse = await makeRequest(loginOptions, loginData);
-    
+
     if (loginResponse.status !== 200 || !loginResponse.data.success) {
       console.log('❌ Login failed:', loginResponse.data);
       return;
@@ -70,14 +70,14 @@ async function testApiAccess() {
     };
 
     const experienceResponse = await makeRequest(experienceOptions);
-    
+
     if (experienceResponse.status === 200 && experienceResponse.data.success) {
       const data = experienceResponse.data.data;
       console.log('✅ Experience data retrieved successfully!');
       console.log(`   Teaching: ${data.teachingExperience?.length || 0} records`);
       console.log(`   Research: ${data.researchExperience?.length || 0} records`);
       console.log(`   Industry: ${data.industryExperience?.length || 0} records`);
-      
+
       if (data.teachingExperience?.length > 0) {
         console.log('\n📝 First teaching record:');
         const first = data.teachingExperience[0];
@@ -102,7 +102,7 @@ async function testApiAccess() {
     };
 
     const publicationsResponse = await makeRequest(publicationsOptions);
-    
+
     if (publicationsResponse.status === 200 && publicationsResponse.data.success) {
       const data = publicationsResponse.data.data;
       console.log('✅ Publications data retrieved successfully!');

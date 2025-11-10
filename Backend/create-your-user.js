@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -19,12 +19,12 @@ async function createYourUserAndScrapedData() {
 
     // Step 1: Create your user account
     console.log('\n1️⃣ Creating user account: skvjey@pondiuni.ac.in');
-    
+
     // Delete if exists (clean start)
     await Professor.deleteOne({ email: 'skvjey@pondiuni.ac.in' });
-    
+
     const hashedPassword = await bcrypt.hash('PUGA31K2ID', 10);
-    
+
     const yourUser = new Professor({
       name: 'JAYAKUMAR S.K.V',
       email: 'skvjey@pondiuni.ac.in',
@@ -34,7 +34,7 @@ async function createYourUserAndScrapedData() {
       node_id: '941',
       data_source: 'hybrid',
       last_scraped: new Date(),
-      
+
       // Scraped teaching experience data (from Node ID 941)
       teaching_experience: [
         {
@@ -46,7 +46,7 @@ async function createYourUserAndScrapedData() {
         },
         {
           designation: 'Associate Professor',
-          institution: 'Pondicherry University', 
+          institution: 'Pondicherry University',
           department: 'Computer Science and Engineering',
           from: '2010',
           to: '2015'
@@ -54,7 +54,7 @@ async function createYourUserAndScrapedData() {
         {
           designation: 'Assistant Professor',
           institution: 'Pondicherry University',
-          department: 'Computer Science and Engineering', 
+          department: 'Computer Science and Engineering',
           from: '2005',
           to: '2010'
         },
@@ -141,7 +141,7 @@ async function createYourUserAndScrapedData() {
         },
         {
           degree: 'M.E. in Computer Science',
-          institution: 'Anna University', 
+          institution: 'Anna University',
           year: '2002',
           specialization: 'Software Engineering'
         },
@@ -162,7 +162,7 @@ async function createYourUserAndScrapedData() {
     });
 
     const savedUser = await yourUser.save();
-    
+
     console.log('✅ User created successfully!');
     console.log(`   Name: ${savedUser.name}`);
     console.log(`   Email: ${savedUser.email}`);

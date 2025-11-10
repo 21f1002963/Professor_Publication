@@ -584,7 +584,7 @@ class DataTransformer {
       const originalPath = this.getOriginalPath(section);
       const originalCount = this.getNestedValue(originalData, originalPath)?.length || 0;
       const transformedCount = transformedData[section]?.length || 0;
-      
+
       validation.summary[section] = {
         original: originalCount,
         transformed: transformedCount,
@@ -605,7 +605,7 @@ class DataTransformer {
   static getOriginalPath(section) {
     const pathMap = {
       'education': 'home.education',
-      'awards': 'home.awards', 
+      'awards': 'home.awards',
       'teaching_experience': 'experience.teaching',
       'research_experience': 'experience.research',
       'innovation_contributions': 'innovation.contributions',
@@ -630,19 +630,19 @@ class DataTransformer {
    */
   static flattenSpecialization(specialization) {
     if (!specialization) return [];
-    
+
     // If it's already an array, flatten any nested arrays
     if (Array.isArray(specialization)) {
-      return specialization.flat(2).filter(item => 
+      return specialization.flat(2).filter(item =>
         typeof item === 'string' && item.trim().length > 0
       );
     }
-    
+
     // If it's a string, return as array
     if (typeof specialization === 'string') {
       return [specialization.trim()].filter(item => item.length > 0);
     }
-    
+
     return [];
   }
 }

@@ -1959,11 +1959,11 @@ app.get('/api/professor/data-status', authenticateToken, async (req, res) => {
 app.post('/api/professor/refresh-notification', authenticateToken, async (req, res) => {
     try {
         const { updateType } = req.body; // 'scraped', 'manual', 'integration'
-        
+
         // Update the professor's last refresh timestamp
         await Professor.findByIdAndUpdate(
             req.user.id,
-            { 
+            {
                 last_refresh_notification: new Date(),
                 last_update_type: updateType || 'manual'
             },

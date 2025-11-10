@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -34,15 +34,15 @@ async function findAllCloudUsers() {
       console.log(`   🏢 Department: ${user.department || 'Not set'}`);
       console.log(`   🔢 Node ID: ${user.node_id || 'Not set'}`);
       console.log(`   📊 Data Source: ${user.data_source || 'Not set'}`);
-      
+
       // Check if user has any scraped data
-      const hasData = (user.teaching_experience?.length || 0) + 
-                     (user.ugc_papers?.length || 0) + 
-                     (user.ugc_approved_journals?.length || 0) + 
+      const hasData = (user.teaching_experience?.length || 0) +
+                     (user.ugc_papers?.length || 0) +
+                     (user.ugc_approved_journals?.length || 0) +
                      (user.books?.length || 0);
-      
+
       console.log(`   📚 Total Data Records: ${hasData}`);
-      
+
       if (hasData > 0) {
         console.log(`   ✅ HAS SCRAPED DATA:`);
         console.log(`      - Teaching: ${user.teaching_experience?.length || 0}`);
@@ -56,8 +56,8 @@ async function findAllCloudUsers() {
 
     // Look specifically for emails containing 'skvjey' or names containing 'jayakumar'
     console.log('\n🔍 SEARCHING FOR YOUR ACCOUNT...');
-    
-    const yourPossibleAccounts = allUsers.filter(user => 
+
+    const yourPossibleAccounts = allUsers.filter(user =>
       (user.email && user.email.toLowerCase().includes('skvjey')) ||
       (user.name && user.name.toLowerCase().includes('jayakumar')) ||
       (user.email && user.email.toLowerCase().includes('pondiuni')) ||
@@ -71,16 +71,16 @@ async function findAllCloudUsers() {
         console.log(`   Email: ${user.email}`);
         console.log(`   Has Login Credentials: ${user.email && user.password ? 'YES' : 'NO'}`);
         console.log(`   Node ID: ${user.node_id || 'Not set'}`);
-        
+
         if (user.teaching_experience?.length > 0) {
           console.log(`   ⭐ This account has ${user.teaching_experience.length} teaching records!`);
         }
       });
-      
+
       console.log('\n💡 TRY LOGGING IN WITH ONE OF THESE ACCOUNTS');
     } else {
       console.log('❌ No accounts found matching your profile');
-      
+
       console.log('\n🔧 NEXT STEPS:');
       console.log('1. Check if you have an account with a different email');
       console.log('2. If no account exists, create one at: http://localhost:3000/signup');
@@ -90,8 +90,8 @@ async function findAllCloudUsers() {
 
     // Show users with most data (likely the active accounts)
     const usersWithData = allUsers.filter(user => {
-      const dataCount = (user.teaching_experience?.length || 0) + 
-                       (user.ugc_papers?.length || 0) + 
+      const dataCount = (user.teaching_experience?.length || 0) +
+                       (user.ugc_papers?.length || 0) +
                        (user.ugc_approved_journals?.length || 0);
       return dataCount > 0;
     }).sort((a, b) => {
@@ -103,8 +103,8 @@ async function findAllCloudUsers() {
     if (usersWithData.length > 0) {
       console.log('\n📊 USERS WITH SCRAPED DATA (most data first):');
       usersWithData.forEach((user, index) => {
-        const dataCount = (user.teaching_experience?.length || 0) + 
-                         (user.ugc_papers?.length || 0) + 
+        const dataCount = (user.teaching_experience?.length || 0) +
+                         (user.ugc_papers?.length || 0) +
                          (user.ugc_approved_journals?.length || 0);
         console.log(`${index + 1}. ${user.name} (${user.email}) - ${dataCount} records`);
       });

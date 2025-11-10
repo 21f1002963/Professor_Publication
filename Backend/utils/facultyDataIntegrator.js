@@ -1,9 +1,9 @@
 /**
  * Integration Example: Scraping and Storing Faculty Data
- * 
+ *
  * This example demonstrates how to:
  * 1. Scrape faculty data from university website
- * 2. Transform the data to match manual entry format  
+ * 2. Transform the data to match manual entry format
  * 3. Store in MongoDB with proper validation
  * 4. Handle conflicts with existing manual data
  */
@@ -13,7 +13,7 @@ const DataTransformer = require('./dataTransformer');
 const Professor = require('../Professor');
 
 class FacultyDataIntegrator {
-  
+
   /**
    * Main integration workflow
    * @param {string} nodeId - Faculty node ID from university website
@@ -27,7 +27,7 @@ class FacultyDataIntegrator {
       console.log('Step 1: Scraping faculty data...');
       const scraper = new FacultyDataScraper();
       const scrapedData = await scraper.scrapeFacultyData(nodeId);
-      
+
       console.log('Scraping completed successfully');
       console.log(`- Name: ${scrapedData.name}`);
       console.log(`- Department: ${scrapedData.department}`);
@@ -36,15 +36,15 @@ class FacultyDataIntegrator {
       // Step 2: Transform scraped data to database format
       console.log('\nStep 2: Transforming data for database...');
       const transformedData = DataTransformer.transformScrapedDataForDB(scrapedData);
-      
+
       // Step 3: Validate transformation
       console.log('\nStep 3: Validating transformation...');
       const validation = DataTransformer.validateTransformation(scrapedData, transformedData);
-      
+
       if (validation.warnings.length > 0) {
         console.log('Transformation warnings:', validation.warnings);
       }
-      
+
       if (validation.errors.length > 0) {
         console.error('Transformation errors:', validation.errors);
         throw new Error('Data transformation failed validation');
@@ -55,7 +55,7 @@ class FacultyDataIntegrator {
       const existingFaculty = await this.findExistingFaculty(transformedData);
 
       let savedFaculty;
-      
+
       if (existingFaculty) {
         // Handle existing record based on options
         savedFaculty = await this.handleExistingRecord(existingFaculty, transformedData, options);
@@ -91,22 +91,22 @@ class FacultyDataIntegrator {
    */
   static async findExistingFaculty(transformedData) {
     const queries = [];
-    
+
     // Search by email (most reliable)
     if (transformedData.email) {
       queries.push({ email: transformedData.email });
     }
-    
+
     // Search by node_id (for previously scraped records)
     if (transformedData.node_id) {
       queries.push({ node_id: transformedData.node_id });
     }
-    
+
     // Search by name and department (fallback)
     if (transformedData.name && transformedData.department) {
-      queries.push({ 
-        name: transformedData.name, 
-        department: transformedData.department 
+      queries.push({
+        name: transformedData.name,
+        department: transformedData.department
       });
     }
 
@@ -134,20 +134,20 @@ class FacultyDataIntegrator {
       case 'replace':
         // Replace entire record with scraped data
         return await this.replaceRecord(existingFaculty, transformedData);
-        
+
       case 'merge':
         // Merge scraped data with existing manual data
         return await this.mergeRecords(existingFaculty, transformedData, options);
-        
+
       case 'skip':
         // Skip update, return existing record
         console.log('Skipping update as requested');
         return existingFaculty;
-        
+
       case 'manual_priority':
         // Keep manual data, only fill empty fields with scraped data
         return await this.fillEmptyFields(existingFaculty, transformedData);
-        
+
       default:
         throw new Error(`Unknown update strategy: ${updateStrategy}`);
     }
@@ -158,7 +158,7 @@ class FacultyDataIntegrator {
    */
   static async replaceRecord(existingFaculty, transformedData) {
     console.log('Replacing existing record completely...');
-    
+
     // Preserve some fields that shouldn't be overwritten
     const preservedFields = {
       _id: existingFaculty._id,
@@ -168,10 +168,10 @@ class FacultyDataIntegrator {
     };
 
     const updatedData = { ...transformedData, ...preservedFields };
-    
+
     const updatedFaculty = await Professor.findByIdAndUpdate(
-      existingFaculty._id, 
-      updatedData, 
+      existingFaculty._id,
+      updatedData,
       { new: true, runValidators: true }
     );
 
@@ -184,7 +184,7 @@ class FacultyDataIntegrator {
    */
   static async mergeRecords(existingFaculty, transformedData, options) {
     console.log('Merging scraped data with existing record...');
-    
+
     const { mergeOptions = {} } = options;
     const {
       arrayMergeStrategy = 'append',  // 'append', 'replace', 'smart_merge'
@@ -210,8 +210,8 @@ class FacultyDataIntegrator {
 
     arrayFields.forEach(field => {
       mergedData[field] = this.mergeArrayField(
-        mergedData[field] || [], 
-        transformedData[field] || [], 
+        mergedData[field] || [],
+        transformedData[field] || [],
         arrayMergeStrategy,
         field
       );
@@ -221,7 +221,7 @@ class FacultyDataIntegrator {
     mergedData.scraped_date = transformedData.scraped_date;
     mergedData.source_url = transformedData.source_url;
     mergedData.node_id = transformedData.node_id;
-    
+
     // Mark as having both manual and scraped data
     if (existingFaculty.data_source === 'manual') {
       mergedData.data_source = 'hybrid'; // Both manual and scraped
@@ -242,7 +242,7 @@ class FacultyDataIntegrator {
    */
   static async fillEmptyFields(existingFaculty, transformedData) {
     console.log('Filling empty fields with scraped data...');
-    
+
     const updatedData = { ...existingFaculty.toObject() };
 
     // Fill empty basic fields
@@ -272,10 +272,10 @@ class FacultyDataIntegrator {
    */
   static async createNewRecord(transformedData, options) {
     console.log('Creating new faculty record...');
-    
+
     // Generate temporary password for scraped accounts
     const tempPassword = this.generateTempPassword();
-    
+
     const facultyData = {
       ...transformedData,
       password: tempPassword, // Will need to be hashed
@@ -288,7 +288,7 @@ class FacultyDataIntegrator {
 
     console.log('New faculty record created successfully');
     console.log(`Temporary password generated: ${tempPassword}`);
-    
+
     return savedFaculty;
   }
 
@@ -299,14 +299,14 @@ class FacultyDataIntegrator {
     switch (strategy) {
       case 'replace':
         return scrapedArray;
-        
+
       case 'append':
         return [...existingArray, ...scrapedArray];
-        
+
       case 'smart_merge':
         // Avoid duplicates based on title/name fields
         return this.smartMergeArrays(existingArray, scrapedArray, fieldName);
-        
+
       default:
         return existingArray;
     }
@@ -317,7 +317,7 @@ class FacultyDataIntegrator {
    */
   static smartMergeArrays(existingArray, scrapedArray, fieldName) {
     const merged = [...existingArray];
-    
+
     // Define key fields for duplicate detection
     const keyFields = {
       'education': ['degree', 'university'],
@@ -327,22 +327,22 @@ class FacultyDataIntegrator {
       'patents': ['title', 'patent_number'],
       'default': ['title']
     };
-    
+
     const keys = keyFields[fieldName] || keyFields.default;
-    
+
     scrapedArray.forEach(scrapedItem => {
       const isDuplicate = existingArray.some(existingItem => {
-        return keys.every(key => 
-          existingItem[key] && scrapedItem[key] && 
+        return keys.every(key =>
+          existingItem[key] && scrapedItem[key] &&
           existingItem[key].toLowerCase().trim() === scrapedItem[key].toLowerCase().trim()
         );
       });
-      
+
       if (!isDuplicate) {
         merged.push(scrapedItem);
       }
     });
-    
+
     return merged;
   }
 
@@ -358,7 +358,7 @@ class FacultyDataIntegrator {
    */
   static async batchScrapeAndStore(nodeIds, options = {}) {
     console.log(`Starting batch processing for ${nodeIds.length} faculty members...`);
-    
+
     const results = {
       successful: [],
       failed: [],
@@ -372,22 +372,22 @@ class FacultyDataIntegrator {
     };
 
     const { batchSize = 5, delayBetweenBatches = 2000 } = options;
-    
+
     // Process in batches to avoid overwhelming the server
     for (let i = 0; i < nodeIds.length; i += batchSize) {
       const batch = nodeIds.slice(i, i + batchSize);
       console.log(`Processing batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(nodeIds.length/batchSize)}...`);
-      
-      const batchPromises = batch.map(nodeId => 
+
+      const batchPromises = batch.map(nodeId =>
         this.scrapeAndStore(nodeId, options).catch(error => ({
           success: false,
           error: error.message,
           nodeId
         }))
       );
-      
+
       const batchResults = await Promise.all(batchPromises);
-      
+
       batchResults.forEach(result => {
         if (result.success) {
           results.successful.push(result);
@@ -402,7 +402,7 @@ class FacultyDataIntegrator {
           results.summary.failure++;
         }
       });
-      
+
       // Delay between batches
       if (i + batchSize < nodeIds.length) {
         console.log(`Waiting ${delayBetweenBatches}ms before next batch...`);
@@ -427,7 +427,7 @@ module.exports = FacultyDataIntegrator;
 // Example 1: Scrape single faculty member
 async function example1() {
   const result = await FacultyDataIntegrator.scrapeAndStore('12345');
-  
+
   if (result.success) {
     console.log('Faculty data stored:', result.faculty.name);
   } else {
@@ -449,13 +449,13 @@ async function example2() {
 // Example 3: Batch scraping
 async function example3() {
   const nodeIds = ['12345', '12346', '12347', '12348', '12349'];
-  
+
   const results = await FacultyDataIntegrator.batchScrapeAndStore(nodeIds, {
     updateStrategy: 'merge',
     batchSize: 3,
     delayBetweenBatches: 3000
   });
-  
+
   console.log('Batch results:', results.summary);
 }
 

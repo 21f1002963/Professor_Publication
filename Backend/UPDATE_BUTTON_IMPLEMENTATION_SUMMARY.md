@@ -6,7 +6,7 @@
 
 #### 1. **New Update Function** (`handleUpdateDatabase`)
 - **Location:** `frontend/src/components/FacultyImporter.js`
-- **Functionality:** 
+- **Functionality:**
   - Scrapes faculty data using the Node ID
   - Stores/merges data into the database using our integration API
   - Uses authentication token for secure access
@@ -99,7 +99,7 @@ POST /api/integration/faculty/{nodeId}
 ```
 1. User enters Node ID → 2. Click "Update Database" → 3. System:
    ├── Authenticates user
-   ├── Scrapes university website  
+   ├── Scrapes university website
    ├── Transforms data to DB format
    ├── Merges with existing records
    ├── Saves to MongoDB
@@ -114,7 +114,7 @@ POST /api/integration/faculty/{nodeId}
 
 ### Next Steps:
 1. Start backend server: `node index.js`
-2. Start frontend: `npm start` 
+2. Start frontend: `npm start`
 3. Navigate to: `http://localhost:3000/faculty-importer`
 4. Test with a faculty Node ID (e.g., 941)
 5. Verify data is properly scraped and stored in database

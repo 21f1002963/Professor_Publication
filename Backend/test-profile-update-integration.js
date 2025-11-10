@@ -14,7 +14,7 @@ async function testProfileUpdateIntegration() {
     // Find the logged-in user
     console.log(`\n👤 Finding user: ${userEmail}`);
     const user = await Professor.findOne({ email: userEmail });
-    
+
     if (!user) {
       console.log('❌ User not found');
       return;
@@ -34,7 +34,7 @@ async function testProfileUpdateIntegration() {
     // Test the scraper components
     try {
       console.log('\n🕷️ Testing scraper components...');
-      
+
       const FacultyDataScraper = require('./scrapers/facultyDataScraper');
       const DataTransformer = require('./utils/dataTransformer');
 
@@ -44,7 +44,7 @@ async function testProfileUpdateIntegration() {
       console.log(`\n🔍 Scraping data for Node ID: ${nodeId}`);
       const scraper = new FacultyDataScraper();
       const scrapedData = await scraper.scrapeFacultyData(nodeId);
-      
+
       console.log('✅ Data scraped successfully!');
       console.log(`📋 Scraped name: ${scrapedData?.name || 'Unknown'}`);
       console.log(`🏛️ Department: ${scrapedData?.department || 'Unknown'}`);
@@ -53,10 +53,10 @@ async function testProfileUpdateIntegration() {
       // Test transformation
       console.log('\n🔄 Transforming data...');
       const transformedData = DataTransformer.transformScrapedDataForDB(scrapedData);
-      
+
       console.log('✅ Data transformed successfully!');
       console.log(`📊 Transformed sections: ${Object.keys(transformedData || {}).length}`);
-      
+
       // Show what would be updated
       console.log('\n📝 DATA THAT WOULD BE UPDATED:');
       if (transformedData.teaching_experience) {
@@ -98,10 +98,10 @@ async function testProfileUpdateIntegration() {
     } catch (scraperError) {
       console.error('\n❌ Scraper test failed:', scraperError.message);
       console.log('\n🔧 TROUBLESHOOTING:');
-      
+
       if (scraperError.message.includes('Cannot find module')) {
         console.log('📁 Missing scraper files - let me create a simple mock scraper...');
-        
+
         // Create a mock update for testing
         const mockData = {
           name: user.name,
@@ -109,7 +109,7 @@ async function testProfileUpdateIntegration() {
           teaching_experience: [
             {
               designation: "Assistant Professor",
-              institution: "Pondicherry University", 
+              institution: "Pondicherry University",
               department: "Department of Computer Science",
               from: "July 2010",
               to: "June 2015"
@@ -117,7 +117,7 @@ async function testProfileUpdateIntegration() {
             {
               designation: "Associate Professor",
               institution: "Pondicherry University",
-              department: "Department of Computer Science", 
+              department: "Department of Computer Science",
               from: "July 2015",
               to: "Present"
             },
@@ -125,7 +125,7 @@ async function testProfileUpdateIntegration() {
               designation: "Professor", // New scraped position
               institution: "Pondicherry University",
               department: "Department of Computer Science",
-              from: "July 2024", 
+              from: "July 2024",
               to: "Present"
             }
           ],
@@ -136,7 +136,7 @@ async function testProfileUpdateIntegration() {
               authors: "Jayakumar S K V, Research Team",
               journal_name: "International Journal of AI Research",
               volume: "15",
-              issue: "2", 
+              issue: "2",
               page_nos: "234-250",
               year: "2024",
               impact_factor: "3.2"
@@ -145,7 +145,7 @@ async function testProfileUpdateIntegration() {
         };
 
         console.log('\n🔄 Applying mock update to test the system...');
-        
+
         const updatedUser = await Professor.findByIdAndUpdate(
           user._id,
           {

@@ -206,7 +206,7 @@ const FacultyImporter = () => {
         } catch {
           errorMessage = `HTTP error! status: ${response.status}`;
         }
-        
+
         if (response.status === 401) {
           errorMessage = 'Authentication failed. Please login again.';
         } else if (response.status === 403) {
@@ -216,7 +216,7 @@ const FacultyImporter = () => {
         } else if (response.status === 500) {
           errorMessage = 'Server error. Please try again later.';
         }
-        
+
         throw new Error(errorMessage);
       }
 
@@ -235,7 +235,7 @@ const FacultyImporter = () => {
 
         // 🔄 Trigger automatic refresh of all relevant components
         console.log('✅ Profile update successful, triggering refresh...');
-        
+
         // Check if backend provided refresh instructions
         if (data.refreshRequired && data.refreshPages) {
           console.log('📋 Backend requested refresh for:', data.refreshPages);
@@ -313,7 +313,7 @@ const FacultyImporter = () => {
             }}>
               Faculty Data Management
             </h3>
-            
+
             <div style={{
               backgroundColor: '#e8f4fd',
               border: '1px solid #bee5eb',
@@ -322,16 +322,16 @@ const FacultyImporter = () => {
               marginBottom: '25px',
               textAlign: 'center'
             }}>
-              <p style={{ 
+              <p style={{
                 margin: '0 0 10px 0',
                 fontSize: '16px',
                 color: '#0c5460',
                 fontWeight: '600'
               }}>
-                📝 <strong>Update My Profile:</strong> Enter a faculty Node ID and click "Update My Profile" 
+                📝 <strong>Update My Profile:</strong> Enter a faculty Node ID and click "Update My Profile"
                 to add their academic data to your current profile.
               </p>
-              <p style={{ 
+              <p style={{
                 margin: 0,
                 fontSize: '14px',
                 color: '#0c5460',
@@ -340,7 +340,7 @@ const FacultyImporter = () => {
                 Your email and login credentials will remain unchanged. Only academic data (publications, experience, etc.) will be added.
               </p>
             </div>
-            
+
             <div style={{
               display: 'flex',
               gap: '20px',
@@ -457,8 +457,8 @@ const FacultyImporter = () => {
                 {result.updated && result.success && (
                   <div style={{ marginTop: '10px' }}>
                     <p style={{ margin: '5px 0', fontWeight: '600' }}>✅ {result.message}</p>
-                    <div style={{ 
-                      backgroundColor: '#d1ecf1', 
+                    <div style={{
+                      backgroundColor: '#d1ecf1',
                       border: '1px solid #bee5eb',
                       borderRadius: '8px',
                       padding: '15px',

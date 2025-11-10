@@ -16,7 +16,7 @@ After successfully scraping and storing faculty data (Node ID 941 - JAYAKUMAR S.
 
 ### Scraped Data Summary:
 - ✅ **14 Teaching Experience** records
-- ✅ **2 Research Experience** records  
+- ✅ **2 Research Experience** records
 - ✅ **3 Industry Experience** records
 - ✅ **3 Education** records
 - ✅ **19 UGC Papers**
@@ -36,10 +36,10 @@ After successfully scraping and storing faculty data (Node ID 941 - JAYAKUMAR S.
 **API Endpoint:** `GET /api/professor/experience`
 **Displays:**
 - **Teaching Experience** → 14 records from university website
-- **Research Experience** → 2 records with positions and organizations  
+- **Research Experience** → 2 records with positions and organizations
 - **Industry Experience** → 3 records with companies and roles
 
-### 2. **Publications Page** - `http://localhost:3000/publications`  
+### 2. **Publications Page** - `http://localhost:3000/publications`
 **API Endpoint:** `GET /api/professor/publications`
 **Displays:**
 - **UGC Approved Journals** → 19 research papers with full details
@@ -47,7 +47,7 @@ After successfully scraping and storing faculty data (Node ID 941 - JAYAKUMAR S.
 - **Conference Proceedings** → 28 conference papers
 
 ### 3. **Books Page** - `http://localhost:3000/books`
-**API Endpoint:** `GET /api/professor/books`  
+**API Endpoint:** `GET /api/professor/books`
 **Displays:**
 - **Authored Books** → 2 books with ISBN details
 - **Book Chapters** → (if any were scraped)
@@ -83,7 +83,7 @@ All other professor-related pages will also display the scraped data:
 cd "c:/Users/mkmoh/OneDrive/Desktop/Professor_Publication/Backend"
 node index.js
 
-# Frontend (Terminal 2)  
+# Frontend (Terminal 2)
 cd "c:/Users/mkmoh/OneDrive/Desktop/Professor_Publication/frontend"
 npm start
 ```
@@ -96,7 +96,7 @@ npm start
 
 ### Step 3: Visit Any Page to See Data
 - **Experience:** `http://localhost:3000/experience` → See 14 teaching positions
-- **Publications:** `http://localhost:3000/publications` → See 19 UGC papers  
+- **Publications:** `http://localhost:3000/publications` → See 19 UGC papers
 - **Books:** `http://localhost:3000/books` → See authored and edited books
 - **Profile:** `http://localhost:3000/profile` → See complete profile info
 
@@ -122,11 +122,11 @@ const response = await fetch('/api/professor/experience', {
 // Returns all scraped teaching/research/industry experience
 ```
 
-### 3. **Database Schema Compatibility**  
+### 3. **Database Schema Compatibility**
 Our data transformer ensures 100% compatibility:
 - **Scraped fields** → **Database fields**
 - `designation` → `designation` ✅
-- `institution` → `institution` ✅  
+- `institution` → `institution` ✅
 - `duration: "2020-Present"` → `from: "2020", to: "Present"` ✅
 - All arrays and objects match existing schema ✅
 
@@ -140,11 +140,11 @@ When you login as the scraped faculty member, you should see:
 ```
 Teaching Experience Table:
 1. Lecturer - Vellore Engineering College
-2. Assistant Professor - Anna University  
+2. Assistant Professor - Anna University
 3. Associate Professor - Pondicherry University
 ... (11 more records)
 
-Research Experience Table:  
+Research Experience Table:
 1. Senior Research Fellow - IIT Chennai
 2. Project Associate - Anna University
 
@@ -162,11 +162,11 @@ UGC Approved Journals (19 papers):
 ... (17 more papers with full details)
 ```
 
-### Books Page:  
+### Books Page:
 ```
 Authored Books:
 1. "Introduction to Database Management Systems" (2009)
-2. "Business Process" (2009) 
+2. "Business Process" (2009)
 
 Edited Books:
 1. "Proceedings of International Conference..." (2005)
@@ -177,7 +177,7 @@ Edited Books:
 ## 🚀 **Status: READY TO USE**
 
 ✅ **Backend Integration:** Complete
-✅ **Data Transformation:** Working  
+✅ **Data Transformation:** Working
 ✅ **Database Storage:** Successful
 ✅ **API Endpoints:** Serving scraped data
 ✅ **Frontend Compatibility:** 100% compatible
@@ -192,7 +192,7 @@ Just login with the scraped faculty credentials and visit any page to see the da
 
 Once a faculty member's data is updated using the "Update Database" button:
 1. **New data** gets stored in database automatically
-2. **All pages** immediately show the updated information  
+2. **All pages** immediately show the updated information
 3. **No manual intervention** required
 4. **Data appears** in the same table format as manually entered data
 

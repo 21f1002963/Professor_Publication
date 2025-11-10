@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -36,8 +36,8 @@ async function completeDataDebug() {
     }
 
     console.log('\n🔍 STEP 2: Look for scraped data...');
-    const scrapedUsers = allUsers.filter(user => 
-      user.teaching_experience?.length > 0 || 
+    const scrapedUsers = allUsers.filter(user =>
+      user.teaching_experience?.length > 0 ||
       user.ugc_papers?.length > 0 ||
       user.ugc_approved_journals?.length > 0 ||
       user.data_source === 'web_scraping'
@@ -76,7 +76,7 @@ async function completeDataDebug() {
     console.log('\n🔍 STEP 4: Check login capability...');
     if (!scrapedUser.email || !scrapedUser.password) {
       console.log('⚠️  User has no login credentials! Setting up...');
-      
+
       const email = 'skvjey@gmail.com';
       const password = 'PUGA31K2ID';
       const hashedPassword = await bcrypt.hash(password, 10);

@@ -14,7 +14,7 @@ async function simulateProfileUpdate() {
     // Find your current user
     console.log(`\n👤 Finding user: ${userEmail}`);
     const user = await Professor.findOne({ email: userEmail });
-    
+
     if (!user) {
       console.log('❌ User not found');
       return;
@@ -54,41 +54,41 @@ async function simulateProfileUpdate() {
       email: user.email, // Keep original email
       password: user.password, // Keep original password
       role: user.role, // Keep original role
-      
+
       // Update profile information
       name: transformedData.name || user.name,
       department: transformedData.department || user.department,
       designation: transformedData.designation || user.designation,
-      
+
       // Update academic data
       teaching_experience: transformedData.teaching_experience || [],
       research_experience: transformedData.research_experience || [],
       industry_experience: transformedData.industry_experience || [],
-      
+
       // Publications
       ugc_papers: transformedData.ugc_papers || [],
       ugc_approved_journals: transformedData.ugc_approved_journals || [],
       non_ugc_papers: transformedData.non_ugc_papers || [],
       non_ugc_journals: transformedData.non_ugc_journals || [],
       conference_proceedings: transformedData.conference_proceedings || [],
-      
+
       // Books
       books: transformedData.books || [],
       chapters_in_books: transformedData.chapters_in_books || [],
       edited_books: transformedData.edited_books || [],
-      
+
       // Education and awards
       education: transformedData.education || [],
       awards: transformedData.awards || [],
-      
+
       // Projects
       ongoing_projects: transformedData.ongoing_projects || [],
       completed_projects: transformedData.completed_projects || [],
-      
+
       // Other data
       patents: transformedData.patents || [],
       patent_details: transformedData.patent_details || [],
-      
+
       // Meta information
       node_id: nodeId,
       data_source: 'web_scraping',

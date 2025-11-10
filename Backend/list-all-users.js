@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -26,13 +26,13 @@ async function listAllUsers() {
         console.log(`   Has Password: ${!!user.password}`);
         console.log(`   Department: ${user.department || 'No department'}`);
         console.log(`   Data Source: ${user.data_source || 'Not specified'}`);
-        
+
         // Check for scraped data
-        const hasScrapedData = !!(user.teaching_experience?.length || 
-                                 user.ugc_approved_journals?.length || 
+        const hasScrapedData = !!(user.teaching_experience?.length ||
+                                 user.ugc_approved_journals?.length ||
                                  user.ugc_papers?.length);
         console.log(`   Has Scraped Data: ${hasScrapedData}`);
-        
+
         if (hasScrapedData) {
           console.log(`   - Teaching: ${user.teaching_experience?.length || 0}`);
           console.log(`   - UGC Papers: ${(user.ugc_approved_journals?.length || 0) + (user.ugc_papers?.length || 0)}`);

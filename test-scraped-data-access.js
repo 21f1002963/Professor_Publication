@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 async function testScrapedDataAccess() {
   try {
     console.log('🔐 Logging in as test faculty user...');
-    
+
     // Login with the test faculty credentials
     const loginResponse = await fetch('http://localhost:5000/api/professor/signin', {
       method: 'POST',
@@ -17,7 +17,7 @@ async function testScrapedDataAccess() {
     });
 
     const loginData = await loginResponse.json();
-    
+
     if (!loginData.success) {
       console.log('❌ Login failed:', loginData.message);
       return;
@@ -36,13 +36,13 @@ async function testScrapedDataAccess() {
     });
 
     const experienceData = await experienceResponse.json();
-    
+
     if (experienceData.success) {
       console.log(`✅ Experience data retrieved successfully:`);
       console.log(`   - Teaching Experience: ${experienceData.data.teachingExperience?.length || 0} records`);
       console.log(`   - Research Experience: ${experienceData.data.researchExperience?.length || 0} records`);
       console.log(`   - Industry Experience: ${experienceData.data.industryExperience?.length || 0} records`);
-      
+
       if (experienceData.data.teachingExperience && experienceData.data.teachingExperience.length > 0) {
         console.log('\n📝 Sample teaching experience:');
         const first = experienceData.data.teachingExperience[0];
@@ -64,12 +64,12 @@ async function testScrapedDataAccess() {
     });
 
     const publicationsData = await publicationsResponse.json();
-    
+
     if (publicationsData.success) {
       console.log(`✅ Publications data retrieved successfully:`);
       console.log(`   - UGC Papers: ${publicationsData.data.ugcPapers?.length || 0} records`);
       console.log(`   - Non-UGC Papers: ${publicationsData.data.nonUgcPapers?.length || 0} records`);
-      
+
       if (publicationsData.data.ugcPapers && publicationsData.data.ugcPapers.length > 0) {
         console.log('\n📄 Sample UGC paper:');
         const first = publicationsData.data.ugcPapers[0];

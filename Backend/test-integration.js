@@ -16,12 +16,12 @@ const mockScrapedData = {
   name: "Dr. Test Faculty",
   designation: "Associate Professor",
   department: "Computer Science",
-  school: "School of Engineering", 
+  school: "School of Engineering",
   email: "test.faculty@pu.edu.in",
   phone: "+91-9876543210",
   node_id: "TEST123",
   source_url: "https://pu.edu.in/faculty/test123",
-  
+
   home: {
     education: [
       {
@@ -32,7 +32,7 @@ const mockScrapedData = {
       },
       {
         degree: "M.Tech",
-        title: "Computer Science and Engineering", 
+        title: "Computer Science and Engineering",
         university: "National Institute of Technology",
         graduationYear: "2014"
       }
@@ -47,12 +47,12 @@ const mockScrapedData = {
       }
     ]
   },
-  
+
   experience: {
     teaching: [
       {
         designation: "Associate Professor",
-        department: "Computer Science", 
+        department: "Computer Science",
         institution: "Pondicherry University",
         duration: "2020-Present"
       },
@@ -67,7 +67,7 @@ const mockScrapedData = {
       {
         designation: "Research Associate",
         department: "AI Research Lab",
-        institution: "IIT Madras", 
+        institution: "IIT Madras",
         duration: "2016-2018"
       }
     ],
@@ -80,7 +80,7 @@ const mockScrapedData = {
       }
     ]
   },
-  
+
   innovation: {
     contributions: [
       {
@@ -111,7 +111,7 @@ const mockScrapedData = {
       {
         title: "Ensemble Methods for Big Data Analytics",
         authors: "Dr. Test Faculty, Dr. Another Author, Dr. Third Author",
-        journalName: "Journal of Machine Learning Research", 
+        journalName: "Journal of Machine Learning Research",
         volumeIssuePages: "Vol 24, pp 1-25",
         year: "2023",
         impactFactor: "6.2"
@@ -122,7 +122,7 @@ const mockScrapedData = {
         title: "Survey of Explainable AI Techniques",
         authors: "Dr. Test Faculty",
         journalName: "International Journal of AI Research",
-        volumeIssuePages: "Vol 8, Issue 2, pp 100-115", 
+        volumeIssuePages: "Vol 8, Issue 2, pp 100-115",
         year: "2022",
         impactFactor: "3.1"
       }
@@ -137,7 +137,7 @@ const mockScrapedData = {
       }
     ]
   },
-  
+
   books: {
     authored_books: [
       {
@@ -154,7 +154,7 @@ const mockScrapedData = {
         authors: "Dr. Test Faculty",
         bookTitle: "Advances in Artificial Intelligence",
         publisher: "Elsevier",
-        year: "2022", 
+        year: "2022",
         isbn: "978-0-123456-78-9"
       }
     ],
@@ -168,13 +168,13 @@ const mockScrapedData = {
       }
     ]
   },
-  
+
   projects: {
     ongoing_projects: [
       {
         title: "AI-Enhanced Learning Management System",
         sponsoredBy: "MHRD",
-        period: "2023-2025", 
+        period: "2023-2025",
         sanctionedAmount: "2500000",
         year: "2023"
       }
@@ -198,7 +198,7 @@ const mockScrapedData = {
       }
     ]
   },
-  
+
   research_guidance: {
     phd_guidance: [
       {
@@ -209,7 +209,7 @@ const mockScrapedData = {
         status: "Ongoing"
       },
       {
-        studentName: "Jane Smith", 
+        studentName: "Jane Smith",
         registrationNo: "PHD2020CS002",
         registrationDate: "2020-08-01",
         thesisTitle: "Blockchain-based Secure Data Sharing",
@@ -221,49 +221,49 @@ const mockScrapedData = {
 
 async function testDataTransformation() {
   console.log('🔄 Testing Data Transformation...\n');
-  
+
   try {
     // Test the transformation
     const transformer = new DataTransformer();
     const transformedData = transformer.transformScrapedDataForDB(mockScrapedData);
-    
+
     console.log('✅ Transformation successful!');
     console.log('\n📊 Transformation Results:');
     console.log('==========================================');
-    
+
     // Display key transformations
     console.log('\n🔹 Basic Information:');
     console.log(`Name: ${transformedData.name}`);
     console.log(`Email: ${transformedData.email}`);
     console.log(`Department: ${transformedData.department}`);
     console.log(`Data Source: ${transformedData.data_source}`);
-    
+
     console.log('\n🔹 Education (Flattened from home.education):');
     transformedData.education?.forEach((edu, index) => {
       console.log(`  ${index + 1}. ${edu.degree} - ${edu.title} (${edu.graduationYear})`);
     });
-    
+
     console.log('\n🔹 Teaching Experience (Duration parsed):');
     transformedData.teaching_experience?.forEach((exp, index) => {
       console.log(`  ${index + 1}. ${exp.designation} at ${exp.institution} (${exp.from} - ${exp.to})`);
     });
-    
+
     console.log('\n🔹 UGC Approved Journals (Volume/Issue parsed):');
     transformedData.ugc_approved_journals?.forEach((paper, index) => {
       console.log(`  ${index + 1}. ${paper.title}`);
       console.log(`     Volume: ${paper.volume}, Issue: ${paper.issue}, Pages: ${paper.page_nos}`);
     });
-    
+
     console.log('\n🔹 Patents (Field mapping):');
     transformedData.patent_details?.forEach((patent, index) => {
       console.log(`  ${index + 1}. ${patent.patent_title} (${patent.year_of_award})`);
     });
-    
+
     console.log('\n🔹 Books (Direct mapping):');
     transformedData.books?.forEach((book, index) => {
       console.log(`  ${index + 1}. ${book.title} - ${book.publisher} (${book.year})`);
     });
-    
+
     // Validate transformation
     const validation = transformer.validateTransformation(transformedData);
     console.log('\n✅ Validation Results:');
@@ -274,9 +274,9 @@ async function testDataTransformation() {
     if (validation.warnings.length > 0) {
       console.log('⚠️  Warnings:', validation.warnings);
     }
-    
+
     return transformedData;
-    
+
   } catch (error) {
     console.error('❌ Transformation failed:', error.message);
     return null;
@@ -285,7 +285,7 @@ async function testDataTransformation() {
 
 async function testFieldMapping() {
   console.log('\n\n🗺️  Testing Field Mapping...\n');
-  
+
   const mappingTests = [
     {
       name: 'Duration Parsing',
@@ -303,13 +303,13 @@ async function testFieldMapping() {
       expected: { volume: '24', issue: '', pages: '1-25' }
     }
   ];
-  
+
   const transformer = new DataTransformer();
-  
+
   mappingTests.forEach(test => {
     console.log(`🧪 ${test.name}:`);
     console.log(`   Input: "${test.input}"`);
-    
+
     try {
       let result;
       if (test.name === 'Duration Parsing') {
@@ -317,7 +317,7 @@ async function testFieldMapping() {
       } else {
         result = transformer.parseVolumeIssuePages(test.input);
       }
-      
+
       console.log(`   Output:`, result);
       console.log(`   Expected:`, test.expected);
       console.log(`   ✅ Match: ${JSON.stringify(result) === JSON.stringify(test.expected)}\n`);
@@ -329,38 +329,38 @@ async function testFieldMapping() {
 
 async function testCompatibilityCheck() {
   console.log('\n\n🔍 Testing Database Schema Compatibility...\n');
-  
+
   try {
     const transformer = new DataTransformer();
     const transformedData = transformer.transformScrapedDataForDB(mockScrapedData);
-    
+
     // Check against Professor schema
     console.log('📋 Schema Compatibility Check:');
     console.log('================================');
-    
+
     const schemaFields = [
       'name', 'email', 'department', 'designation',
-      'education', 'awards', 'teaching_experience', 
+      'education', 'awards', 'teaching_experience',
       'ugc_approved_journals', 'patent_details', 'books'
     ];
-    
+
     schemaFields.forEach(field => {
       const hasField = transformedData.hasOwnProperty(field);
-      const hasData = hasField && transformedData[field] && 
+      const hasData = hasField && transformedData[field] &&
                      (Array.isArray(transformedData[field]) ? transformedData[field].length > 0 : true);
-      
+
       console.log(`${hasField ? '✅' : '❌'} ${field}: ${hasField ? (hasData ? 'Present with data' : 'Present but empty') : 'Missing'}`);
     });
-    
+
     // Calculate compatibility percentage
     const presentFields = schemaFields.filter(field => transformedData.hasOwnProperty(field));
     const compatibility = (presentFields.length / schemaFields.length * 100).toFixed(1);
-    
+
     console.log(`\n📈 Overall Compatibility: ${compatibility}%`);
     console.log(`📊 Fields Mapped: ${presentFields.length}/${schemaFields.length}`);
-    
+
     return compatibility >= 80;
-    
+
   } catch (error) {
     console.error('❌ Compatibility check failed:', error.message);
     return false;
@@ -370,27 +370,27 @@ async function testCompatibilityCheck() {
 async function runAllTests() {
   console.log('🚀 Faculty Data Integration Test Suite');
   console.log('=====================================\n');
-  
+
   // Test 1: Data Transformation
   const transformedData = await testDataTransformation();
   if (!transformedData) {
     console.log('❌ Testing stopped due to transformation failure');
     return;
   }
-  
+
   // Test 2: Field Mapping
   await testFieldMapping();
-  
+
   // Test 3: Compatibility Check
   const isCompatible = await testCompatibilityCheck();
-  
+
   // Final Results
   console.log('\n\n🏆 FINAL TEST RESULTS');
   console.log('====================');
   console.log(`✅ Data Transformation: PASSED`);
   console.log(`✅ Field Mapping: PASSED`);
   console.log(`${isCompatible ? '✅' : '❌'} Schema Compatibility: ${isCompatible ? 'PASSED' : 'FAILED'}`);
-  
+
   if (isCompatible) {
     console.log('\n🎉 SUCCESS: Scraped data CAN be successfully stored in your existing database!');
     console.log('\n📋 Next Steps:');
@@ -410,7 +410,7 @@ if (require.main === module) {
 
 module.exports = {
   testDataTransformation,
-  testFieldMapping, 
+  testFieldMapping,
   testCompatibilityCheck,
   mockScrapedData
 };

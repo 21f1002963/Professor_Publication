@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -12,7 +12,7 @@ async function debugCloudDatabase() {
   try {
     console.log('🔗 Connecting to MongoDB Atlas Cloud...');
     console.log(`📡 URI: ${process.env.MONGO_URI.substring(0, 50)}...`);
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected to MongoDB Atlas Cloud');
 
@@ -78,9 +78,9 @@ async function debugCloudDatabase() {
       console.log(`   UGC Approved Journals: ${foundUser.ugc_approved_journals?.length || 0} records`);
       console.log(`   Books: ${foundUser.books?.length || 0} records`);
 
-      const totalRecords = (foundUser.teaching_experience?.length || 0) + 
-                          (foundUser.ugc_papers?.length || 0) + 
-                          (foundUser.ugc_approved_journals?.length || 0) + 
+      const totalRecords = (foundUser.teaching_experience?.length || 0) +
+                          (foundUser.ugc_papers?.length || 0) +
+                          (foundUser.ugc_approved_journals?.length || 0) +
                           (foundUser.books?.length || 0);
 
       if (totalRecords === 0) {
@@ -99,7 +99,7 @@ async function debugCloudDatabase() {
 
     } else {
       console.log('\n❌ YOUR USER NOT FOUND IN CLOUD DATABASE!');
-      
+
       // Show all users in cloud database
       const allUsers = await Professor.find({}).limit(10);
       console.log(`\n📊 All users in cloud database (showing first 10 of ${allUsers.length}):`);

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -39,7 +39,7 @@ async function debugCurrentState() {
       console.log(`   UGC Papers: ${user.ugc_papers?.length || 0} records`);
       console.log(`   UGC Approved Journals: ${user.ugc_approved_journals?.length || 0} records`);
       console.log(`   Has Password: ${!!user.password}`);
-      
+
       // Check if this user has any scraped data
       const hasScrapedData = (
         (user.teaching_experience?.length || 0) > 0 ||
@@ -52,7 +52,7 @@ async function debugCurrentState() {
     });
 
     // Find the user that should have scraped data
-    const userWithData = allUsers.find(user => 
+    const userWithData = allUsers.find(user =>
       (user.teaching_experience?.length || 0) > 0 ||
       (user.ugc_papers?.length || 0) > 0 ||
       user.data_source === 'hybrid' ||
@@ -64,7 +64,7 @@ async function debugCurrentState() {
       console.log(`   Name: ${userWithData.name}`);
       console.log(`   Email: ${userWithData.email}`);
       console.log(`   Login credentials: ${userWithData.email && userWithData.password ? '✅ Available' : '❌ Missing'}`);
-      
+
       // Show sample data
       if (userWithData.teaching_experience?.length > 0) {
         console.log('\n📚 Sample Teaching Experience:');

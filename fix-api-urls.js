@@ -7,7 +7,7 @@ const productionUrl = 'https://professorpublication-production.up.railway.app';
 // Components that need the getApiUrl import
 const componentsToFix = [
   'Training.js',
-  'ResearchGuidanceStudents.js', 
+  'ResearchGuidanceStudents.js',
   'RequestPublications.js',
   'ReportBroken.js',
   'Report.js',
@@ -26,7 +26,7 @@ const componentsToFix = [
 
 function fixComponent(componentName) {
   const filePath = path.join(componentsDir, componentName);
-  
+
   if (!fs.existsSync(filePath)) {
     console.log(`⚠️  ${componentName} not found, skipping...`);
     return;
@@ -40,12 +40,12 @@ function fixComponent(componentName) {
     // Add import after the existing imports
     const importRegex = /import.*from.*['"];?\s*\n/g;
     const imports = content.match(importRegex);
-    
+
     if (imports && imports.length > 0) {
       const lastImport = imports[imports.length - 1];
       const lastImportIndex = content.lastIndexOf(lastImport);
-      
-      content = content.slice(0, lastImportIndex + lastImport.length) + 
+
+      content = content.slice(0, lastImportIndex + lastImport.length) +
                 `import { getApiUrl } from '../config/api';\n` +
                 content.slice(lastImportIndex + lastImport.length);
       modified = true;
@@ -54,7 +54,7 @@ function fixComponent(componentName) {
 
   // Replace all hardcoded production URLs
   const urlPattern = new RegExp(`["'\`]${productionUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/api/([^"'\`]+)["'\`]`, 'g');
-  
+
   content = content.replace(urlPattern, (match, apiPath) => {
     modified = true;
     return `getApiUrl("/api/${apiPath}")`;

@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -24,9 +24,9 @@ async function testProfileUpdateFeature() {
 
     // Step 1: Create a test user if none exists
     console.log('\n1️⃣ Setting up test user...');
-    
+
     let testUser = await Professor.findOne({ email: 'test@example.com' });
-    
+
     if (!testUser) {
       const hashedPassword = await bcrypt.hash('password123', 10);
       testUser = new Professor({
@@ -39,7 +39,7 @@ async function testProfileUpdateFeature() {
         teaching_experience: [],
         ugc_papers: []
       });
-      
+
       await testUser.save();
       console.log('✅ Created test user: test@example.com / password123');
     } else {

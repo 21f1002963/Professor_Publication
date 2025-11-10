@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -16,7 +16,7 @@ async function debugLogin() {
 
     // Find the user we just created
     const user = await Professor.findOne({ email: 'test@example.com' });
-    
+
     if (!user) {
       console.log('❌ User not found with email test@example.com');
       return;
@@ -31,7 +31,7 @@ async function debugLogin() {
     // Test password manually
     console.log('\n🔐 Testing password...');
     const testPasswords = ['password123', 'Password123', 'PASSWORD123'];
-    
+
     for (const testPass of testPasswords) {
       const isValid = await bcrypt.compare(testPass, user.password);
       console.log(`   "${testPass}": ${isValid ? '✅ VALID' : '❌ Invalid'}`);

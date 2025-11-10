@@ -20,11 +20,11 @@ function makeRequest(options, data = null) {
     });
 
     req.on('error', reject);
-    
+
     if (data) {
       req.write(JSON.stringify(data));
     }
-    
+
     req.end();
   });
 }
@@ -70,7 +70,7 @@ async function testFixedAPIs() {
       console.log(`   teaching_experience: ${expResponse.data.teaching_experience?.length || 0} records`);
       console.log(`   research_experience: ${expResponse.data.research_experience?.length || 0} records`);
       console.log(`   industry_experience: ${expResponse.data.industry_experience?.length || 0} records`);
-      
+
       if (expResponse.data.teaching_experience?.length > 0) {
         console.log('\n   📚 Sample Teaching Experience:');
         const sample = expResponse.data.teaching_experience[0];
@@ -96,7 +96,7 @@ async function testFixedAPIs() {
       console.log(`   ugcPapers: ${pubResponse.data.ugcPapers?.length || 0} records`);
       console.log(`   nonUgcPapers: ${pubResponse.data.nonUgcPapers?.length || 0} records`);
       console.log(`   ugc_approved_journals: ${pubResponse.data.ugc_approved_journals?.length || 0} records (legacy)`);
-      
+
       if (pubResponse.data.ugcPapers?.length > 0) {
         console.log('\n   📄 Sample UGC Paper:');
         const sample = pubResponse.data.ugcPapers[0];

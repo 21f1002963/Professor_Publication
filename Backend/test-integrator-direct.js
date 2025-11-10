@@ -8,13 +8,13 @@ const FacultyDataIntegrator = require('./utils/facultyDataIntegrator');
 
 async function testFacultyDataIntegrator() {
   console.log('🔍 Testing FacultyDataIntegrator directly...\n');
-  
+
   try {
     // Connect to MongoDB
     console.log('1. Connecting to MongoDB...');
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ MongoDB connected');
-    
+
     // Test scraping and storing
     console.log('\n2. Testing scrape and store for Node ID 941...');
     const result = await FacultyDataIntegrator.scrapeAndStore('941', {
@@ -24,9 +24,9 @@ async function testFacultyDataIntegrator() {
         conflictResolution: 'manual'
       }
     });
-    
+
     console.log('✅ Scrape and store result:', result);
-    
+
   } catch (error) {
     console.error('❌ Test failed:', error.message);
     console.error('Stack:', error.stack);

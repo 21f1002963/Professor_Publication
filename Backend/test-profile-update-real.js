@@ -16,10 +16,10 @@ async function testProfileUpdate() {
     const userEmail = 'skvjey@pondiuni.ac.in';
 
     console.log(`\n🕷️ Scraping data for Node ID: ${nodeId}`);
-    
+
     // Initialize scraper
     const scraper = new FacultyDataScraper();
-    
+
     // Scrape faculty data
     const scrapedData = await scraper.scrapeFacultyData(nodeId);
     console.log('✅ Data scraped successfully');
@@ -51,7 +51,7 @@ async function testProfileUpdate() {
     // Find user
     console.log(`\n👤 Finding user: ${userEmail}`);
     const user = await Professor.findOne({ email: userEmail });
-    
+
     if (!user) {
       console.log('❌ User not found');
       return;
@@ -71,7 +71,7 @@ async function testProfileUpdate() {
     };
 
     console.log('\n🔄 Updating user profile...');
-    
+
     // Update the user
     const updatedUser = await Professor.findByIdAndUpdate(
       user._id,

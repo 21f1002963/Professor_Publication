@@ -10,7 +10,7 @@ This document analyzes the mapping between web-scraped faculty data and the manu
 {
   name: "Faculty Name",
   designation: "Professor",
-  department: "Department Name", 
+  department: "Department Name",
   school: "School Name",
   email: "email@domain.com",
   profileImage: "image_url",
@@ -62,7 +62,7 @@ home: {
 ```javascript
 education: [{
   degree: String,
-  title: String, 
+  title: String,
   university: String,
   graduationYear: String
 }]
@@ -78,7 +78,7 @@ home: {
   awards: [
     {
       title: "Award Title",
-      type: "Award Type", 
+      type: "Award Type",
       agency: "Awarding Agency",
       year: "2023",
       amount: "50000"
@@ -143,7 +143,7 @@ experience: {
   research: [
     {
       designation: "Research Fellow",
-      department: "Physics", 
+      department: "Physics",
       institution: "Institute Name",
       duration: "2018-2020"
     }
@@ -155,7 +155,7 @@ experience: {
 ```javascript
 research_experience: [{
   position: String,        // ← designation
-  organization: String,    // ← institution  
+  organization: String,    // ← institution
   project: String,         // ← Not available in scraped
   from: String,
   to: String
@@ -164,7 +164,7 @@ research_experience: [{
 
 **⚠️ MAPPING STATUS: PARTIAL COMPATIBILITY**
 - `designation` → `position`
-- `institution` → `organization` 
+- `institution` → `organization`
 - `duration` → Split into `from` and `to`
 - `project` field missing in scraped data (can be empty)
 
@@ -189,7 +189,7 @@ industry_experience: [{
   designation: String,
   company: String,
   sector: String,      // ← Not available in scraped
-  from: String,        // ← Not available in scraped  
+  from: String,        // ← Not available in scraped
   to: String          // ← Not available in scraped
 }]
 ```
@@ -272,7 +272,7 @@ innovation: {
   ugc_papers: [
     {
       title: "Paper Title",
-      authors: "Author Names", 
+      authors: "Author Names",
       journalName: "Journal Name",
       volumeIssuePages: "Vol 1, Issue 2, pp 1-10",
       year: "2023",
@@ -289,7 +289,7 @@ ugc_approved_journals: [{
   authors: String,
   journal_name: String,       // ← journalName
   volume: String,             // ← Extract from volumeIssuePages
-  issue: String,              // ← Extract from volumeIssuePages  
+  issue: String,              // ← Extract from volumeIssuePages
   page_nos: String,           // ← Extract from volumeIssuePages
   year: String,
   impact_factor: String,      // ← impactFactor
@@ -316,7 +316,7 @@ books: {
     {
       title: "Book Title",
       authors: "Author Names",
-      publisher: "Publisher Name", 
+      publisher: "Publisher Name",
       year: "2023",
       isbn: "978-1234567890"
     }
@@ -348,7 +348,7 @@ books: {
       authors: "Author Names",
       bookTitle: "Book Title",
       publisher: "Publisher",
-      year: "2023", 
+      year: "2023",
       isbn: "978-1234567890"
     }
   ]
@@ -395,7 +395,7 @@ ongoing_projects: [{
   title_of_project: String,     // ← title
   sponsored_by: String,          // ← sponsoredBy
   period: String,
-  sanctioned_amount: String,     // ← sanctionedAmount  
+  sanctioned_amount: String,     // ← sanctionedAmount
   year: String
 }]
 ```
@@ -415,7 +415,7 @@ research_guidance: {
   phd_guidance: [
     {
       studentName: "Student Name",
-      registrationNo: "REG123", 
+      registrationNo: "REG123",
       registrationDate: "2020-01-01",
       thesisTitle: "Thesis Title",
       status: "YES" // Completed/In Progress
@@ -448,7 +448,7 @@ phd_guidance: [{
 
 ### ✅ Fully Compatible Sections (Can store directly):
 1. **Basic Information** - Direct mapping
-2. **Education** - Direct mapping  
+2. **Education** - Direct mapping
 3. **Awards** - Direct mapping
 4. **Authored Books** - Direct mapping
 5. **Book Chapters** - Field name conversion only
@@ -471,7 +471,7 @@ function transformScrapedDataForDB(scrapedData) {
     name: scrapedData.name,
     email: scrapedData.email,
     department: scrapedData.department,
-    
+
     // Transform experience
     teaching_experience: scrapedData.experience.teaching.map(exp => ({
       designation: exp.designation,
@@ -480,7 +480,7 @@ function transformScrapedDataForDB(scrapedData) {
       from: parseDateRange(exp.duration).from,
       to: parseDateRange(exp.duration).to
     })),
-    
+
     // Transform publications
     ugc_approved_journals: scrapedData.innovation.ugc_papers.map(paper => ({
       title: paper.title,
@@ -493,7 +493,7 @@ function transformScrapedDataForDB(scrapedData) {
       paper_upload_filename: '',
       paper_link: ''
     })),
-    
+
     // Set metadata
     data_source: 'web_scraping',
     scraped_date: scrapedData.scraped_date,
@@ -503,7 +503,7 @@ function transformScrapedDataForDB(scrapedData) {
 }
 ```
 
-#### Option 2: Hybrid Schema 
+#### Option 2: Hybrid Schema
 Add scraped data as separate nested object while maintaining compatibility:
 
 ```javascript
@@ -513,7 +513,7 @@ scraped_data: {
   default: null
 },
 data_source: {
-  type: String, 
+  type: String,
   enum: ['manual', 'web_scraping'],
   default: 'manual'
 }

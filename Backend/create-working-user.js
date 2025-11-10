@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -27,7 +27,7 @@ async function createWorkingTestUser() {
       role: 'faculty',
       department: 'Computer Science',
       data_source: 'hybrid',
-      
+
       // Add some test data to verify it shows up
       teaching_experience: [
         {
@@ -38,14 +38,14 @@ async function createWorkingTestUser() {
           to: '2023'
         },
         {
-          designation: 'Assistant Professor', 
+          designation: 'Assistant Professor',
           institution: 'Test College',
           department: 'Information Technology',
           from: '2018',
           to: '2020'
         }
       ],
-      
+
       research_experience: [
         {
           position: 'Research Associate',

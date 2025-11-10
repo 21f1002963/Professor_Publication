@@ -11,7 +11,7 @@ async function testYourAccount() {
     // Find your account
     console.log('\n🔍 Looking for your account: skvjey@pondiuni.ac.in');
     const yourAccount = await Professor.findOne({ email: 'skvjey@pondiuni.ac.in' });
-    
+
     if (!yourAccount) {
       console.log('❌ Account not found');
       return;
@@ -22,7 +22,7 @@ async function testYourAccount() {
     console.log(`👤 Name: ${yourAccount.name}`);
     console.log(`🆔 ID: ${yourAccount._id}`);
     console.log(`🔒 Password Hash: ${yourAccount.password ? 'Present' : 'Missing'}`);
-    
+
     // Check if there's any academic data
     console.log('\n📚 ACADEMIC DATA CHECK:');
     console.log(`📖 Publications: ${yourAccount.publications ? yourAccount.publications.length : 0}`);
@@ -30,7 +30,7 @@ async function testYourAccount() {
     console.log(`📝 UGC Papers: ${yourAccount.ugc_papers ? yourAccount.ugc_papers.length : 0}`);
     console.log(`📄 Non-UGC Papers: ${yourAccount.non_ugc_papers ? yourAccount.non_ugc_papers.length : 0}`);
     console.log(`🏆 Patents: ${yourAccount.patents ? yourAccount.patents.length : 0}`);
-    
+
     // Show some sample data if it exists
     if (yourAccount.publications && yourAccount.publications.length > 0) {
       console.log('\n📖 Sample Publications:');

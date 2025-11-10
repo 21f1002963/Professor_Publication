@@ -14,7 +14,7 @@ async function manuallyUpdateYourProfile() {
     // Find your account
     console.log(`\n👤 Finding your account: ${userEmail}`);
     const user = await Professor.findOne({ email: userEmail });
-    
+
     if (!user) {
       console.log('❌ User not found');
       return;
@@ -137,7 +137,7 @@ async function manuallyUpdateYourProfile() {
 
     // Update the user with sample data
     console.log('\n🔄 Updating your profile with sample academic data...');
-    
+
     const updateData = {
       ...sampleScrapedData,
       node_id: nodeId,

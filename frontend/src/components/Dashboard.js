@@ -174,6 +174,7 @@ function Dashboard() {
     { label: 'Profile', path: '/profile', icon: '👤' },
     { label: 'Experience', path: '/experience', icon: '💼' },
     { label: 'Faculty', path: '/faculty', icon: '👥' },
+    { label: 'Faculty Importer', path: '/faculty-importer', icon: '📥' },
     { label: 'Publications', path: '/publications', icon: '📄' },
     { label: 'Access Requests', path: '/access-requests', icon: '🔐' },
     { label: 'Patents', path: '/patents', icon: '💡' },

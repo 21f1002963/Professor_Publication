@@ -21,11 +21,11 @@ function makeRequest(options, data = null) {
     });
 
     req.on('error', reject);
-    
+
     if (data) {
       req.write(JSON.stringify(data));
     }
-    
+
     req.end();
   });
 }
@@ -44,7 +44,7 @@ async function testFullIntegration() {
         path: '/',
         method: 'GET'
       });
-      
+
       if (healthCheck.status === 200) {
         console.log('✅ Backend is running on port 5000');
       } else {
@@ -74,7 +74,7 @@ async function testFullIntegration() {
     };
 
     const loginResponse = await makeRequest(loginOptions, loginData);
-    
+
     if (loginResponse.status !== 200 || !loginResponse.data.token) {
       console.log('❌ Login failed:', loginResponse.data);
       console.log('   Make sure the test user exists and credentials are correct.');
@@ -101,13 +101,13 @@ async function testFullIntegration() {
     };
 
     const experienceResponse = await makeRequest(experienceOptions);
-    
+
     if (experienceResponse.status === 200) {
       console.log('✅ Experience API working!');
       console.log(`   Teaching Experience: ${experienceResponse.data.teaching_experience?.length || 0} records`);
       console.log(`   Research Experience: ${experienceResponse.data.research_experience?.length || 0} records`);
       console.log(`   Industry Experience: ${experienceResponse.data.industry_experience?.length || 0} records`);
-      
+
       if (experienceResponse.data.teaching_experience?.length > 0) {
         console.log('\n   📚 Sample Teaching Experience:');
         const sample = experienceResponse.data.teaching_experience[0];
@@ -135,7 +135,7 @@ async function testFullIntegration() {
     };
 
     const publicationsResponse = await makeRequest(publicationsOptions);
-    
+
     if (publicationsResponse.status === 200) {
       console.log('✅ Publications API working!');
       console.log(`   UGC Papers: ${publicationsResponse.data.ugcPapers?.length || 0} records`);
@@ -149,7 +149,7 @@ async function testFullIntegration() {
     console.log('1. ✅ Backend running: YES');
     console.log('2. ✅ Login working: YES');
     console.log('3. ✅ APIs accessible: Check above results');
-    
+
     console.log('\n📝 TO SEE DATA ON FRONTEND:');
     console.log('1. Go to http://localhost:3000');
     console.log('2. Login with: test@example.com / password123');
@@ -157,7 +157,7 @@ async function testFullIntegration() {
     console.log('4. Open browser Developer Tools (F12)');
     console.log('5. Check Network tab for API calls');
     console.log('6. Check Console tab for JavaScript errors');
-    
+
     if (experienceResponse.data.teaching_experience?.length > 0) {
       console.log('\n✅ DATA IS AVAILABLE! If frontend shows empty tables:');
       console.log('   • Check if you\'re logged in as test@example.com');

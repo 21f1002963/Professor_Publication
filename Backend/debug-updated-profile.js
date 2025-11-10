@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -40,7 +40,7 @@ async function debugUpdatedProfile() {
       console.log(`   research_experience: ${userWithMostData.research_experience?.length || 0}`);
       console.log(`   industry_experience: ${userWithMostData.industry_experience?.length || 0}`);
 
-      // Check all possible publication fields  
+      // Check all possible publication fields
       console.log('\n📄 Publications Data:');
       console.log(`   ugc_papers: ${userWithMostData.ugc_papers?.length || 0}`);
       console.log(`   ugc_approved_journals: ${userWithMostData.ugc_approved_journals?.length || 0}`);

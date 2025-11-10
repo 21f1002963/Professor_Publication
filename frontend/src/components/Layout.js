@@ -322,7 +322,7 @@ function Layout({ children }) {
 
         {children}
       </div>
-      
+
       {/* Refresh Notification */}
       <RefreshNotification />
     </div>

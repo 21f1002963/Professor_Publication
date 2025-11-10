@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const professorSchema = new mongoose.Schema({}, { 
+const professorSchema = new mongoose.Schema({}, {
   collection: 'professors',
-  strict: false 
+  strict: false
 });
 
 const Professor = mongoose.model('Professor', professorSchema);
@@ -18,10 +18,10 @@ async function debugSpecificUser() {
 
     // Find the specific user
     const user = await Professor.findOne({ email: 'skvjey@pondiuni.ac.in' });
-    
+
     if (!user) {
       console.log('❌ User NOT FOUND with email: skvjey@pondiuni.ac.in');
-      
+
       // Show all users to see what emails exist
       const allUsers = await Professor.find({});
       console.log(`\n📊 All users in database (${allUsers.length} total):`);
@@ -64,9 +64,9 @@ async function debugSpecificUser() {
     console.log(`   area_of_expertise: ${user.area_of_expertise?.length || 0} records`);
 
     // Calculate total data
-    const totalData = (user.teaching_experience?.length || 0) + 
-                     (user.ugc_papers?.length || 0) + 
-                     (user.ugc_approved_journals?.length || 0) + 
+    const totalData = (user.teaching_experience?.length || 0) +
+                     (user.ugc_papers?.length || 0) +
+                     (user.ugc_approved_journals?.length || 0) +
                      (user.books?.length || 0);
 
     console.log(`\n📊 TOTAL DATA RECORDS: ${totalData}`);
@@ -78,15 +78,15 @@ async function debugSpecificUser() {
       console.log('   2. Data was saved to wrong user');
       console.log('   3. Database connection issue during update');
       console.log('   4. Authentication problem during update');
-      
+
       console.log('\n💡 SOLUTIONS:');
       console.log('   1. Try running "Update My Profile" again');
       console.log('   2. Check browser console for errors during update');
       console.log('   3. Make sure backend is running during update');
-      
+
     } else {
       console.log('\n✅ USER HAS SCRAPED DATA!');
-      
+
       // Show sample data
       if (user.teaching_experience?.length > 0) {
         console.log('\n📚 Sample Teaching Experience:');

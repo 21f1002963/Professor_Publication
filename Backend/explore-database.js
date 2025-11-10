@@ -5,7 +5,7 @@ async function exploreDatabase() {
   try {
     console.log('🔗 Connecting to MongoDB Atlas...');
     console.log(`📡 Full URI: ${process.env.MONGO_URI}`);
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected successfully');
 
@@ -17,14 +17,14 @@ async function exploreDatabase() {
     console.log('\n📋 ALL COLLECTIONS IN THIS DATABASE:');
     const collections = await mongoose.connection.db.listCollections().toArray();
     console.log(`Found ${collections.length} collections:`);
-    
+
     for (const collection of collections) {
       console.log(`\n📁 Collection: ${collection.name}`);
-      
+
       // Count documents in each collection
       const count = await mongoose.connection.db.collection(collection.name).countDocuments();
       console.log(`   📊 Documents: ${count}`);
-      
+
       if (count > 0 && count < 20) {
         // Show sample documents for small collections
         const samples = await mongoose.connection.db.collection(collection.name).find({}).limit(3).toArray();
@@ -40,13 +40,13 @@ async function exploreDatabase() {
 
     // Specifically check 'professors' collection with different queries
     console.log('\n🔍 DETAILED PROFESSORS COLLECTION ANALYSIS:');
-    
+
     const professorSchema = new mongoose.Schema({}, { strict: false });
     const Professor = mongoose.model('Professor', professorSchema, 'professors');
-    
+
     const totalProfs = await Professor.countDocuments();
     console.log(`📊 Total professors: ${totalProfs}`);
-    
+
     // Try different queries
     const queries = [
       { query: {}, name: 'All documents' },
@@ -60,7 +60,7 @@ async function exploreDatabase() {
     for (const { query, name } of queries) {
       const count = await Professor.countDocuments(query);
       console.log(`   ${name}: ${count} documents`);
-      
+
       if (count > 0 && count <= 10) {
         const results = await Professor.find(query).limit(5);
         results.forEach((doc, index) => {
@@ -70,9 +70,9 @@ async function exploreDatabase() {
     }
 
     // Check if there are any other professor-like collections
-    const profCollections = collections.filter(c => 
-      c.name.toLowerCase().includes('prof') || 
-      c.name.toLowerCase().includes('user') || 
+    const profCollections = collections.filter(c =>
+      c.name.toLowerCase().includes('prof') ||
+      c.name.toLowerCase().includes('user') ||
       c.name.toLowerCase().includes('faculty') ||
       c.name.toLowerCase().includes('teacher')
     );
@@ -83,7 +83,7 @@ async function exploreDatabase() {
         if (coll.name !== 'professors') {
           const count = await mongoose.connection.db.collection(coll.name).countDocuments();
           console.log(`   ${coll.name}: ${count} documents`);
-          
+
           if (count > 0 && count <= 10) {
             const samples = await mongoose.connection.db.collection(coll.name).find({}).limit(3).toArray();
             samples.forEach((doc, index) => {

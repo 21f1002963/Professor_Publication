@@ -35,7 +35,7 @@ const RefreshNotification = () => {
       if (e.key === 'dataLastUpdated') {
         setIsRefreshing(true);
         setLastRefreshTime(new Date());
-        
+
         // Hide notification after 3 seconds
         setTimeout(() => {
           setIsRefreshing(false);
@@ -50,7 +50,7 @@ const RefreshNotification = () => {
   if (!isRefreshing) return null;
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         top: '20px',
@@ -67,7 +67,7 @@ const RefreshNotification = () => {
         animation: 'slideIn 0.3s ease-out'
       }}
     >
-      <div 
+      <div
         style={{
           width: '16px',
           height: '16px',
@@ -78,14 +78,14 @@ const RefreshNotification = () => {
         }}
       />
       <span>Data updated! Refreshing tables...</span>
-      
+
       <style>
         {`
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
           }
-          
+
           @keyframes slideIn {
             from {
               transform: translateX(100%);
