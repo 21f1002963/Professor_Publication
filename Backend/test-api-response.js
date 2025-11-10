@@ -6,7 +6,7 @@ const testApiResponse = async () => {
   try {
     console.log('🔄 Testing API Response Format');
     console.log('=====================================');
-    
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('📊 Connected to database');
 
@@ -81,7 +81,7 @@ const testApiResponse = async () => {
     if (ugcCount === 0 && scopusCount === 0 && scieCount === 0) {
       console.log('\n⚠️  WARNING: No papers found with recognized types!');
       console.log('   This might explain why the frontend table appears empty.');
-      
+
       if (publicationsData.papers_published.length > 0) {
         const uniqueTypes = [...new Set(publicationsData.papers_published.map(p => p.paper_type))];
         console.log(`   Found paper types: ${uniqueTypes.join(', ')}`);

@@ -695,7 +695,7 @@ function Dashboard() {
                   fontWeight: 600,
                   textAlign: 'center'
                 }}>Last 3 Years</div>
-                
+
                 {publicationsStats.yearWiseBreakdown.length > 0 ? (
                   publicationsStats.yearWiseBreakdown.map(([year, count]) => (
                     <div key={year} style={{
@@ -781,7 +781,7 @@ function Dashboard() {
                   fontWeight: 600,
                   textAlign: 'center'
                 }}>Top Faculty by Awards</div>
-                
+
                 {awardsStats.topFacultyByAwards.length > 0 ? (
                   awardsStats.topFacultyByAwards.map((faculty, index) => (
                     <div key={faculty.name} style={{
@@ -806,7 +806,7 @@ function Dashboard() {
                         }}>
                           {index + 1}
                         </span>
-                        <span style={{ 
+                        <span style={{
                           fontSize: '0.8rem',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',

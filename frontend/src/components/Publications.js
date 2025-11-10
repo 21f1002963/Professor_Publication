@@ -288,7 +288,7 @@ function Publications() {
 
           console.log('📊 Final papersPublished array before setState:', papersPublished.length, 'papers');
           console.log('🎯 Setting papers_published in state:', papersPublished.length > 0 ? papersPublished.length : 'keeping previous (empty)');
-          
+
           const newState = {
             ...prevState,
             papers_published: papersPublished.length > 0 ? papersPublished : prevState.papers_published,
@@ -298,7 +298,7 @@ function Publications() {
             non_ugc_journals: data.non_ugc_journals || [],
             conference_proceedings: conferenceProceedings
           };
-          
+
           console.log('🔄 New state papers_published length:', newState.papers_published?.length);
           return newState;
         });

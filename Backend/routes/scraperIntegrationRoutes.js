@@ -173,6 +173,8 @@ router.post('/faculty/:nodeId', async (req, res) => {
       // Projects and other activities
       ongoing_projects: transformedData.ongoing_projects || [],
       completed_projects: transformedData.completed_projects || [],
+      ongoing_consultancy_works: transformedData.ongoing_consultancy_works || [],
+      completed_consultancy_works: transformedData.completed_consultancy_works || [],
       patents: transformedData.patents || [],
       fellowship: transformedData.fellowship || [],
       training_programs: transformedData.training_programs || [],
@@ -216,6 +218,7 @@ router.post('/faculty/:nodeId', async (req, res) => {
       education: updateData.education?.length || 0,
       awards: updateData.awards?.length || 0,
       projects: (updateData.ongoing_projects?.length || 0) + (updateData.completed_projects?.length || 0),
+      consultancy_works: (updateData.ongoing_consultancy_works?.length || 0) + (updateData.completed_consultancy_works?.length || 0),
       patents: updateData.patents?.length || 0
     };
 

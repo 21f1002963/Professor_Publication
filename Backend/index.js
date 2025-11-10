@@ -1010,49 +1010,77 @@ app.put('/api/professor/research-guidance/:id', authenticateToken, async (req, r
 app.get('/api/professor/project-consultancy/:id', authenticateToken, async (req, res) => {
     try {
         const professorId = req.params.id;
+        console.log('🔍 Project Consultancy API - Professor ID:', professorId);
         const professor = await Professor.findById(professorId).select('-password');
         if (!professor) {
             return res.status(404).json({ message: 'Professor not found' });
         }
+        console.log('👨‍🏫 Found professor:', professor.name, professor.email);
+        console.log('📊 Data counts - Ongoing:', professor.ongoing_projects?.length, 'Completed:', professor.completed_projects?.length);
+
+        // Function to convert Mongoose documents to plain objects
+        const convertToPlainObjects = (items) => {
+            if (!items || items.length === 0) return [];
+            return items.map(item => item.toObject ? item.toObject() : item);
+        };
+
+        // Function to check if array has actual data (not just empty objects)
+        const hasActualData = (items, titleField) => {
+            if (!items || items.length === 0) return false;
+            return items.some(item => {
+                const plainItem = item.toObject ? item.toObject() : item;
+                return plainItem[titleField] && plainItem[titleField].trim() !== '';
+            });
+        };
 
         // Return project consultancy data or default structure
         const projectConsultancyData = {
-            ongoing_projects: professor.ongoing_projects || [{
-                title_of_project: "",
-                sponsored_by: "",
-                period: "",
-                sanctioned_amount: "",
-                year: "",
-            }],
-            ongoing_consultancy_works: professor.ongoing_consultancy_works || [{
-                title_of_consultancy_work: "",
-                sponsored_by: "",
-                period: "",
-                sanctioned_amount: "",
-                year: "",
-            }],
-            completed_projects: professor.completed_projects || [{
-                title_of_project: "",
-                sponsored_by: "",
-                period: "",
-                sanctioned_amount: "",
-                year: "",
-            }],
-            completed_consultancy_works: professor.completed_consultancy_works || [{
-                title_of_consultancy_work: "",
-                sponsored_by: "",
-                period: "",
-                sanctioned_amount: "",
-                year: "",
-            }],
-            research_projects_funded: professor.research_projects_funded || [{
-                pi_name: "",
-                project_title: "",
-                funding_agency: "",
-                duration: "",
-                year_of_award: "",
-                amount: "",
-            }]
+            ongoing_projects: hasActualData(professor.ongoing_projects, 'title_of_project')
+                ? convertToPlainObjects(professor.ongoing_projects) 
+                : [{
+                    title_of_project: "",
+                    sponsored_by: "",
+                    period: "",
+                    sanctioned_amount: "",
+                    year: "",
+                }],
+            ongoing_consultancy_works: hasActualData(professor.ongoing_consultancy_works, 'title_of_consultancy_work')
+                ? convertToPlainObjects(professor.ongoing_consultancy_works) 
+                : [{
+                    title_of_consultancy_work: "",
+                    sponsored_by: "",
+                    period: "",
+                    sanctioned_amount: "",
+                    year: "",
+                }],
+            completed_projects: hasActualData(professor.completed_projects, 'title_of_project')
+                ? convertToPlainObjects(professor.completed_projects) 
+                : [{
+                    title_of_project: "",
+                    sponsored_by: "",
+                    period: "",
+                    sanctioned_amount: "",
+                    year: "",
+                }],
+            completed_consultancy_works: hasActualData(professor.completed_consultancy_works, 'title_of_consultancy_work')
+                ? convertToPlainObjects(professor.completed_consultancy_works) 
+                : [{
+                    title_of_consultancy_work: "",
+                    sponsored_by: "",
+                    period: "",
+                    sanctioned_amount: "",
+                    year: "",
+                }],
+            research_projects_funded: hasActualData(professor.research_projects_funded, 'project_title')
+                ? convertToPlainObjects(professor.research_projects_funded) 
+                : [{
+                    pi_name: "",
+                    project_title: "",
+                    funding_agency: "",
+                    duration: "",
+                    year_of_award: "",
+                    amount: "",
+                }]
         };
 
         res.status(200).json(projectConsultancyData);
@@ -1746,18 +1774,18 @@ app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) 
         // Check if user has HOD role
         const requester = await Professor.findById(req.user.id);
         if (!requester || requester.role !== 'hod') {
-            return res.status(403).json({ 
-                success: false, 
-                message: 'Access denied. HOD role required.' 
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied. HOD role required.'
             });
         }
 
         // Get all faculty in the department
         const allFaculty = await Professor.find({}).select('ugc_approved_journals conference_proceedings non_ugc_journals');
-        
+
         let totalPublications = 0;
         const yearWisePublications = {};
-        
+
         // Process UGC approved journals
         allFaculty.forEach(faculty => {
             if (faculty.ugc_approved_journals && faculty.ugc_approved_journals.length > 0) {
@@ -1767,7 +1795,7 @@ app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) 
                     yearWisePublications[year] = (yearWisePublications[year] || 0) + 1;
                 });
             }
-            
+
             // Process conference proceedings
             if (faculty.conference_proceedings && faculty.conference_proceedings.length > 0) {
                 faculty.conference_proceedings.forEach(paper => {
@@ -1776,7 +1804,7 @@ app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) 
                     yearWisePublications[year] = (yearWisePublications[year] || 0) + 1;
                 });
             }
-            
+
             // Process non-UGC journals
             if (faculty.non_ugc_journals && faculty.non_ugc_journals.length > 0) {
                 faculty.non_ugc_journals.forEach(paper => {
@@ -1790,7 +1818,7 @@ app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) 
         // Get current year and filter for last 3 years only
         const currentYear = new Date().getFullYear();
         const last3Years = [currentYear, currentYear - 1, currentYear - 2];
-        
+
         const sortedYears = Object.entries(yearWisePublications)
             .filter(([year, count]) => {
                 // Only include last 3 years (exclude 'Unknown')
@@ -1809,9 +1837,9 @@ app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) 
         });
     } catch (error) {
         console.error('Error fetching publications statistics:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Server error' 
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
         });
     }
 });
@@ -1822,22 +1850,22 @@ app.get('/api/hod/awards-statistics', authenticateToken, async (req, res) => {
         // Check if user has HOD role
         const requester = await Professor.findById(req.user.id);
         if (!requester || requester.role !== 'hod') {
-            return res.status(403).json({ 
-                success: false, 
-                message: 'Access denied. HOD role required.' 
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied. HOD role required.'
             });
         }
 
         // Get all faculty with their awards
         const allFaculty = await Professor.find({}).select('name awards');
-        
+
         let totalAwards = 0;
         const facultyAwards = [];
-        
+
         allFaculty.forEach(faculty => {
             const awardCount = (faculty.awards && faculty.awards.length) ? faculty.awards.length : 0;
             totalAwards += awardCount;
-            
+
             if (awardCount > 0) {
                 facultyAwards.push({
                     name: faculty.name || 'Unknown Faculty',
@@ -1860,9 +1888,9 @@ app.get('/api/hod/awards-statistics', authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching awards statistics:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Server error' 
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
         });
     }
 });

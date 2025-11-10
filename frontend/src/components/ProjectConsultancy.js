@@ -60,7 +60,7 @@ function ProjectConsultancy() {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await fetch(getApiUrl("/api/professor/project-consultancy/${userId}"), {
+      const response = await fetch(getApiUrl(`/api/professor/project-consultancy/${userId}`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +149,7 @@ function ProjectConsultancy() {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
 
-        const response = await fetch(getApiUrl("/api/professor/project-consultancy/${userId}"), {
+        const response = await fetch(getApiUrl(`/api/professor/project-consultancy/${userId}`), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -158,6 +158,13 @@ function ProjectConsultancy() {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('🔍 Project Consultancy API Response:', data);
+          console.log('📚 Ongoing Projects:', data.ongoing_projects?.length || 0);
+          console.log('📚 Completed Projects:', data.completed_projects?.length || 0);
+          console.log('💼 Ongoing Consultancy:', data.ongoing_consultancy_works?.length || 0);
+          console.log('💼 Completed Consultancy:', data.completed_consultancy_works?.length || 0);
+          console.log('🔍 First ongoing project:', data.ongoing_projects?.[0]);
+          console.log('🔍 Project title:', data.ongoing_projects?.[0]?.title_of_project);
           setProjectConsultancy({
             ongoing_projects: data.ongoing_projects || [
               { title_of_project: "", sponsored_by: "", period: "", sanctioned_amount: "", year: "" },
@@ -229,12 +236,15 @@ function ProjectConsultancy() {
                       </tr>
                     </thead>
                     <tbody>
+                      {console.log('🎨 Rendering ongoing projects table:', projectConsultancy.ongoing_projects?.length, 'items')}
+                      {console.log('🔍 First ongoing project in state:', projectConsultancy.ongoing_projects?.[0])}
                       {projectConsultancy.ongoing_projects.map((project, idx) => (
+                        console.log(`🔢 Rendering ongoing project row ${idx}:`, project?.title_of_project),
                         <tr key={idx} style={{ background: idx % 2 === 0 ? "#fff" : "#f8fafc" }}>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
                           <td style={{ padding: "10px", border: "1px solid #e2e8f0" }}>
                             <textarea
-                              value={project.title_of_project}
+                              value={project.title_of_project || ''}
                               onChange={(e) => handleArrayChange("ongoing_projects", idx, "title_of_project", e.target.value)}
                               style={{
                                 width: "90%",

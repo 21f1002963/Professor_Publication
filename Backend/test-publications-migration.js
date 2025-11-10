@@ -8,34 +8,34 @@ async function testPublicationsMigration() {
     try {
         console.log('🔄 Testing Publications Migration for Existing Professor');
         console.log('=====================================================');
-        
+
         // Connect to database
         await mongoose.connect(process.env.MONGO_URI);
         console.log('📊 Connected to database');
-        
+
         // Find an existing professor with publications
-        const professor = await Professor.findOne({ 
+        const professor = await Professor.findOne({
             $or: [
                 { ugc_approved_journals: { $exists: true, $ne: [] } },
                 { non_ugc_journals: { $exists: true, $ne: [] } }
             ]
         });
-        
+
         if (!professor) {
             console.log('⚠️  No professor found with existing publications');
             await mongoose.disconnect();
             return;
         }
-        
+
         console.log(`\n👨‍🏫 Found professor: ${professor.name}`);
         console.log(`📚 UGC Journals: ${professor.ugc_approved_journals?.length || 0}`);
         console.log(`📰 Non-UGC Journals: ${professor.non_ugc_journals?.length || 0}`);
         console.log(`📄 Papers Published (new format): ${professor.papers_published?.length || 0}`);
-        
+
         // Check if we need to migrate
         if (professor.papers_published && professor.papers_published.length > 0) {
             console.log('\n✅ Professor already has new format data');
-            
+
             // Check the format of existing data
             const samplePaper = professor.papers_published[0];
             console.log('\n📋 Sample paper format:');
@@ -44,10 +44,10 @@ async function testPublicationsMigration() {
             console.log(`  Co-authors (Within): "${samplePaper.coauthors_within_org || 'Not set'}"`);
             console.log(`  Co-authors (Outside): "${samplePaper.coauthors_outside_org || 'Not set'}"`);
             console.log(`  Paper Link: "${samplePaper.paper_link || 'Not set'}"`);
-            
+
         } else if (professor.ugc_approved_journals?.length > 0 || professor.non_ugc_journals?.length > 0) {
             console.log('\n🔄 Migrating legacy data to new format...');
-            
+
             // Create new format data from existing legacy data
             const ugcPapers = (professor.ugc_approved_journals || []).map(paper => ({
                 title: paper.title || '',
@@ -65,7 +65,7 @@ async function testPublicationsMigration() {
                 paper_type: 'UGC',
                 conference_details: ''
             }));
-            
+
             const nonUgcPapers = (professor.non_ugc_journals || []).map(paper => ({
                 title: paper.title || '',
                 coauthors_within_org: '',
@@ -82,18 +82,18 @@ async function testPublicationsMigration() {
                 paper_type: 'Scopus',
                 conference_details: ''
             }));
-            
+
             const allPapersPublished = [...ugcPapers, ...nonUgcPapers];
-            
+
             // Update the professor record
             const updateResult = await Professor.updateOne(
                 { _id: professor._id },
                 { $set: { papers_published: allPapersPublished } }
             );
-            
+
             console.log(`✅ Migration completed: ${updateResult.modifiedCount} record updated`);
             console.log(`📄 New papers_published array has ${allPapersPublished.length} papers`);
-            
+
             // Verify the migration
             const updatedProfessor = await Professor.findById(professor._id);
             if (updatedProfessor.papers_published?.length > 0) {
@@ -103,7 +103,7 @@ async function testPublicationsMigration() {
                 console.log(`  UGC papers: ${ugcCount}`);
                 console.log(`  Scopus papers: ${scopusCount}`);
                 console.log(`  Total papers: ${updatedProfessor.papers_published.length}`);
-                
+
                 console.log('\n🎉 Migration successful! The publications page will now show:');
                 console.log('  ✅ UGC papers marked as "UGC" in type dropdown');
                 console.log('  ✅ Non-UGC papers marked as "Scopus" in type dropdown');
@@ -114,10 +114,10 @@ async function testPublicationsMigration() {
         } else {
             console.log('\n📝 No publications found to migrate');
         }
-        
+
         await mongoose.disconnect();
         console.log('\n🔌 Database connection closed');
-        
+
     } catch (error) {
         console.error('❌ Error during migration test:', error.message);
         await mongoose.disconnect();
