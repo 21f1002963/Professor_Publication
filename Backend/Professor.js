@@ -161,6 +161,24 @@ const ProfessorSchema = new mongoose.Schema({
         paper_link: { type: String, default: '' }
     }],
 
+    // Consolidated Publications (New Format)
+    papers_published: [{
+        title: { type: String, default: '' },
+        coauthors_within_org: { type: String, default: '' },
+        coauthors_outside_org: { type: String, default: '' },
+        journal_name: { type: String, default: '' },
+        volume: { type: String, default: '' },
+        issue: { type: String, default: '' },
+        page_nos: { type: String, default: '' },
+        year: { type: String, default: '' },
+        impact_factor: { type: String, default: '' },
+        paper_upload: { type: String, default: '' },
+        paper_upload_filename: { type: String, default: '' },
+        paper_link: { type: String, default: '' },
+        paper_type: { type: String, default: 'UGC' }, // UGC, Scopus, SCIE
+        conference_details: { type: String, default: '' } // For future conference papers
+    }],
+
     // New Patents Structure
     innovation_contributions: [{
         work_name: { type: String, default: '' },

@@ -42,10 +42,16 @@ class DataTransformer {
       innovation_contributions: this.transformInnovationContributions(scrapedData.innovation?.contributions || []),
       patent_details: this.transformPatents(scrapedData.innovation?.patents || []),
 
-      // Publications
+      // Publications - Legacy format for backward compatibility
       ugc_approved_journals: this.transformUGCPapers(scrapedData.innovation?.ugc_papers || []),
       non_ugc_journals: this.transformNonUGCPapers(scrapedData.innovation?.non_ugc_papers || []),
       conference_proceedings: this.transformConferencePapers(scrapedData.innovation?.conference_papers || []),
+
+      // Publications - New consolidated format
+      papers_published: [
+        ...this.transformUGCPapersToNewFormat(scrapedData.innovation?.ugc_papers || []),
+        ...this.transformNonUGCPapersToNewFormat(scrapedData.innovation?.non_ugc_papers || [])
+      ],
 
       // Books
       books: this.transformAuthoredBooks(scrapedData.books?.authored_books || []),
@@ -211,6 +217,56 @@ class DataTransformer {
    */
   static transformNonUGCPapers(papersArray) {
     return this.transformUGCPapers(papersArray); // Same transformation logic
+  }
+
+  /**
+   * Transform UGC papers to new consolidated format with proper fields for frontend
+   */
+  static transformUGCPapersToNewFormat(papersArray) {
+    return papersArray.map(paper => {
+      const volumeData = this.parseVolumeIssuePages(paper.volumeIssuePages || '');
+      return {
+        title: paper.title || '',
+        coauthors_within_org: '',              // Blank for scraped data as requested
+        coauthors_outside_org: '',             // Blank for scraped data as requested
+        journal_name: paper.journalName || '',
+        volume: volumeData.volume,
+        issue: volumeData.issue,
+        page_nos: volumeData.pages,
+        year: paper.year || '',
+        impact_factor: paper.impactFactor || '',
+        paper_upload: '',                      // Not available in scraped data
+        paper_upload_filename: '',
+        paper_link: '',                        // Blank as requested
+        paper_type: 'UGC',                     // Mark as UGC type as requested
+        conference_details: ''                 // For future use
+      };
+    });
+  }
+
+  /**
+   * Transform Non-UGC papers to new consolidated format with proper fields for frontend
+   */
+  static transformNonUGCPapersToNewFormat(papersArray) {
+    return papersArray.map(paper => {
+      const volumeData = this.parseVolumeIssuePages(paper.volumeIssuePages || '');
+      return {
+        title: paper.title || '',
+        coauthors_within_org: '',              // Blank for scraped data as requested
+        coauthors_outside_org: '',             // Blank for scraped data as requested
+        journal_name: paper.journalName || '',
+        volume: volumeData.volume,
+        issue: volumeData.issue,
+        page_nos: volumeData.pages,
+        year: paper.year || '',
+        impact_factor: paper.impactFactor || '',
+        paper_upload: '',                      // Not available in scraped data
+        paper_upload_filename: '',
+        paper_link: '',                        // Blank as requested
+        paper_type: 'Scopus',                  // Mark as Scopus type as requested
+        conference_details: ''                 // For future use
+      };
+    });
   }
 
   /**
@@ -547,8 +603,8 @@ class DataTransformer {
     const issueMatch = volumeIssuePages.match(/issue\s*\.?\s*(\d+)/i);
     if (issueMatch) result.issue = issueMatch[1];
 
-    // Extract pages
-    const pagesMatch = volumeIssuePages.match(/pp?\s*\.?\s*(\d+[-–]\d+|\d+)/i);
+    // Extract pages (handle both "pp 123-145", "p 123", and "Pages 123-145" formats)
+    const pagesMatch = volumeIssuePages.match(/(?:pp?|pages?)\s*\.?\s*(\d+[-–]\d+|\d+)/i);
     if (pagesMatch) result.pages = pagesMatch[1];
 
     // If no specific patterns found, try to extract numbers in sequence

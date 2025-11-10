@@ -22,20 +22,20 @@ async function debugSpecialization() {
     // Find the Area of Specializaion heading
     const specializationH2 = $('h2:contains("Area of Specializaion"), h2:contains("Area of Specialization")');
     console.log(`Found specialization headings: ${specializationH2.length}`);
-    
+
     if (specializationH2.length > 0) {
       specializationH2.each((index, element) => {
         console.log(`\nHeading ${index + 1}: "${$(element).text().trim()}"`);
-        
+
         // Get the parent container
         const parent = $(element).parent();
         console.log(`Parent tag: ${parent.prop('tagName')}`);
         console.log(`Parent classes: ${parent.attr('class') || 'none'}`);
-        
+
         // Look for content after the heading
         const nextElements = $(element).nextAll();
         console.log(`Elements after heading: ${nextElements.length}`);
-        
+
         // Check different content patterns
         nextElements.each((i, nextEl) => {
           if (i < 5) { // Check first 5 elements
@@ -49,7 +49,7 @@ async function debugSpecialization() {
         // Check siblings
         const siblings = $(element).siblings();
         console.log(`Siblings: ${siblings.length}`);
-        
+
         siblings.each((i, sibling) => {
           if (i < 3) { // Check first 3 siblings
             const tagName = sibling.tagName;
@@ -77,10 +77,10 @@ async function debugSpecialization() {
 
     // Alternative search - look for any content that might be specialization
     console.log('\n=== SEARCHING FOR SPECIALIZATION CONTENT ===\n');
-    
+
     // Look for common specialization terms
     const terms = ['Cloud Computing', 'Data Mining', 'Machine Learning', 'Network', 'Database', 'Software Engineering'];
-    
+
     terms.forEach(term => {
       const elements = $(`*:contains("${term}")`);
       if (elements.length > 0) {

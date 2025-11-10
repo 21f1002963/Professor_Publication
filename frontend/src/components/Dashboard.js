@@ -20,6 +20,14 @@ function Dashboard() {
     incoming: 0,
     outgoing: 0
   });
+  const [publicationsStats, setPublicationsStats] = useState({
+    totalPublications: 0,
+    yearWiseBreakdown: []
+  });
+  const [awardsStats, setAwardsStats] = useState({
+    totalAwards: 0,
+    topFacultyByAwards: []
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +53,8 @@ function Dashboard() {
           // If user is HOD, also fetch faculty statistics
           if ((userInfo.role || decoded.role || 'faculty') === 'hod') {
             promises.push(fetchFacultyStats());
+            promises.push(fetchPublicationsStats());
+            promises.push(fetchAwardsStats());
           }
 
           await Promise.all(promises);
@@ -117,6 +127,50 @@ function Dashboard() {
       }
     } catch (error) {
       console.error('Error fetching faculty statistics:', error);
+    }
+  };
+
+  const fetchPublicationsStats = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch(getApiUrl("/api/hod/publications-statistics"), {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setPublicationsStats(data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching publications statistics:', error);
+    }
+  };
+
+  const fetchAwardsStats = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch(getApiUrl("/api/hod/awards-statistics"), {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setAwardsStats(data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching awards statistics:', error);
     }
   };
 
@@ -586,20 +640,18 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Statistics Card 2 - Empty for now */}
+            {/* Publications Statistics Card */}
             <div style={{
               background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
               borderRadius: '20px',
-              padding: '30px',
+              padding: '25px',
               color: '#fff',
               boxShadow: '0 10px 40px rgba(79, 172, 254, 0.3)',
               transform: 'translateY(0)',
               transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: '200px'
+              cursor: 'pointer'
             }}
+              onClick={() => navigate('/publications')}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
                 e.currentTarget.style.boxShadow = '0 15px 50px rgba(79, 172, 254, 0.4)';
@@ -609,29 +661,83 @@ function Dashboard() {
                 e.currentTarget.style.boxShadow = '0 10px 40px rgba(79, 172, 254, 0.3)';
               }}>
               <div style={{
-                textAlign: 'center',
-                opacity: 0.7
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '20px'
               }}>
-                <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📊</div>
-                <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Statistics Card 2</h3>
-                <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem' }}>Coming Soon</p>
+                <div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.8rem',
+                    fontWeight: 700
+                  }}>Department Publications</h3>
+                </div>
+              </div>
+
+              <div style={{
+                fontSize: '3rem',
+                fontWeight: 800,
+                marginBottom: '15px',
+                textAlign: 'center'
+              }}>
+                {publicationsStats.totalPublications}
+              </div>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '12px',
+                padding: '15px',
+                marginTop: '20px'
+              }}>
+                <div style={{
+                  fontSize: '0.9rem',
+                  marginBottom: '10px',
+                  fontWeight: 600,
+                  textAlign: 'center'
+                }}>Last 3 Years</div>
+                
+                {publicationsStats.yearWiseBreakdown.length > 0 ? (
+                  publicationsStats.yearWiseBreakdown.map(([year, count]) => (
+                    <div key={year} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '5px',
+                      fontSize: '0.85rem'
+                    }}>
+                      <span>{year}</span>
+                      <span style={{
+                        background: 'rgba(255, 255, 255, 0.3)',
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        fontWeight: 600
+                      }}>{count}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div style={{
+                    textAlign: 'center',
+                    fontSize: '0.8rem',
+                    opacity: 0.8
+                  }}>
+                    No publications in last 3 years
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Statistics Card 3 - Empty for now */}
+            {/* Awards Statistics Card */}
             <div style={{
               background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
               borderRadius: '20px',
-              padding: '30px',
+              padding: '25px',
               color: '#fff',
               boxShadow: '0 10px 40px rgba(250, 112, 154, 0.3)',
               transform: 'translateY(0)',
               transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: '200px'
+              cursor: 'pointer'
             }}
+              onClick={() => navigate('/fellowship')}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
                 e.currentTarget.style.boxShadow = '0 15px 50px rgba(250, 112, 154, 0.4)';
@@ -641,12 +747,93 @@ function Dashboard() {
                 e.currentTarget.style.boxShadow = '0 10px 40px rgba(250, 112, 154, 0.3)';
               }}>
               <div style={{
-                textAlign: 'center',
-                opacity: 0.7
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '20px'
               }}>
-                <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📈</div>
-                <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Statistics Card 3</h3>
-                <p style={{ margin: '5px 0 0 0', fontSize: '0.9rem' }}>Coming Soon</p>
+                <div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.8rem',
+                    fontWeight: 700
+                  }}>Department Awards</h3>
+                </div>
+              </div>
+
+              <div style={{
+                fontSize: '3rem',
+                fontWeight: 800,
+                marginBottom: '15px',
+                textAlign: 'center'
+              }}>
+                {awardsStats.totalAwards}
+              </div>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '12px',
+                padding: '15px',
+                marginTop: '20px'
+              }}>
+                <div style={{
+                  fontSize: '0.9rem',
+                  marginBottom: '10px',
+                  fontWeight: 600,
+                  textAlign: 'center'
+                }}>Top Faculty by Awards</div>
+                
+                {awardsStats.topFacultyByAwards.length > 0 ? (
+                  awardsStats.topFacultyByAwards.map((faculty, index) => (
+                    <div key={faculty.name} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '8px',
+                      fontSize: '0.85rem'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <span style={{
+                          background: 'rgba(255, 255, 255, 0.3)',
+                          borderRadius: '50%',
+                          width: '20px',
+                          height: '20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.7rem',
+                          fontWeight: 600,
+                          marginRight: '8px'
+                        }}>
+                          {index + 1}
+                        </span>
+                        <span style={{ 
+                          fontSize: '0.8rem',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '120px'
+                        }}>
+                          {faculty.name}
+                        </span>
+                      </div>
+                      <span style={{
+                        background: 'rgba(255, 255, 255, 0.3)',
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        fontWeight: 600,
+                        fontSize: '0.8rem'
+                      }}>{faculty.awardCount}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div style={{
+                    textAlign: 'center',
+                    fontSize: '0.8rem',
+                    opacity: 0.8
+                  }}>
+                    No awards data available
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -18,7 +18,7 @@ async function debugProfileUpdateProcess() {
     // Initialize scraper
     const scraper = new FacultyDataScraper();
     const scrapedData = await scraper.scrapeFacultyData(nodeId);
-    
+
     console.log('✅ Data scraped successfully');
     console.log(`📊 Scraped specialization: ${JSON.stringify(scrapedData.specialization, null, 2)}`);
 
@@ -30,7 +30,7 @@ async function debugProfileUpdateProcess() {
     // Find current user
     console.log(`\n👤 Finding user: ${userEmail}`);
     const currentUser = await Professor.findOne({ email: userEmail });
-    
+
     if (!currentUser) {
       console.log('❌ User not found');
       return;
@@ -43,9 +43,9 @@ async function debugProfileUpdateProcess() {
 
     // Prepare update data (same logic as integration endpoint)
     const updateData = {
-      // Update scraped data fields  
+      // Update scraped data fields
       area_of_expertise: transformedData.area_of_expertise || [],
-      
+
       // Meta information
       node_id: nodeId,
       data_source: currentUser.data_source === 'manual' ? 'hybrid' : 'web_scraping',
@@ -70,7 +70,7 @@ async function debugProfileUpdateProcess() {
     // Double check by re-fetching from database
     const verifyUser = await Professor.findById(currentUser._id);
     console.log(`📊 Verification - area_of_expertise in DB: ${JSON.stringify(verifyUser.area_of_expertise, null, 2)}`);
-    
+
     if (verifyUser.area_of_expertise && verifyUser.area_of_expertise.length > 0) {
       console.log('\n✅ SUCCESS! area_of_expertise has been saved to database correctly!');
     } else {

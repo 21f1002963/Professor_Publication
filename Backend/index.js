@@ -443,18 +443,24 @@ app.get('/api/professor/publications', authenticateToken, async (req, res) => {
 
         // Function to sanitize sensitive publication data
         const sanitizePublications = (publications) => {
-            return publications.map(pub => ({
-                ...pub,
-                paper_upload: !isOwnProfile ? "" : pub.paper_upload,
-                paper_upload_filename: !isOwnProfile ? "" : pub.paper_upload_filename,
-                paper_link: !isOwnProfile ? "" : pub.paper_link
-            }));
+            return publications.map(pub => {
+                // Convert Mongoose document to plain object
+                const plainPub = pub.toObject ? pub.toObject() : pub;
+                return {
+                    ...plainPub,
+                    paper_upload: !isOwnProfile ? "" : plainPub.paper_upload,
+                    paper_upload_filename: !isOwnProfile ? "" : plainPub.paper_upload_filename,
+                    paper_link: !isOwnProfile ? "" : plainPub.paper_link
+                };
+            });
         };
 
         // Return publications data with field names that match frontend expectations
         const publicationsData = {
             name: professor.name,
             email: professor.email,
+            // New consolidated format
+            papers_published: sanitizePublications(professor.papers_published || []),
             // Frontend expects these specific field names
             ugcPapers: sanitizePublications([
                 ...(professor.ugc_papers || []),
@@ -1729,6 +1735,135 @@ app.get('/api/professor/project-consultancy/:professorId', authenticateToken, as
     } catch (error) {
         console.error('Error fetching professor project consultancy:', error);
         res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// ===== HOD STATISTICS ENDPOINTS =====
+
+// Get department-wide publications statistics for HOD dashboard
+app.get('/api/hod/publications-statistics', authenticateToken, async (req, res) => {
+    try {
+        // Check if user has HOD role
+        const requester = await Professor.findById(req.user.id);
+        if (!requester || requester.role !== 'hod') {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Access denied. HOD role required.' 
+            });
+        }
+
+        // Get all faculty in the department
+        const allFaculty = await Professor.find({}).select('ugc_approved_journals conference_proceedings non_ugc_journals');
+        
+        let totalPublications = 0;
+        const yearWisePublications = {};
+        
+        // Process UGC approved journals
+        allFaculty.forEach(faculty => {
+            if (faculty.ugc_approved_journals && faculty.ugc_approved_journals.length > 0) {
+                faculty.ugc_approved_journals.forEach(paper => {
+                    totalPublications++;
+                    const year = paper.year || 'Unknown';
+                    yearWisePublications[year] = (yearWisePublications[year] || 0) + 1;
+                });
+            }
+            
+            // Process conference proceedings
+            if (faculty.conference_proceedings && faculty.conference_proceedings.length > 0) {
+                faculty.conference_proceedings.forEach(paper => {
+                    totalPublications++;
+                    const year = paper.year || 'Unknown';
+                    yearWisePublications[year] = (yearWisePublications[year] || 0) + 1;
+                });
+            }
+            
+            // Process non-UGC journals
+            if (faculty.non_ugc_journals && faculty.non_ugc_journals.length > 0) {
+                faculty.non_ugc_journals.forEach(paper => {
+                    totalPublications++;
+                    const year = paper.year || 'Unknown';
+                    yearWisePublications[year] = (yearWisePublications[year] || 0) + 1;
+                });
+            }
+        });
+
+        // Get current year and filter for last 3 years only
+        const currentYear = new Date().getFullYear();
+        const last3Years = [currentYear, currentYear - 1, currentYear - 2];
+        
+        const sortedYears = Object.entries(yearWisePublications)
+            .filter(([year, count]) => {
+                // Only include last 3 years (exclude 'Unknown')
+                return year !== 'Unknown' && last3Years.includes(parseInt(year));
+            })
+            .sort((a, b) => {
+                return parseInt(b[0]) - parseInt(a[0]);
+            });
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totalPublications,
+                yearWiseBreakdown: sortedYears
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching publications statistics:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error' 
+        });
+    }
+});
+
+// Get department-wide awards statistics for HOD dashboard
+app.get('/api/hod/awards-statistics', authenticateToken, async (req, res) => {
+    try {
+        // Check if user has HOD role
+        const requester = await Professor.findById(req.user.id);
+        if (!requester || requester.role !== 'hod') {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Access denied. HOD role required.' 
+            });
+        }
+
+        // Get all faculty with their awards
+        const allFaculty = await Professor.find({}).select('name awards');
+        
+        let totalAwards = 0;
+        const facultyAwards = [];
+        
+        allFaculty.forEach(faculty => {
+            const awardCount = (faculty.awards && faculty.awards.length) ? faculty.awards.length : 0;
+            totalAwards += awardCount;
+            
+            if (awardCount > 0) {
+                facultyAwards.push({
+                    name: faculty.name || 'Unknown Faculty',
+                    awardCount: awardCount
+                });
+            }
+        });
+
+        // Sort faculty by award count and get top 3
+        const topFaculty = facultyAwards
+            .sort((a, b) => b.awardCount - a.awardCount)
+            .slice(0, 3);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totalAwards,
+                topFacultyByAwards: topFaculty
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching awards statistics:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error' 
+        });
     }
 });
 

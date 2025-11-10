@@ -224,9 +224,16 @@ function Publications() {
         console.log('🔍 Publications API Response:', data);
         console.log('UGC Papers Count:', data.ugcPapers?.length || 0);
         console.log('Non-UGC Papers Count:', data.nonUgcPapers?.length || 0);
+        console.log('Papers Published Count:', data.papers_published?.length || 0);
 
         // Convert legacy data to new format if needed
         let papersPublished = data.papers_published || [];
+        console.log('📄 Raw papers_published array:', papersPublished.length, 'papers');
+        if (papersPublished.length > 0) {
+          console.log('🔍 First paper structure:', papersPublished[0]);
+          console.log('🔍 First paper title:', papersPublished[0]?.title);
+          console.log('🔍 First paper type:', papersPublished[0]?.paper_type);
+        }
 
         // If legacy arrays exist, convert them to new format
         if (!papersPublished.length && (data.seie_journals?.length || data.ugc_approved_journals?.length || data.non_ugc_journals?.length)) {
@@ -279,7 +286,10 @@ function Publications() {
             return p;
           });
 
-          return {
+          console.log('📊 Final papersPublished array before setState:', papersPublished.length, 'papers');
+          console.log('🎯 Setting papers_published in state:', papersPublished.length > 0 ? papersPublished.length : 'keeping previous (empty)');
+          
+          const newState = {
             ...prevState,
             papers_published: papersPublished.length > 0 ? papersPublished : prevState.papers_published,
             // Keep legacy arrays for now
@@ -288,6 +298,9 @@ function Publications() {
             non_ugc_journals: data.non_ugc_journals || [],
             conference_proceedings: conferenceProceedings
           };
+          
+          console.log('🔄 New state papers_published length:', newState.papers_published?.length);
+          return newState;
         });
       }
     } catch (error) {
@@ -534,6 +547,10 @@ function Publications() {
                     </tr>
                   </thead>
                   <tbody>
+                    {console.log('🎨 Rendering table with papers_published:', publications.papers_published?.length, 'papers')}
+                    {console.log('📋 First paper sample:', publications.papers_published?.[0])}
+                    {console.log('📝 First paper title:', publications.papers_published?.[0]?.title)}
+                    {console.log('📄 First paper type:', publications.papers_published?.[0]?.paper_type)}
                     {(publications.papers_published || []).map((pub, idx) => (
                       <tr key={idx}>
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>{idx + 1}</td>
@@ -883,12 +900,8 @@ function Publications() {
                             placeholder="Details (venue, date, etc.)"
                           />
                         </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          {renderPaperUploadCell("conference_proceedings", idx, proc)}
-                        </td>
-                        <td style={{ padding: "8px", border: "1px solid #e2e8f0" }}>
-                          {renderPaperLinkCell("conference_proceedings", idx, proc)}
-                        </td>
+                        {renderPaperUploadCell(proc, "conference_proceedings", idx)}
+                        {renderPaperLinkCell(proc, "conference_proceedings", idx)}
                         <td style={{ padding: "8px", border: "1px solid #e2e8f0", textAlign: "center" }}>
                           {isOwnProfile && (
                             <button

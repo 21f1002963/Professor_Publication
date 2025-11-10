@@ -14,7 +14,7 @@ async function checkAreaOfExpertiseInDB() {
 
     // Find the user with email skvjey@pondiuni.ac.in
     const user = await Professor.findOne({ email: 'skvjey@pondiuni.ac.in' });
-    
+
     if (!user) {
       console.log('❌ User not found with email: skvjey@pondiuni.ac.in');
       return;
@@ -33,7 +33,7 @@ async function checkAreaOfExpertiseInDB() {
     console.log('Raw field value:', user.area_of_expertise);
     console.log('Type:', typeof user.area_of_expertise);
     console.log('Is Array:', Array.isArray(user.area_of_expertise));
-    
+
     if (Array.isArray(user.area_of_expertise)) {
       console.log('Length:', user.area_of_expertise.length);
       console.log('Contents:');

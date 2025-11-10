@@ -9,11 +9,11 @@ async function testSpecializationExtraction() {
     console.log('1️⃣ Testing FacultyDataScraper...');
     const scraper = new FacultyDataScraper();
     const scrapedData = await scraper.scrapeFacultyData('941');
-    
+
     console.log(`✅ Scraper completed`);
     console.log(`📧 Name: ${scrapedData.name}`);
     console.log(`🏢 Department: ${scrapedData.department}`);
-    
+
     // Check specialization in home section
     if (scrapedData.home && scrapedData.home.specialization) {
       console.log(`🎯 Raw Specialization Data:`, scrapedData.home.specialization);
@@ -26,9 +26,9 @@ async function testSpecializationExtraction() {
     // 2. Test the data transformer
     console.log('\n2️⃣ Testing DataTransformer...');
     const transformedData = DataTransformer.transformScrapedDataForDB(scrapedData);
-    
+
     console.log(`✅ Transformer completed`);
-    
+
     if (transformedData.area_of_expertise) {
       console.log(`🎯 Transformed Area of Expertise:`, transformedData.area_of_expertise);
       console.log(`📊 Type: ${typeof transformedData.area_of_expertise}`);
